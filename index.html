@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+    <title>TSS</title>
+</head>
+
+<body>
+
+    <!--Navigation Bar-->
+    <ul class="h-menu d-flex flex-justify-start">
+        <li onclick="loadTaskUI()">
+            <a href="#">
+                <span class="mif-cog fg-pink icon"></span>
+                <span class="title">Tasks</span>
+            </a>
+        </li>
+        <li onclick="loadLogsUI()">
+            <a href="#">
+                <span class="mif-file-text fg-cyan icon"></span>
+                <span class="title">Logs</span>
+            </a>
+        </li>
+        <li onclick="loadAboutUI()">
+            <a href="#">
+                <span class="mif-question fg-green icon"></span>
+                <span class="title">About</span>
+            </a>
+        </li>
+        <li class="ml-auto" onclick="closeWindow()">
+            <a href="#">
+                <span class="mif-exit icon"></span>
+                <span class="title">Exit</span>
+            </a>
+        </li>
+    </ul>
+
+    <!-- SCREENS -->
+
+    <div class="grid">
+
+        <!-- Task View -->
+        <div class="row" id="TaskPanel" style="display:flex; margin-top: 20px; left: 10px;padding-right : 40px; ">
+            <div class="cell-3" style="margin-left: 0px;">
+                <ul class="v-menu">
+                    <li class="menu-title">Completed Tasks</li>
+                    <li>
+                        <a href="#">
+                            <span class="mif-checkmark icon"></span>ES Development</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="cell-9" style="padding-left: 20px;">
+                <h4>Create Task</h4>
+                <div data-role="panel">
+                    <form>
+
+                        <div class="form-group">
+                            <label>Module Name</label>
+                            <select data-role="select">
+                                <option>PricePlan</option>
+                                <option>PricePlan Workbench</option>
+                                <option>Priceplan Workflow</option>
+                                <option>Admin</option>
+                            </select>
+                            <small class="text-muted">Module must be part of
+                                <b>Speedway BR-2</b> project</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Task Name</label>
+                            <input type="text" class="mt-1" placeholder="Enter Task Title" data-role="input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Task Details</label>
+                            <textarea data-role="textarea" data-prepend="<span class='mif-bubbles'></span>"
+                                data-auto-size="true" data-max-height="200" placeholder="Enter task Description"
+                                required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Issues or Bugs</label>
+                            <textarea data-role="textarea" data-prepend="<span class='mif-warning'></span>"
+                                data-auto-size="true" data-max-height="200" placeholder="Enter Issues or bugs if any"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="button success">Submit data</button>
+                            <input type="button" class="button" value="Cancel">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs View -->
+        <div class="row" id="LogsPanel" style="display:none; margin-top: 20px; left: 20px;padding-right:40px; ">
+            <h4 class="cell-12">Logs</h4>
+            <div class="cell-12">
+                <span class=" text-leader2">Your activities fetched from task list are below</span>
+            </div>
+            <div class="cell 12">
+                <table class="table table-border cell-border compact">
+                    <thead>
+                        <tr>
+                            <th>Sr.</th>
+                            <th>Module</th>
+                            <th>Date</th>
+                            <th>Task</th>
+                            <th>Description</th>
+                            <th>Issues or Bugs</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>PricePlan</td>
+                            <td>10/10/2018</td>
+                            <td>ES Development</td>
+                            <td>Modified Priceplan.updatePricePlan() in Priceplan Workflow</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>PricePlan</td>
+                            <td>10/10/2018</td>
+                            <td>ES Development</td>
+                            <td>Modified Priceplan.updatePricePlan() in Priceplan Workflow</td>
+                            <td>Views not ready yet</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>PricePlan</td>
+                            <td>10/10/2018</td>
+                            <td>ES Development</td>
+                            <td>Modified Priceplan.updatePricePlan() in Priceplan Workflow</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+        <!-- About View -->
+        <div class="row" id="AboutPanel" style="display:none; margin-top: 20px; left: 20px;padding-right:40px; ">
+            <h1>Task Schedular</h1><span class="tally success">v 1.0</span>
+            <div class="cell-12">
+                <span class=" text-leader2">Helping individuals to manage task and work records.</span>
+                <p>This software is Developed and maintained by <b>Laniak</b></p>
+                <p>Information : </p>
+                <div data-role="panel">
+                    <dl>
+                        <dt>Version</dt>
+                        <dd>v 1.0</dd>
+                        <dt>Product Name</dt>
+                        <dd>Task Schedular</dd>
+                        <dt>UI Framework</dt>
+                        <dd>Metro UI 4</dd>
+                        <dt>Backend -Framework</dt>
+                        <dd>Electron</dd>
+                        <dt>Developer</dt>
+                        <dd>Shashank Kawle</dd>
+                        <dt>Designer</dt>
+                        <dd>Shashank Kawle</dd>
+                        <dt>Author</dd>
+                        <dd>Shashank Kawle</dd>
+                    </dl>
+                </div>
+                <div class="remark primary">
+                    <b>This software is currently supported for Speedway BR-2 only.</b>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
+    <script src="scripts/viewLoader.js"></script>
+</body>
+
+</html>
