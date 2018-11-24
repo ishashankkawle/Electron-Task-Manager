@@ -1,36 +1,35 @@
-let ExlJS = require('././scripts/exlHandler');
+let XL = require('././scripts/exlHandler');
 let fs = require('fs');
 let res = require('././shared/resources');
 const util = require('util');
 
 
-let workbook;
-let exelSheet;
+let xlWorkbook;
 
 async function saveTask() 
 {
     try 
     {
-        let data = {};
+        //let data = {};
+        let data = [];
         let dateTime = new Date();
-        const exl = new ExlJS();
-        let exist = await checkFileExist(exl);
-        console.log(exist);
+        const exl = new XL();
+        let exist = await checkFileExist();
         if(!exist)
         {
-            workbook = exl.createFile();
+            xlWorkbook = exl.createWorkBook();
         }
         else
         {
-            workbook = await exl.openWorkBook();
+            xlWorkbook = await exl.openWorkBook();
         }
-        data[res["STR_MODULE"]] = document.getElementById('module').value;
-        data[res["STR_DATE"]] = dateTime.getDate() + "/" + dateTime.getMonth() + "/" + dateTime.getFullYear();
-        data[res["STR_TASK"]] = document.getElementById('task').value;
-        data[res["STR_DESCRIPTION"]] = document.getElementById('description').value;
-        data[res["STR_IOB"]] = document.getElementById('iob').value;
-        let op = await exl.InsertTask(data);
-        console.log(op);
+;
+        data[0] = document.getElementById('module').value;
+        data[1] = dateTime.getDate() + "/" + dateTime.getMonth() + "/" + dateTime.getFullYear();
+        data[2] = document.getElementById('task').value;
+        data[3] = document.getElementById('description').value;
+        data[4] = document.getElementById('iob').value;
+        await exl.InsertTask(data , xlWorkbook);
     } 
     catch (error) 
     {
@@ -39,7 +38,7 @@ async function saveTask()
     
 }
 
-async function checkFileExist(exl) 
+async function checkFileExist() 
 {
     try 
     {

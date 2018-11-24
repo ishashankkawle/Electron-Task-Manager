@@ -1,79 +1,37 @@
 const res = require('../shared/resources');
-const excel = require('exceljs');
 const util = require('util');
+const XLSX = require('xlsx')
 
-module.exports = class ExlJS{
-    
-    createFile() 
+module.exports = class ExlJS 
+{
+
+    createWorkBook() 
     {
-        try 
-        {
-            let workbook = new excel.Workbook();
-            workbook.creator = 'Laniak';
-            workbook.addWorksheet(res["SHEET_NAME"]);
-            workbook.getWorksheet(res["SHEET_NAME"]).columns = [
-            {header:res["STR_MODULE"] , key:'module'},
-            {header:res["STR_DATE"] , key:'date'},
-            {heaade:res["STR_TASK"] , key:'task'},
-            {header:res["STR_DESCRIPTION"] , key:'description'},
-            {header:res["STR_IOB"] , key:'iob'}
-            ]
-            workbook.xlsx.writeFile(res["FILE_PATH"] + res["FILE_NAME"]);
-            return workbook;    
-        } 
-        catch (error) 
-        {
-            console.log("Error due to : " + error);
-        }
-        
-    }
-    
-    openWorkBook()
-    {
-        return new excel.Workbook();
+        let xlFilePath = res["FILE_PATH"] + res["FILE_NAME"];
+        let xlWorkbook = XLSX.utils.book_new();
+        let xlSheetName = res["SHEET_NAME"];
+        let xlSheetHeaders = [[res["STR_MODULE"], res["STR_DATE"], res["STR_TASK"], res["STR_DESCRIPTION"], res["STR_IOB"]]];
+        let xlWorkSheet = XLSX.utils.aoa_to_sheet(xlSheetHeaders);
+        XLSX.utils.book_append_sheet(xlWorkbook, xlWorkSheet, xlSheetName);
+        XLSX.writeFile(xlWorkbook, xlFilePath);
+        return xlWorkbook;
     }
 
-    getAllColumnData(columnKey, workbook)
+    openWorkBook() 
     {
-        try 
-        {
-            let dataList = []
-
-            return new Promise( (resolve , reject) => {
-                workbook.xlsx.readFile(res["FILE_PATH"] + res["FILE_NAME"])
-                .then(function() 
-                {
-                    //let sheet = this.workbook.getWorksheet(res["SHEET_NAME"])
-                    let column = exlSheet.getColumn(columnKey);
-                    column.eachCell(function (cell , rowNumber)
-                    {
-                        dataList.push(cell.text);
-                    });
-                    resolve(dataList);
-                });
-            });
-        } 
-        catch (error)
-        {
-            console.log("Error due to : " + error);
-            
-        }
-        
+        let xlFilePath = res["FILE_PATH"] + res["FILE_NAME"];
+        let xlWorkbook = XLSX.readFile(xlFilePath);
+        return xlWorkbook;
     }
 
-    InsertTask(objTask)
+    InsertTask(arrTask , xlWorkbook) 
     {
-        let wbk = new excel.Workbook();
-        console.log(res["SHEET_NAME"]);
-        wbk.xlsx.readFile(res["FILE_PATH"] + res["FILE_NAME"])
-        .then(function ()
-        {
-            console.log(wbk);
-            //let workSheet = Workbook.getWorksheet(res["SHEET_NAME"]);
-            //workSheet.addRows([objTask]);
-            //console.log(workSheet);
-        })
-        //return Workbook.xlsx.writeFile(res["FILE_PATH"] + res["FILE_NAME"]);
+       let xlFilePath = res["FILE_PATH"] + res["FILE_NAME"];
+       let xlSheet = xlWorkbook.Sheets[res["SHEET_NAME"]];
+       xlSheet = XLSX.utils.sheet_add_aoa (xlSheet , [arrTask] , {origin : -1})
+       console.log(xlSheet);
+       XLSX.writeFile(xlWorkbook , xlFilePath);
+       return xlWorkbook;
     }
 
 }
