@@ -2,6 +2,7 @@ let XL = require('././scripts/exlHandler');
 let fs = require('fs');
 let res = require('././shared/resources');
 const util = require('util');
+let operations = require('././scripts/coreOperations');
 
 
 let xlWorkbook;
@@ -10,26 +11,26 @@ async function saveTask()
 {
     try 
     {
-        //let data = {};
         let data = [];
         let dateTime = new Date();
         const exl = new XL();
+        const op = new operations();
         let exist = await checkFileExist();
         if(!exist)
         {
-            xlWorkbook = exl.createWorkBook();
+            xlWorkbook = exl.getNewWorkBook();
         }
         else
         {
             xlWorkbook = await exl.openWorkBook();
         }
-;
+
         data[0] = document.getElementById('module').value;
         data[1] = dateTime.getDate() + "/" + dateTime.getMonth() + "/" + dateTime.getFullYear();
         data[2] = document.getElementById('task').value;
         data[3] = document.getElementById('description').value;
         data[4] = document.getElementById('iob').value;
-        await exl.InsertTask(data , xlWorkbook);
+        await op.InsertTaskInExcel(data , xlWorkbook);
     } 
     catch (error) 
     {
