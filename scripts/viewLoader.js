@@ -1,10 +1,9 @@
 const ipc = require('electron').ipcRenderer;
 const UIList = [ 'TaskPanel' , 'LogsPanel' , 'AboutPanel' ];
 
-function loadUI(screenName)
+function loadLandingPage()
 {
-    document.getElementById(screenName).style.display = 'flex';
-    closeOtherUIWindows(screenName);
+    loadUIElement('views/overview');
 }
 
 function closeWindow()
@@ -12,13 +11,16 @@ function closeWindow()
     ipc.send('close-app');
 }
 
-function closeOtherUIWindows(ViewName)
+function loadUIElement(screenName)
 {
-    for (let index = 0; index < UIList.length; index++) 
-    {
-        if(ViewName !== UIList[index])
-        {
-            document.getElementById(UIList[index]).style.display = 'none';
-        }
-    }   
+    document.getElementById('display').innerHTML = 'none';
+
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('GET' , screenName + '.html');
+    xmlhttp.onreadystatechange = function(){
+        if(this.readyState !== 4) return;
+        if(this.status !== 200) return;
+        document.getElementById('display').innerHTML = this.responseText;
+    }
+    xmlhttp.send();
 }

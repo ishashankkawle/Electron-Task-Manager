@@ -5,26 +5,13 @@ const XLSX = require('xlsx')
 module.exports = class ExlJS 
 {
 
-    // createWorkBook(FILE_PATH , FILE_NAME , SHEET_NAME = 'Sheet 1') 
-    // {
-    //let xlFilePath = res["FILE_PATH"] + res["FILE_NAME"];
-    //--------------------------------------------------------------------------
-    // Variable Declarations
-    //--------------------------------------------------------------------------
-    //let xlFilePath = FILE_PATH + FILE_NAME;
-    //let xlSheetName = SHEET_NAME;
-
 
     //let xlWorkbook = XLSX.utils.book_new();
     //let xlSheetHeaders = [[res["STR_MODULE"], res["STR_DATE"], res["STR_TASK"], res["STR_DESCRIPTION"], res["STR_IOB"]]];
-    //let xlWorkSheet = XLSX.utils.aoa_to_sheet(xlSheetHeaders);
-
-
-
+    //let xlWorkSheet = XLSX.utils.aoa_to_sheet(xlSheetHeaders)
     //XLSX.utils.book_append_sheet(xlWorkbook, xlWorkSheet, xlSheetName);
     //XLSX.writeFile(xlWorkbook, xlFilePath);
     //return xlWorkbook;
-    //}
 
     getNewWorkBook() {
         return XLSX.utils.book_new();

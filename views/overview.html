@@ -1,0 +1,52 @@
+<!-- Task View -->
+<div class="row" id="TaskPanel" style="display:flex; margin-top: 20px; left: 10px;padding-right : 40px; ">
+    <div class="cell-3" style="margin-left: 0px;">
+        <ul class="v-menu">
+            <li class="menu-title">Completed Tasks</li>
+            <li>
+                <a href="#">
+                    <span class="mif-checkmark icon"></span>ES Development</a>
+            </li>
+        </ul>
+    </div>
+    <div class="cell-9" style="padding-left: 20px;">
+        <h4>Create Task</h4>
+        <div data-role="panel">
+
+                <div class="form-group">
+                    <label>Module Name</label>
+                    <select data-role="select" id="module">
+                        <option value="PricePlan">PricePlan</option>
+                        <option value="PricePlan_Workbench">PricePlan Workbench</option>
+                        <option value="PricePlan_Workflow">Priceplan Workflow</option>
+                        <option value="Admin">Admin</option>
+                    </select>
+                    <small class="text-muted">Module must be part of
+                        <b>Speedway BR-2</b> project</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Task Name</label>
+                    <input type="text" class="mt-1" placeholder="Enter Task Title" data-role="input" id="task" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Task Details</label>
+                    <textarea data-role="textarea" data-prepend="<span class='mif-bubbles'></span>"
+                        data-auto-size="true" data-max-height="200" placeholder="Enter task Description" id="description"
+                        required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Issues or Bugs</label>
+                    <textarea data-role="textarea" data-prepend="<span class='mif-warning'></span>"
+                        data-auto-size="true" data-max-height="200" placeholder="Enter Issues or bugs if any" id="iob"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button class="button success" onclick="saveTask()">Submit data</button>
+                    <input type="button" class="button" value="Cancel">
+                </div>
+        </div>
+    </div>
+</div>
