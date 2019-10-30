@@ -1,0 +1,103 @@
+<!-- CREATE TASK VIEW -->
+<div>
+    <h4>Create Task</h4>
+    <div data-role="panel">
+
+        <div class="form-group">
+            <label>Module Name</label>
+            <select data-role="select" id="Module">
+                <option value="PricePlan">PricePlan</option>
+                <option value="PricePlan_Workbench">PricePlan Workbench</option>
+                <option value="PricePlan_Workflow">Priceplan Workflow</option>
+                <option value="Admin">Admin</option>
+            </select>
+            <small class="text-muted">Module must be part of
+                <b>Speedway BR-2</b> project</small>
+        </div>
+
+        <div class="form-group">
+            <label>Task Title</label>
+            <input type="text" class="mt-1" placeholder="Enter Task Title" data-role="input" id="Title"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label>Task Details</label>
+            <textarea data-role="textarea" data-prepend="<span class='mif-bubbles'></span>"
+                data-auto-size="true" data-max-height="200" placeholder="Enter task Description"
+                id="Description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="cell-3">
+                    <label>ETA</label>
+                    <input id="ETA" type="text" data-role="calendarpicker" data-cls-calendar="compact">
+                </div>
+
+                <div class="cell-3">
+                    <label>Owner</label>
+                    <select data-role="select" id="Owner">
+                        <option value="Sunil">Sunil</option>
+                        <option value="Abid">Abid</option>
+                        <option value="Ashish">Ashish</option>
+                        <option value="Raghav">Raghav</option>
+                    </select>
+                </div>
+
+                <div class="cell-3">
+                    <label>Assigned To</label>
+                    <select data-role="select" id="Assign">
+                        <option value="Shashank">Shashank</option>
+                        <option value="Nitin">Nitin</option>
+                        <option value="Rohit">Rohit</option>
+                        <option value="Chinmay">Chinmay</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+
+                <div class="cell-3">
+                    <label>Type</label>
+                    <select data-role="select" id="Type">
+                        <option data-template="<span class='mif-codepen fg-pink icon'></span> $1"
+                            value="Feature">Feature</option>
+                        <option data-template="<span class='mif-warning fg-yellow icon'></span> $1"
+                            value="Defect">Defect</option>
+                        <option data-template="<span class='mif-bug fg-orange icon'></span> $1" value="Bug">Bug
+                        </option>
+                    </select>
+                </div>
+
+                <div class="cell-3">
+                    <label>Priority</label>
+                    <select data-role="select" id="Priority">
+                        <option class="fg-red" value="Critical">Critical</option>
+                        <option class="fg-orange" value="Major">Major</option>
+                        <option class="fg-cyan" value="Moderate">Moderate</option>
+                        <option class="fg-green" value="Minor">Minor</option>
+                    </select>
+                </div>
+
+                <div class="cell-3">
+                    <label>Order</label>
+                    <select data-role="select" id="Order">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <button class="button success" onclick="saveTask()">Submit data</button>
+            <input type="button" class="button" value="Cancel">
+        </div>
+    </div>
+</div>

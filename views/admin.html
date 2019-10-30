@@ -1,0 +1,23 @@
+<!-- admin View -->
+<div class="row" id="TaskPanel" style="display:flex; margin-top: 20px; left: 10px;padding-right : 40px; ">
+    <div class="cell-3" style="margin-left: 0px;">
+        <ul class="sidenav-simple h-auto sidenav-simple-expand-sm">
+            <li onclick="loadUIElement('adminView' , 'views/adminPages/taskView')"><a>
+                    <span class="mif-books icon"></span>
+                    <span class="title">New Task</span>
+                </a></li>
+            <li onclick="loadUIElement('adminView' , 'views/adminPages/userView')"><a>
+                    <span class="mif-user-plus icon"></span>
+                    <span class="title">New User</span>
+                </a></li>
+            <li onclick="loadUIElement('adminView' , 'views/adminPages/userView')"><a>
+                    <span class="mif-star-empty icon"></span>
+                    <span class="title">New Asset</span>
+                </a></li>
+        </ul>
+    </div>
+
+
+    <div class="cell-9" style="padding-left: 20px;" id="adminView">
+    </div>
+</div>

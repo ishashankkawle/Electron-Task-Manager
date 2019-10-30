@@ -1,52 +1,96 @@
-<!-- Task View -->
-<div class="row" id="TaskPanel" style="display:flex; margin-top: 20px; left: 10px;padding-right : 40px; ">
-    <div class="cell-3" style="margin-left: 0px;">
-        <ul class="v-menu">
-            <li class="menu-title">Completed Tasks</li>
-            <li>
-                <a href="#">
-                    <span class="mif-checkmark icon"></span>ES Development</a>
-            </li>
-        </ul>
-    </div>
-    <div class="cell-9" style="padding-left: 20px;">
-        <h4>Create Task</h4>
-        <div data-role="panel">
+<!-- Overview View -->
+<div id="OverviewPanel" style="display:flex; margin-top: 20px; left: 10px;padding-right : 40px; ">
 
-                <div class="form-group">
-                    <label>Module Name</label>
-                    <select data-role="select" id="module">
-                        <option value="PricePlan">PricePlan</option>
-                        <option value="PricePlan_Workbench">PricePlan Workbench</option>
-                        <option value="PricePlan_Workflow">Priceplan Workflow</option>
-                        <option value="Admin">Admin</option>
-                    </select>
-                    <small class="text-muted">Module must be part of
-                        <b>Speedway BR-2</b> project</small>
-                </div>
+    <div class="cell-10" id="overviewDisplay">
 
-                <div class="form-group">
-                    <label>Task Name</label>
-                    <input type="text" class="mt-1" placeholder="Enter Task Title" data-role="input" id="task" required>
-                </div>
+        <!-- TASK PANEL -->
+        <div class="row" id="TaskList">
+            <div class="cell-3" style="margin-left: 0px;">
+                <ul class="v-menu">
+                    <li class="menu-title">Completed Tasks</li>
+                    <li>
+                        <div class="row">
+                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
+                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
+                        </div>
+                        <div class="row">
+                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
+                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
+                        </div>
+                        <div class="row">
+                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
+                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
+                        </div>
+                        <div class="row">
+                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
+                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
 
-                <div class="form-group">
-                    <label>Task Details</label>
-                    <textarea data-role="textarea" data-prepend="<span class='mif-bubbles'></span>"
-                        data-auto-size="true" data-max-height="200" placeholder="Enter task Description" id="description"
-                        required></textarea>
-                </div>
 
-                <div class="form-group">
-                    <label>Issues or Bugs</label>
-                    <textarea data-role="textarea" data-prepend="<span class='mif-warning'></span>"
-                        data-auto-size="true" data-max-height="200" placeholder="Enter Issues or bugs if any" id="iob"></textarea>
-                </div>
+            <!-- Task View-->
+            <div class="cell-8" style="padding-left: 20px;">
+                <h3>Up Next To Do</h3>
 
-                <div class="form-group">
-                    <button class="button success" onclick="saveTask()">Submit data</button>
-                    <input type="button" class="button" value="Cancel">
+                <div class="panel" style="padding-left:5px;padding-right:5px">
+                    <div class="row" style="border-bottom: 1px solid;">
+                        <div class="cell-6 d-flex flex-align-center" style="padding-left:10px;">
+                            <h4>Batch Job Restructure</h4>
+                        </div>
+                        <div class="cell-4 d-flex flex-align-center">
+                            <span class="tally" style="margin-left: 5px;margin-right: 5px;">Module</span>
+                            <span class="tally success" style="margin-left: 5px;margin-right: 5px;">Priority</span>
+                            <div class="order"
+                                style="border:1px solid;margin-left: 5px;margin-right: 5px;padding:5px 10px">
+                                1
+                            </div>
+                        </div>
+                        <div class="cell-2 d-flex flex-align-center text-center" style="border-left: 1px solid;">
+                            <h6>23-10-2019</h6>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-left:10px; padding-right:10px">
+                        <strong>Description</strong>
+                        <p class="text-secondry">Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry.
+                            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+                            unknown
+                            printer took a galley of type and scrambled it to make a type specimen book.</p>
+                    </div>
+                    <div class="row d-flex flex-align-center"
+                        style="padding-left:10px; padding-right:10px;margin-top: 10px;">
+                        <div class="cell-8">
+                            <strong>Mark As</strong>
+                            <button class="button primary">Done</button>
+                            <button class="button secondary">Cancel</button>
+                            <button class="button">Stand By</button>
+                        </div>
+                        <div class="cell-4">
+                            <strong>Owner :</strong>
+                            <span class="text-secondry">Abid Khan</span>
+                        </div>
+                    </div>
                 </div>
+            </div>
         </div>
+
     </div>
+
+    <div class="cell-2">
+        
+        <button class="image-button success outline" style="margin-bottom: 10px;"
+            onclick="loadUIElement('overviewDisplay' , 'views/overviewPages/profileView')">
+            <span class="mif-wrench icon"></span>
+            <span class="caption">Profile</span>
+        </button>
+        <!-- <button class="image-button alert outline" style="margin-bottom: 10px;">
+            <span class="mif-cogs icon"></span>
+            <span class="caption">Account</span>
+        </button> -->
+    </div>
+
+
+
 </div>
