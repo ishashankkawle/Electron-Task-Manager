@@ -2,48 +2,76 @@ let XL = require('././core/exlHandler');
 let Util = require('././core/util');
 let fs = require('fs');
 let res = require('././shared/resources');
-let dbOperations = require('././core/dbOperations');
-
+let Admin = require('././scripts/adminManager')
 
 const util = new Util();
+const admin = new Admin();
 
-async function saveTask() {
-    try {
-        let data = [];
-        //const exl = new XL();
-        const dbOps = new dbOperations();
+async function operationTrigger(params) 
+{
+    switch (params) 
+    {
+        case "admin_createTask":
+            admin.saveTask(params);
+            break;
 
-        data.push(document.getElementById('Module').value);
-        data.push(document.getElementById('Title').value);
-        data.push(document.getElementById('Description').value);
-        data.push(document.getElementById('ETA').value);
-        data.push(document.getElementById('Owner').value);
-        data.push(document.getElementById('Assign').value);
-        data.push(document.getElementById('Type').value);
-        data.push(document.getElementById('Priority').value);
-        data.push(document.getElementById('Order').value);
+        case "admin_createUser":
+            admin.saveUser(params);
+            break;
+        
+        case "admin_createModule":
+            admin.saveModule(params);
+            break;
 
-        //await InsertTaskInExcel(data, xlWorkbook);
-        await insertIntoDatabase(data, dbOps);
-        //await getDataFromDatabase(dbOps);
-    }
-    catch (error) {
-        console.log("Error due to : " + error);
-    }
-
+        case "admin_createType":
+            admin.saveType(params);
+            break;
+        
+        case "admin_createPriority":
+            admin.savePriority(params);
+            break;        
+        default:
+            break;
+    }    
 }
 
-async function insertIntoDatabase(arrData, dbOps) {
-    let db = dbOps.initialize(res["firebaseConfig"]);
-    let keys = ["Module", "Title", "Description", "ETA", "Owner", "Assign", "Type", "Priority", "Order"]
-    let objData = util.generateJSONObject(keys, arrData);
-    dbOps.insertData(objData, "Task", db);
-}
+// async function saveTask() {
+//     try {
+//         let data = [];
+//         //const exl = new XL();
+//         const dbOps = new dbOperations();
 
-async function getDataFromDatabase(dbOps) {
-    let db = dbOps.initialize(res["firebaseConfig"]);
-    console.log(dbOps.readAllData("Task", db));
-}
+//         data.push(document.getElementById('Module').value);
+//         data.push(document.getElementById('Title').value);
+//         data.push(document.getElementById('Description').value);
+//         data.push(document.getElementById('ETA').value);
+//         data.push(document.getElementById('Owner').value);
+//         data.push(document.getElementById('Assign').value);
+//         data.push(document.getElementById('Type').value);
+//         data.push(document.getElementById('Priority').value);
+//         data.push(document.getElementById('Order').value);
+
+//         //await InsertTaskInExcel(data, xlWorkbook);
+//         await insertIntoDatabase(data, dbOps);
+//         //await getDataFromDatabase(dbOps);
+//     }
+//     catch (error) {
+//         console.log("Error due to : " + error);
+//     }
+
+// }
+
+// async function insertIntoDatabase(arrData, dbOps) {
+//     let db = dbOps.initialize(res["firebaseConfig"]);
+//     let keys = ["Module", "Title", "Description", "ETA", "Owner", "Assign", "Type", "Priority", "Order"]
+//     let objData = util.generateJSONObject(keys, arrData);
+//     dbOps.insertData(objData, "Task", db);
+// }
+
+// async function getDataFromDatabase(dbOps) {
+//     let db = dbOps.initialize(res["firebaseConfig"]);
+//     console.log(dbOps.readAllData("Task", db));
+// }
 
 async function InsertTaskInExcel(arrTask, xlWorkbook)
 {

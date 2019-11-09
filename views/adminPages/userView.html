@@ -4,46 +4,46 @@
 
         <div class="form-group">
             <label>Name</label>
-            <input type="text" data-role="input">
+            <input type="text" data-role="input" id="UserView-Name">
             <small class="text-muted">Please enter full name.</small>
         </div>
 
         <div class="row">
             <div class="cell-6">
                 <label>Id</label>
-                <input type="text" data-role="input">
+                <input type="text" data-role="input" id="UserView-UserId">
                 <small class="text-muted">Id should be specific to <b>PROJECT ONLY</b></small>
             </div>
 
             <div class="cell-6">
                 <label>Contact</label>
-                <input type="text" data-role="input">
+                <input type="text" data-role="input" id="UserView-Contact">
             </div>
         </div>
 
         <div class="form-group">
             <label>DOB </label>
-            <input data-role="datepicker">
+            <input data-role="datepicker" id="UserView-DOB">
         </div>
 
         <div class="form-group">
             <label>Email</label>
-            <input type="email" data-role="input">
+            <input type="email" data-role="input" id="UserView-Email">
             <input type="checkbox" data-role="checkbox" data-caption="Make Username same as Email">
         </div>
 
         <div class="form-group">
             <label>UserName</label>
-            <input type="text" data-role="input" data-prepend="<span class='mif-user-check'></span>">
+            <input type="text" data-role="input" data-prepend="<span class='mif-user-check'></span>" id="UserView-UserName">
         </div>
 
         <div class="form-group">
             <label>Password</label>
-            <input type="password" data-role="input" data-prepend="<span class='mif-unlock'></span>">
+            <input type="password" data-role="input" data-prepend="<span class='mif-unlock'></span>" id="UserView-Password">
         </div>
 
         <div class="form-group">
-            <button class="button success">Create</button>
+            <button class="button success" onclick="operationTrigger('admin_createUser')">Create</button>
             <input type="button" class="button" value="Cancel">
         </div>
     </div>

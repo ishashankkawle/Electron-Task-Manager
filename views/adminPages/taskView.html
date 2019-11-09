@@ -5,7 +5,7 @@
 
         <div class="form-group">
             <label>Module Name</label>
-            <select data-role="select" id="Module">
+            <select data-role="select" id="TaskView-Module">
                 <option value="PricePlan">PricePlan</option>
                 <option value="PricePlan_Workbench">PricePlan Workbench</option>
                 <option value="PricePlan_Workflow">Priceplan Workflow</option>
@@ -17,7 +17,7 @@
 
         <div class="form-group">
             <label>Task Title</label>
-            <input type="text" class="mt-1" placeholder="Enter Task Title" data-role="input" id="Title"
+            <input type="text" class="mt-1" placeholder="Enter Task Title" data-role="input" id="TaskView-Title"
                 required>
         </div>
 
@@ -25,19 +25,19 @@
             <label>Task Details</label>
             <textarea data-role="textarea" data-prepend="<span class='mif-bubbles'></span>"
                 data-auto-size="true" data-max-height="200" placeholder="Enter task Description"
-                id="Description" required></textarea>
+                id="TaskView-Description" required></textarea>
         </div>
 
         <div class="form-group">
             <div class="row">
                 <div class="cell-3">
                     <label>ETA</label>
-                    <input id="ETA" type="text" data-role="calendarpicker" data-cls-calendar="compact">
+                    <input id="TaskView-ETA" type="text" data-role="calendarpicker" data-cls-calendar="compact">
                 </div>
 
                 <div class="cell-3">
                     <label>Owner</label>
-                    <select data-role="select" id="Owner">
+                    <select data-role="select" id="TaskView-Owner">
                         <option value="Sunil">Sunil</option>
                         <option value="Abid">Abid</option>
                         <option value="Ashish">Ashish</option>
@@ -47,7 +47,7 @@
 
                 <div class="cell-3">
                     <label>Assigned To</label>
-                    <select data-role="select" id="Assign">
+                    <select data-role="select" id="TaskView-Assign">
                         <option value="Shashank">Shashank</option>
                         <option value="Nitin">Nitin</option>
                         <option value="Rohit">Rohit</option>
@@ -62,7 +62,7 @@
 
                 <div class="cell-3">
                     <label>Type</label>
-                    <select data-role="select" id="Type">
+                    <select data-role="select" id="TaskView-Type">
                         <option data-template="<span class='mif-codepen fg-pink icon'></span> $1"
                             value="Feature">Feature</option>
                         <option data-template="<span class='mif-warning fg-yellow icon'></span> $1"
@@ -74,7 +74,7 @@
 
                 <div class="cell-3">
                     <label>Priority</label>
-                    <select data-role="select" id="Priority">
+                    <select data-role="select" id="TaskView-Priority">
                         <option class="fg-red" value="Critical">Critical</option>
                         <option class="fg-orange" value="Major">Major</option>
                         <option class="fg-cyan" value="Moderate">Moderate</option>
@@ -84,7 +84,7 @@
 
                 <div class="cell-3">
                     <label>Order</label>
-                    <select data-role="select" id="Order">
+                    <select data-role="select" id="TaskView-Order">
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -96,7 +96,7 @@
             </div>
         </div>
         <div class="form-group">
-            <button class="button success" onclick="saveTask()">Submit data</button>
+            <button class="button success" onclick="operationTrigger('admin_createTask')">Submit data</button>
             <input type="button" class="button" value="Cancel">
         </div>
     </div>
