@@ -18,6 +18,14 @@ module.exports = {
       messagingSenderId: "544782536332",
       appId: "1:544782536332:web:6cbd101a13f9743c9175a9",
       measurementId: "G-GHMRQ8EQ6N"
-    }
+    },
+
+    "dbConfig" :{
+      dbEndPoint : "",
+      dbApiKey : "1058fa982e50406eb873e32b92d7d557"
+    },
+
+    "PostgresConnection" : "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs"
+
 };
 

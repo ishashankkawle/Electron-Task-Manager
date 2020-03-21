@@ -1,9 +1,11 @@
-let dbOperations = require('../core/dbOperations');
+let dbOperations = require('../core/databaseOperations');
 
 module.exports = class adminManager {
 
-    async saveTask() {
-        try {
+    async saveTask() 
+    {
+        try 
+        {
             let data = [];
             //const exl = new XL();
             const dbOps = new dbOperations();
@@ -18,8 +20,10 @@ module.exports = class adminManager {
             data.push(document.getElementById('TaskView-Priority').value);
             data.push(document.getElementById('TaskView-Order').value);
 
+            let keys = ["TaskId" , "Module", "Title", "Description", "DateTerminated", "Owner", "Assign", "Type", "Priority", "Order"];
+
             //await InsertTaskInExcel(data, xlWorkbook);
-            await this.insertTaskIntoDatabase(data, dbOps);
+            await this.saveObject("Task_master" , keys , data , dbOps);
             //await getDataFromDatabase(dbOps);
         }
         catch (error) {
@@ -35,15 +39,18 @@ module.exports = class adminManager {
             const dbOps = new dbOperations();
 
             data.push(document.getElementById('UserView-Name').value);
-            data.push(document.getElementById('UserView-UserId').value);
+            //data.push(document.getElementById('UserView-UserId').value);
             data.push(document.getElementById('UserView-Contact').value);
             data.push(document.getElementById('UserView-DOB').value);
             data.push(document.getElementById('UserView-Email').value);
             data.push(document.getElementById('UserView-UserName').value);
             data.push(document.getElementById('UserView-Password').value);
            
+            let keys = [ "UserId", "Name", "Contact", "DOB", "Email", "UserName", "Password"]
+            let arrEncryptedCols = [4,5];
+            //await this.insertUserIntoDatabase(data, dbOps);
+            await this.saveObject("User_master" , keys , data, dbOps , true ,arrEncryptedCols);
 
-            await this.insertUserIntoDatabase(data, dbOps);
         } catch (error) {
             console.log("Error due to : " + error);
         }
@@ -56,7 +63,8 @@ module.exports = class adminManager {
             let data = [];
             const dbOps = new dbOperations();
             data.push(document.getElementById('AssetView-Module').value);
-            await this.insertAssetIntoDatabase("Module", data, dbOps);
+            let keys = ["ModuleId","Module"];
+            await this.saveObject("Module_master", keys, data, dbOps);
         } catch (error) {
             console.log("Error due to : " + error);
         }
@@ -69,7 +77,8 @@ module.exports = class adminManager {
             let data = [];
             const dbOps = new dbOperations();
             data.push(document.getElementById('AssetView-Type').value);
-            await this.insertAssetIntoDatabase("Type", data, dbOps);
+            let keys = ["TypeId","Type"];
+            await this.saveObject("Type_master", keys, data, dbOps);
         } catch (error) {
             console.log("Error due to : " + error);
         }
@@ -82,34 +91,30 @@ module.exports = class adminManager {
             let data = [];
             const dbOps = new dbOperations();
             data.push(document.getElementById('AssetView-Priority').value);
-            await this.insertAssetIntoDatabase("Priority", data, dbOps);
+            let keys = ["PriorityId","Priority"];
+            await this.saveObject("Priority_master",keys,  data, dbOps);
         } catch (error) {
             console.log("Error due to : " + error);
         }
     }
 
-    async insertAssetIntoDatabase(asset , arrData , dbOps)
+
+    async saveObject(type , keys , arrData , dbOps , isEncrypted , arrEncrypted)
     {
-        let db = dbOps.initialize(res["firebaseConfig"]);
-        let keys = [asset]
-        let objData = util.generateJSONObject(keys, arrData);
-        dbOps.insertData(objData, asset, db);
+        // let db = dbOps.initialize(res["firebaseConfig"]);
+        // let objData = util.generateJSONObject(keys, arrData);
+        if(isEncrypted)
+        {
+            dbOps.addEncryptedData(type , keys , arrData , arrEncrypted)
+        }   
+        else
+        {
+            dbOps.addData(type , keys , arrData)
+        }
+        
     }
 
-    async insertUserIntoDatabase(arrData, dbOps) {
-        let db = dbOps.initialize(res["firebaseConfig"]);
-        let keys = ["Name", "UserId", "Contact", "DOB", "Email", "UserName", "Password"]
-        let objData = util.generateJSONObject(keys, arrData);
-        dbOps.insertData(objData, "User", db);
-    }
-
-    async insertTaskIntoDatabase(arrData, dbOps) {
-        let db = dbOps.initialize(res["firebaseConfig"]);
-        let keys = ["Module", "Title", "Description", "ETA", "Owner", "Assign", "Type", "Priority", "Order"]
-        let objData = util.generateJSONObject(keys, arrData);
-        dbOps.insertData(objData, "Task", db);
-    }
-
+    
     async getDataFromDatabase(dbOps) {
         let db = dbOps.initialize(res["firebaseConfig"]);
         console.log(dbOps.readAllData("Task", db));

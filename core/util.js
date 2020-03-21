@@ -32,4 +32,33 @@ module.exports = class Util
         }
         return objJSON;
     }
+
+    generateCustomArrayString(wrapper , arr)
+    {
+        let str="";
+        console.log("Len == " + arr.length);
+
+        if(arr.length == 1)
+        {
+            console.log("Inside check")
+            return wrapper+arr[0]+wrapper
+        }
+
+        for (let index = 0; index < (arr.length)-1; index++) 
+        {
+            if(index == 0)
+            {
+                console.log("Inside 0 index")
+                str = wrapper + arr[index] + wrapper + ",";
+            }
+            else
+            {
+                console.log("STR = "+ str)
+                str = str + wrapper + arr[index] + wrapper + ",";
+            }
+        }
+
+        console.log("STR == " + str)
+        return str + wrapper+arr[(arr.length)-1]+wrapper
+    }
 }
