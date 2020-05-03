@@ -4,12 +4,14 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-analytics.js"></script>
     <title>TSS</title>
 </head>
 
-<body>
+<body style="font-family: 'Chakra Petch', sans-serif !important">
 
     <!--Navigation Bar-->
     <ul class="h-menu d-flex flex-justify-start">
@@ -44,6 +46,16 @@
             </a>
         </li>
     </ul>
+
+
+    <!--PROGRESS BAR -->
+    <div class="flare" id="loader-box">
+        <div class="wrapper"></div>
+        <div class="loadbox">
+            <h6 style="margin: 01px;">Loading ... </h6>
+            <hr style="border: 1px solid #ff005e;margin-bottom:  0.5px;">
+        </div>
+      </div>
 
     <!-- SCREEN -->
     <div id= "display" class="grid">

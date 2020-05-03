@@ -1,0 +1,29 @@
+.wrapper
+{
+  position: fixed;
+  top: 40px;
+  left: 0;
+  z-index: 98;
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+  opacity: 0.5;
+}
+.loadbox
+{
+  z-index: 99;
+  /* margin-left: 40%; */
+  /* margin-top: 40%; */
+  background-color: white;
+  min-width: 20%;
+  max-width: auto;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  padding: 5px;
+}
+.flare
+{
+  display: contents;
+}

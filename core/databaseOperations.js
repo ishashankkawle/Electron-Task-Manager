@@ -14,19 +14,15 @@ module.exports = class dbOps
 
     addData(tableName , inputColumn , inputData , client)
     {
-        //console.log("cols = "+ util.generateCustomArrayString("\"" , inputColumn))
         var query = "INSERT INTO " + tableName + "(" + util.generateCustomArrayString("\"" , inputColumn) + ", \"DateCreated\") VALUES (nextval('master_db_id_sequence') , " + util.generateCustomArrayString("\'" , inputData) + " , current_timestamp)";
-
-        console.log(query);
-        //console.log(inputColumn.toString());
 
         if(client == undefined)
         {
             client = new pg.Client(res["PostgresConnection"]);
         }
 
-        this.executeQuery (query , client);
-        
+        var result = this.executeQuery (query , client);
+        console.log(result);
     }
 
     addEncryptedData(tableName , inputColumn , inputData , arrEncryptedColumnIndex , client)
@@ -37,8 +33,6 @@ module.exports = class dbOps
         }
 
         var query = "INSERT INTO " + tableName + "(" + util.generateCustomArrayString("\"" , inputColumn) + ", \"DateCreated\") VALUES (nextval('master_db_id_sequence') , ";
-
-        console.log(arrEncryptedColumnIndex.toString());
 
         for (let index = 0; index < inputData.length; index++) 
         {
@@ -62,33 +56,44 @@ module.exports = class dbOps
                 query = query + " '" + element + "' ,"        
             }    
         }
-
-        //query = query.substring(0,query.length - 1)
         query = query + " current_timestamp)"
-        console.log(query); 
         this.executeQuery(query , client);
     }
 
-    executeQuery(query , client)
+    async getAllData(tableName , client)
     {
-        client.connect(function(err) 
+        let query = "SELECT * FROM " + tableName
+
+        if(client == undefined)
         {
-            if(err) 
-            {
-              return console.error('could not connect to postgres', err);
-            }
-            client.query(query, function(err, result) 
-            {
-                if(err) {
-                  return console.error('error running query', err);
-                }
-                else
-                {
-                    return result;
-                }
-                client.end();
-            }); 
-        });
+            client = new pg.Client(res["PostgresConnection"]);
+        }
+
+        console.log(query);
+        let result = await this.executeQuery(query , client);
+        return result;
+    }
+
+    async getData(tableName , arrColumns , condition , client)
+    {
+        let query ="SELECT " + arrColumns.toString() + " FROM " + tableName + " WHERE " + condition;
+
+        if(client == undefined)
+        {
+            client = new pg.Client(res["PostgresConnection"]);
+        }
+
+        let result = await this.executeQuery(query , client);
+        return result;
+    }
+
+    async executeQuery(query , client)
+    {
+        let response;
+        client.connect();
+        await client.query(query).then((result)=>{response = result;}).catch((error)=>{response = error;});
+        client.end();
+        return response
     }
 
 }
