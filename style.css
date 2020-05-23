@@ -1,5 +1,10 @@
-.wrapper
+body
 {
+  background-color: #f7f7f7;
+  overflow: hidden;
+}
+
+.wrapper {
   position: fixed;
   top: 40px;
   left: 0;
@@ -9,8 +14,7 @@
   background-color: grey;
   opacity: 0.5;
 }
-.loadbox
-{
+.loadbox {
   z-index: 99;
   /* margin-left: 40%; */
   /* margin-top: 40%; */
@@ -23,7 +27,84 @@
   left: 40%;
   padding: 5px;
 }
-.flare
-{
+.flare {
   display: contents;
+}
+
+
+.task-card-panel
+{
+  padding-left:5px;
+  padding-right:5px;
+  margin-top:10px;
+  margin-bottom: 10px;
+  border-radius:3px;
+  border-left:3px solid;
+  background:white;
+}
+
+.path-view
+{
+  margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: 0.5px solid #ececec;
+  margin-top: 5px;
+}
+
+.path-breadcrum
+{
+  margin-top: 5px;
+  margin-bottom: 0px;
+}
+
+.view-panel
+{
+  display:flex; 
+}
+.task-card-footer
+{
+  padding-left:10px; 
+  padding-right:10px;
+  margin-top: 20px;
+  border-top: 1px dashed #e3e3e3;
+}
+.task-card-header-title
+{
+  padding-left:10px;
+}
+.task-card-body
+{
+  padding-left:10px; 
+  padding-right:10px;
+  padding-top: 10px;
+  max-height: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  /* border-top: 1px dashed #e3e3e3; */
+}
+.task-panel-subheader
+{
+  padding-left: 10px;
+  color:#adadad;
+}
+.task-panel-btn
+{
+  margin-right: 2px;
+}
+
+.overview-panel
+{
+  padding-right : 15px;   
+}
+
+.summary-section
+{
+  padding-left:15px;
+}
+
+.summary-panel
+{
+  background-color: white;
+  margin:10px;
+  border-radius: 3px;
 }

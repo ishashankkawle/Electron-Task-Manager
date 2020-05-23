@@ -2,7 +2,9 @@ const ipc = require('electron').ipcRenderer;
 
 function loadLandingPage()
 {
-    loadUIElement('display' , 'views/overview');
+
+    loadUIElement('display' , 'views/overview' , 'Overview');
+    operationTrigger('home_getData');
 }
 
 function closeWindow()
@@ -10,20 +12,27 @@ function closeWindow()
     ipc.send('close-app');
 }
 
-function loadUIElement( locationId , screenName)
+function loadUIElement( locationId , screenName , path)
 {
-    loadMask(1 , "loading view");
-
     let xmlhttp = new XMLHttpRequest();
     xmlhttp.open('GET' , screenName + '.html');
     xmlhttp.onreadystatechange = function(){
         if(this.readyState !== 4) return;
         if(this.status !== 200) return;
-        loadMask(0);
         document.getElementById(locationId).innerHTML = this.responseText;
     }
     
     xmlhttp.send();
+
+    if(screenName == 'views/overview' )
+    {
+        operationTrigger('home_getData');
+    }
+
+    if(path != undefined)
+    {
+        document.getElementById("path-name").innerText = path;
+    }
 }
 
 function toggleDisplayElements(elementId1 , elementId2)

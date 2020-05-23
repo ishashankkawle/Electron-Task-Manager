@@ -9,6 +9,7 @@
     "electron": "^3.0.5"
   },
   "dependencies": {
+    "electron-reload": "^1.5.0",
     "firebase": "^7.2.0",
     "pg": "^7.18.2",
     "xlsx": "^0.14.1",

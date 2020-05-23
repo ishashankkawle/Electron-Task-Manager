@@ -1,98 +1,123 @@
-<div id="OverviewPanel" style="display:flex; margin-top: 20px; left: 10px;padding-right : 40px; ">
-
-    <div class="cell-10" id="overviewDisplay">
-
+<div id="OverviewPanel" class="view-panel overview-panel">
+    <div class="cell-12" id="overviewDisplay">
         <!-- TASK PANEL -->
         <div class="row" id="TaskList">
-            <div class="cell-3" style="margin-left: 0px;">
-                <ul class="v-menu">
-                    <li class="menu-title">Completed Tasks</li>
+
+            <!-- Summary View-->
+            <div class="cell-6 summary-section">
+                <h4>Summary</h4>
+                <div class="row">
+                    <div class="cell-2 summary-panel">
+                        Total <h1>10</h1>
+                    </div>
+
+                    <div class="cell-2 summary-panel">
+                        Active <h1>10</h1>
+                    </div>   
+                    
+                    <div class="cell-2 summary-panel">
+                        Completed <h1>4</h1>
+                    </div>
+
+                    <div class="cell-7 summary-panel">
+                        Modular Info
+                        <table class="table compact">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Module</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>ETL</td>
+                                    <td>23</td>
+                                </tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Task View-->
+            <div class="cell-6" style="height: 564px;overflow-y: auto;">
+                <ul id="task-list" style="list-style-type:none;margin-left :0px">
                     <li>
-                        <div class="row">
-                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
-                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
+
+                        <div class="cell-12 task-card-panel" id="task-panel">
+
+                            <!-- TASK CARD HEADER -->
+                            <div class="row">
+
+                                <div class="cell-9 task-card-header-title">
+                                    <h5 style="margin-bottom:0px">Title</h5>
+                                    <span style="display: none;">id</span>
+                                </div>
+                                <div class="cell-3 d-flex flex-justify-start">
+                                    <!-- <a class="ml-auto"><span class="mif-more-vert"></span></a>
+                                    <ul class="d-menu context" data-role="dropdown">
+                                        <li onClick="operationTrigger(this.id , 'Completed', 'update_task')"><a href="#"><span class="mif-done icon"></span>Complete</a></li>
+                                        <li onClick="operationTrigger(this.id , 'In_Progress', 'update_task')"><a href="#"><span class="mif-wrench icon"></span>In_Progress</a></li>
+                                        <li onClick="operationTrigger(this.id , 'delete_task')"><a href="#"><span class="mif-bin icon"></span>Delete</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#"><span class="mif-pencil icon"></span> Edit</a></li>
+                                    </ul> -->
+
+                                    <button class="task-panel-btn ml-auto button cycle outline" onClick="operationTrigger(this.id , 'complete_task')"><span class="mif-done mif-lg fg-green"></span></button>
+                                    <button class="task-panel-btn button cycle outline" onClick="operationTrigger(this.id , 'delete_task')"><span class="mif-bin mif-lg fg-red"></span></button>
+                                    <button class="task-panel-btn button cycle outline" onClick="operationTrigger(this.id , 'edit_task')"><span class="mif-pencil mif-lg fg-blue"></span></button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <span class="task-panel-subheader"><small>Critical</small> | <small>Module</small> |
+                                    <small>20-3-2019</small></span>
+                            </div>
+
+
+                            <!-- TASK CARD BODY -->
+                            <div class="row task-card-body">
+                                <h6><small>
+                                        Description here as lorem sasii asdlasi duilasduilas uldiasd isayisal dasidlsa
+                                        dylasdyiasyd isady sladlsayid las dilsad isadisyadias di sydy siadylsad
+                                        lhakfhuekshufhksueu usek f e fksefhkuse kuf sekufhskuehf sukehf ksehfksefkse
+                                        fkseh fkues hfuk adliwjiald aw dalw djiawdi lawjd jjaiwjdlai jdilaw jdiawjdl
+                                        awdjliadlif yafayf a fa f a f af Description here as lorem sasii asdlasi
+                                        duilasduilas uldiasd isayisal dasidlsa dylasdyiasyd isady sladlsayid las dilsad
+                                        isadisyadias di sydy siadylsad lhakfhuekshufhksueu usek f e fksefhkuse kuf
+                                        sekufhskuehf sukehf ksehfksefkse fkseh fkues hfuk adliwjiald aw dalw djiawdi
+                                        lawjd jjaiwjdlai jdilaw jdiawjdl awdjliadlif yafayf a fa f a f af
+                                    </small></h6>
+                            </div>
+
+                            <!-- TASK CARD FOOTER -->
+                            <div class="row d-flex flex-align-center task-card-footer">
+
+                                <div class="cell-8">
+                                    <strong>Assigned by :</strong>
+                                    <span class="text-secondry"></span>
+                                </div>
+                                <div class="cell-3">
+                                    <span class="tally">In_Progress</span>
+                                </div>
+                                <div class="cell-1">
+                                    <button class="button cycle outline"><span
+                                            class="mif-info mif-lg fg-blue"></span></button>
+                                </div>
+                                <!-- <div class="cell-6 ">
+                                        <button class="button cycle outline" onClick="operationTrigger(this.id , 'complete_task')"><span class="mif-done mif-lg fg-green"></span></button>
+                                        <button class="button cycle outline" onClick="operationTrigger(this.id , 'delete_task')"><span class="mif-bin mif-lg fg-red"></span></button>
+                                        <button class="button cycle outline" onClick="operationTrigger(this.id , 'edit_task')"><span class="mif-pencil mif-lg fg-blue"></span></button>
+                                    </div> -->
+
+                            </div>
                         </div>
-                        <div class="row">
-                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
-                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
-                        </div>
-                        <div class="row">
-                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
-                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
-                        </div>
-                        <div class="row">
-                            <a href="#" class="cell-10"><span class="mif-checkmark icon"></span>ES Development</a> <span
-                                class="cell-2 d-flex flex-align-center mif-cancel icon"></span>
-                        </div>
+
                     </li>
                 </ul>
             </div>
 
-
-            <!-- Task View-->
-            <div class="cell-8" style="padding-left: 20px;;height: 564px;overflow-y: auto;">
-                <div class="row"><div class="cell-10"><h3 style="margin-top: 0px;">Up Next To Do</h3></div><div class="cell-2"><span class="mif-replay mif-lg fg-cyan" onclick="operationTrigger('home_getData')">Refresh</span></div></div>
-                    <ul id="task-list" style="list-style-type:none;">
-                        <li>
-                            <div class="panel" id="task-panel" style="padding-left:5px;padding-right:5px;margin-top:5px;margin-bottom: 5px;">
-                                <div class="row" style="border-bottom: 1px solid;">
-                                    <div class="cell-6 d-flex flex-align-center" style="padding-left:10px;">
-                                        <h4>Batch Job Restructure</h4>
-                                    </div>
-                                    <div class="cell-4 d-flex flex-align-center">
-                                        <span class="tally" style="margin-left: 5px;margin-right: 5px;">Module</span>
-                                        <span class="tally success" style="margin-left: 5px;margin-right: 5px;">Priority</span>
-                                        <div class="order"
-                                            style="border:1px solid;margin-left: 5px;margin-right: 5px;padding:5px 10px">
-                                            1
-                                        </div>
-                                    </div>
-                                    <div class="cell-2 d-flex flex-align-center text-center" style="border-left: 1px solid;">
-                                        <h6>23-10-2019</h6>
-                                    </div>
-                                </div>
-                                <div class="row" style="padding-left:10px; padding-right:10px">
-                                    <strong>Description</strong>
-                                    <p class="text-secondry">Lorem Ipsum is simply dummy text of the printing and typesetting
-                                        industry.
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an
-                                        unknown
-                                        printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                </div>
-                                <div class="row d-flex flex-align-center"
-                                    style="padding-left:10px; padding-right:10px;margin-top: 10px;">
-                                    <div class="cell-8">
-                                        <strong>Mark As</strong>
-                                        <button class="button primary">Done</button>
-                                        <button class="button secondary">Cancel</button>
-                                        <button class="button">Stand By</button>
-                                    </div>
-                                    <div class="cell-4">
-                                        <strong>Owner :</strong>
-                                        <span class="text-secondry">Abid Khan</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-            </div>
         </div>
-
     </div>
-
-    <div class="cell-2">
-        
-        <button class="image-button success outline" style="margin-bottom: 10px;"
-            onclick="loadUIElement('overviewDisplay' , 'views/overviewPages/profileView')">
-            <span class="mif-wrench icon"></span>
-            <span class="caption">Profile</span>
-        </button>
-        <!-- <button class="image-button alert outline" style="margin-bottom: 10px;">
-            <span class="mif-cogs icon"></span>
-            <span class="caption">Account</span>
-        </button> -->
-    </div>
-
-
-
 </div>

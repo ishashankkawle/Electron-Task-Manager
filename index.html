@@ -4,36 +4,35 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4/css/metro-all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500&display=swap" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.2.0/firebase-analytics.js"></script>
     <title>TSS</title>
 </head>
 
-<body style="font-family: 'Chakra Petch', sans-serif !important">
+<body>
 
     <!--Navigation Bar-->
     <ul class="h-menu d-flex flex-justify-start">
-        <li onclick="loadUIElement('display' , 'views/overview')">
+        <li onclick="loadUIElement('display' , 'views/overview', 'Overview')">
             <a href="#">
                 <span class="mif-cog fg-pink icon"></span>
                 <span class="title">Tasks</span>
             </a>
         </li>
-        <li onclick="loadUIElement('display' ,'views/history')">
+        <li onclick="loadUIElement('display' ,'views/history' , 'All Tasks')">
             <a href="#">
                 <span class="mif-file-text fg-cyan icon"></span>
                 <span class="title">Logs</span>
             </a>
         </li>
-        <li onclick="loadUIElement('display' ,'views/about')">
+        <li onclick="loadUIElement('display' ,'views/about' , 'About')">
             <a href="#">
                 <span class="mif-question fg-green icon"></span>
                 <span class="title">About</span>
             </a>
         </li>
-        <li class="ml" onclick="loadUIElement('display' ,'views/admin')" >
+        <li class="ml" onclick="loadUIElement('display' ,'views/admin' , 'Admin')" >
                 <a href="#">
                     <span class="mif-user fg-red icon"></span>
                     <span class="title">Administrator</span>
@@ -58,13 +57,16 @@
       </div>
 
     <!-- SCREEN -->
+    <div class="row path-view">
+        <span class="mif-home mif-lg"></span><span class="mif-chevron-right mif-lg"></span><h6 class="path-breadcrum" id="path-name"></h6>
+    </div>
     <div id= "display" class="grid">
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.metroui.org.ua/v4/js/metro.min.js"></script>
     <script src="scripts/viewLoader.js"></script>
-    <script src="scripts/taskHandler.js"></script>
+    <script src="scripts/operationHandler.js"></script>
     <script>
         document.getElementById('display').addEventListener('load' , loadLandingPage())
     </script>
