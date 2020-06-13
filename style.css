@@ -2,7 +2,16 @@ body
 {
   background-color: #f7f7f7;
   overflow: hidden;
+  font-family: 'Nunito Sans', sans-serif;
 }
+
+
+.main-nav
+{
+  background-color: #C2185B;
+  color: #fff;
+}
+
 
 .wrapper {
   position: fixed;
@@ -39,8 +48,9 @@ body
   margin-top:10px;
   margin-bottom: 10px;
   border-radius:3px;
-  border-left:3px solid;
+  /* border-left:3px solid; */
   background:white;
+  box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 2px 0 rgba(63,63,68,0.15);
 }
 
 .path-view
@@ -94,17 +104,58 @@ body
 
 .overview-panel
 {
-  padding-right : 15px;   
-}
-
-.summary-section
-{
-  padding-left:15px;
+  padding-right : 15px;  
+  height: 100%; 
 }
 
 .summary-panel
 {
   background-color: white;
-  margin:10px;
+  margin-top:10px;
+  margin-bottom:10px;
   border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(63,63,68,0.05), 0 1px 2px 0 rgba(63,63,68,0.15);
+}
+.summ-tile-text
+{
+  /* border-left:3px solid #E92E63; */
+  color:#E91E63;
+  font-weight: 800;
+}
+.ovr-task-panel
+{
+  height: -webkit-fill-available;
+  overflow-y: auto;
+  margin-left: 15px;
+}
+.ovr-task-list
+{
+  list-style-type:none;
+  margin-left :0px
+}
+.ovr-summ-panel
+{
+  height: 255px;
+  /* overflow-y: auto; */
+  padding-left:15px;
+  /* padding-right: 30px; */
+}
+.ovr-summ-active-card
+{
+  width: 48.667%;
+  margin-right: 5px;
+}
+.ovr-summ-card-progress-bar
+{
+  margin-left:7px; 
+  margin-top: 10px;
+}
+.ovr-summ-count-sec
+{
+  padding-bottom: 0;
+  padding-left: 12px;
+}
+.ovr-summ-tile-cout-sec
+{
+  margin-bottom: 5px;
 }

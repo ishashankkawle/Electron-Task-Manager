@@ -73,7 +73,7 @@ module.exports = class dbOps
         return result;
     }
 
-    async getData(tableName , arrColumns , condition , client)
+    async getData(tableName , arrColumns , condition , opions, client)
     {
         let query ="SELECT " + arrColumns.toString() + " FROM " + tableName;
 
@@ -82,9 +82,14 @@ module.exports = class dbOps
             client = new pg.Client(res["PostgresConnection"]);
         }
 
-        if(condition !== undefined)
+        if(condition !== undefined && condition !== "")
         {
             query = query + " WHERE " + condition;
+        }
+
+        if(opions !== undefined)
+        {
+            query = query + " " + opions;
         }
 
         let result = await this.executeQuery(query , client);

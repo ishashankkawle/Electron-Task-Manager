@@ -2,9 +2,7 @@ const ipc = require('electron').ipcRenderer;
 
 function loadLandingPage()
 {
-
     loadUIElement('display' , 'views/overview' , 'Overview');
-    operationTrigger('home_getData');
 }
 
 function closeWindow()

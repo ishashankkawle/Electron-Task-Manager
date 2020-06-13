@@ -13,12 +13,19 @@ module.exports = class taskManager
     {
         const dbOps = new dbOperations();
         let result = {};
-        result["total"]= await dbOps.getData("Task_Master" , "COUNT(*)");
-        let activeCondition = " \"TaskStatus\" IN ( \"New\" , \"In_Progress\") ";
-        let completeCondition = " \"TaskStatus\"  = \"Completed\" ";
-        result["active"]= await dbOps.getData("Task_Master" , "COUNT(*)" , activeCondition);
-        result["complete"]= await dbOps.getData("Task_Master" , "COUNT(*)" , completeCondition);
-        console.log(result);
+        let totalcount= await dbOps.getData("Task_Master" , "COUNT(*)");
+        let activeCondition = " \"TaskStatus\" IN ( \'New\' , \'In_Progress\') ";
+        let completeCondition = " \"TaskStatus\"  = \'Completed\' ";
+        let activeCount= await dbOps.getData("Task_Master" , "COUNT(*)" , activeCondition);
+        let completeCount= await dbOps.getData("Task_Master" , "COUNT(*)" , completeCondition);
+        result["total"] = totalcount["rows"][0]["count"];
+        result["active"] = activeCount["rows"][0]["count"];
+        result["complete"] = completeCount["rows"][0]["count"];
+        let opt = "GROUP BY \"Module\"";
+        let arrColms = [" \"Module\" " , "count(0)"];
+        let moduleFragmentationData = await dbOps.getData("Task_Master" ,arrColms , "" , opt);
+        result["ModuleData"] = moduleFragmentationData["rows"];
+        return result;
     }
 
     async updateTask(id , state)

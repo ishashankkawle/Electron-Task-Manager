@@ -1,44 +1,34 @@
 let conf = require('../scripts/config');
 
-module.exports = class Overview_ViewLoader
-{
-    async parseTaskSectionObject(data , panel_element , list_element)
-    {
+module.exports = class Overview_ViewLoader {
+    async parseTaskSectionObject(data, panel_element, list_element) {
         let datarows = data["rows"];
         list_element.innerHTML = '';
-        
+        console.log("Length = " + datarows.length)
         //----------------------------------------------
         // TASK LIST
         //----------------------------------------------
-        for (let index = 0; index < datarows.length; index++) 
-        {
+        //for (let index = 0; index < datarows.length; index++) 
+        for (let index = 0; index < 3; index++) {
             const data_element = datarows[index];
             let node = panel_element.cloneNode(true);
 
-            let title = node.children[0].children[0].children[0];
-            let id = node.children[0].children[0].children[1];
-            let moduleName = node.children[1].children[0].children[1];
-            let priority = node.children[1].children[0].children[0];
-            let status = node.children[3].children[1].children[0];
-            let endDate = node.children[1].children[0].children[2];
-            let description = node.children[2].children[0].children[0];
-            let owner = node.children[3].children[0].children[1];
-            //let btn_task_complete = node.children[0].children[1].children[1].children[0];
-            //let btn_task_inprgss = node.children[0].children[1].children[1].children[1];
-            //let btn_task_delete = node.children[0].children[1].children[1].children[2];
-            //let btn_task_edit = node.children[0].children[1].children[1].children[4];
-            //let context_anchor = node.children[0].children[1].children[0];
-            //let context_menu = node.children[0].children[1].children[1];
+            let title = node.children[0].children[1].children[0].children[0];
+            let id = node.children[0].children[1].children[1];
+            let moduleName = node.children[0].children[1].children[2].children[0].children[1];
+            let priority = node.children[0].children[1].children[2].children[0].children[0];
+            let status = node.children[0].children[2].children[0];
+            let endDate = node.children[0].children[1].children[2].children[0].children[2];
+
 
             title.innerHTML = data_element["Title"];
             moduleName.innerHTML = data_element["Module"];
             priority.innerHTML = data_element["Priority"];
             status.innerHTML = data_element["TaskStatus"];
             endDate = data_element["DateTerminated"];
-            description.innerHTML = data_element["Description"];
-            owner.innerHTML = data_element["Owner"];
+            //description.innerHTML = data_element["Description"];
+            //owner.innerHTML = data_element["Owner"];
 
-            console.log(conf["TaskTypeToCardColorMap"][data_element["Type"]] + " ----------------> " + data_element["Type"]);
             panel_element.style.borderLeftColor = conf["TaskTypeToCardColorMap"][data_element["Type"]]
 
             //btn_task_complete.id = "dne"+data_element["TaskId"];
@@ -55,7 +45,118 @@ module.exports = class Overview_ViewLoader
 
     }
 
-    async parseSummarySectionObject(data , root_element){
-        
+    async parseSummarySectionObject(data, root_element, module_table, perf_chart, mod_occup_chart) {
+        let activeTile = root_element.children[0].children[0].children[0].children[0].children[0].children[1]
+        let completeTile = root_element.children[0].children[0].children[1].children[0].children[0].children[1]
+        let activeProgressBar = root_element.children[0].children[0].children[0].children[1].children[0]
+        let activeProgressBarValue = root_element.children[0].children[0].children[0].children[1].children[1].children[0]
+        let completeProgressBar = root_element.children[0].children[0].children[1].children[1].children[0]
+        let completeProgressBarValue = root_element.children[0].children[0].children[1].children[1].children[1].children[0]
+
+        let totaTaskCount = parseInt(data["total"]);
+        let percActive = parseInt(data["active"]) * 100 / totaTaskCount;
+        let perComplete = parseInt(data["complete"]) * 100 / totaTaskCount;
+
+
+
+        let moduleData = data["ModuleData"];
+        let moduleNames = [];
+        let moduleCount = [];
+
+        //---------------------------------------------------------------
+        // SET ELEMENT DATA
+        //---------------------------------------------------------------
+        activeTile.innerHTML = data["active"]
+        completeTile.innerHTML = data["complete"]
+        activeProgressBar.setAttribute('data-value', percActive)
+        completeProgressBar.setAttribute('data-value', perComplete)
+        activeProgressBarValue.innerHTML = percActive
+        completeProgressBarValue.innerHTML = perComplete
+
+        //---------------------------------------------------------------
+        // MODULE FRAGENTATION TABLE
+        //---------------------------------------------------------------
+        for (let index = 0; index < moduleData.length; index++) {
+            const element = moduleData[index];
+            let row = module_table.insertRow(index);
+
+            for (let colIndex = 0; colIndex < 3; colIndex++) {
+                let cell = row.insertCell(colIndex);
+                if (colIndex == 0) {
+                    cell.innerHTML = index + 1;
+                }
+                else if (colIndex == 1) {
+                    cell.innerHTML = element["Module"];
+                    moduleNames.push(element["Module"])
+                }
+                else {
+                    cell.innerHTML = element["count"];
+                    moduleCount.push(element["count"]);
+                }
+            }
+        }
+
+
+
+        //---------------------------------------------------------------
+        // MODULE FRAGENTATION CHART
+        //---------------------------------------------------------------
+        var ctx2 = mod_occup_chart.getContext('2d');
+        var chart2 = new Chart(ctx2, {
+            // The type of chart we want to create
+            type: 'doughnut',
+
+            // The data for our dataset
+            data: {
+                datasets: [{
+
+                    data: moduleCount,
+                    backgroundColor: [
+                        'rgb(0, 204, 0)',
+                        'rgb(255, 153, 0)'
+                    ]
+                }],
+
+                labels: moduleNames,
+
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+
+        //---------------------------------------------------------------
+        // MONTHLY PERFORMANCE CHART
+        //---------------------------------------------------------------
+        var ctx = perf_chart.getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                datasets: [{
+                    label: 'Monthly Performance',
+                    backgroundColor: 'rgb(63, 81, 181)',
+                    borderColor: 'rgb(63, 81, 181)',
+                    data: [0, 10, 5, 2, 20, 30]
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 20
+                    }
+                }
+            }
+        });
     }
 }

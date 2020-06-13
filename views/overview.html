@@ -1,61 +1,115 @@
 <div id="OverviewPanel" class="view-panel overview-panel">
     <div class="cell-12" id="overviewDisplay">
-        <!-- TASK PANEL -->
         <div class="row" id="TaskList">
 
-            <!-- Summary View-->
-            <div class="cell-6 summary-section">
-                <h4>Summary</h4>
-                <div class="row">
-                    <div class="cell-2 summary-panel">
-                        Total <h1>10</h1>
+            <!-- SUMMARY VIEW-->
+            <div class="cell-12 ovr-summ-panel" id="summary-section">
+                <div class="row" style="height: 244px; margin-bottom: 10px;">
+                    <div class="cell-2">
+
+                        <div class="summary-panel summ-tile">
+                            <div class="row ovr-summ-tile-cout-sec">
+                                <div class="cell-8 ovr-summ-count-sec">
+                                    <span class=" cell-12 summ-tile-text"
+                                        style="padding-bottom: 0;">Active</span>
+                                    <strong class="cell-12" style="padding-top: 0;">0</strong>
+                                </div>
+                                <div class="cell-4 text-center">
+                                    <span class="mif-cogs mif-4x fg-green"></span>
+                                </div>
+                            </div>
+                            <div class="row  d-flex flex-justify-center">
+                                <!-- <progress class="cell-6 ovr-summ-card-progress-bar" max='100' value="5"></progress> -->
+                                <div class="cell-6 ovr-summ-card-progress-bar" data-cls-bar="bg-blue"
+                                    data-role="progress" data-small="true"></div>
+                                <small class="cell-5 text-right"
+                                    style="margin-top: 0px; color: #757575;"><b>0</b>%
+                                    active</small>
+                            </div>
+                        </div>
+
+                        <div class=" summary-panel summ-tile">
+                            <div class="row ovr-summ-tile-cout-sec">
+                                <div class="cell-8 ovr-summ-count-sec">
+                                    <span class=" cell-12 summ-tile-text"
+                                        style="padding-bottom: 0;">Complete</span>
+                                    <strong class="cell-12" style="padding-top: 0;">0</strong>
+                                </div>
+                                <div class="cell-4 text-center">
+                                    <span class="mif-done_all mif-4x fg-cyan"></span>
+                                </div>
+                            </div>
+                            <div class="row  d-flex flex-justify-center">
+                                <div class="cell-6 ovr-summ-card-progress-bar" data-cls-bar="bg-blue"
+                                    data-role="progress" data-small="true"></div>
+                                <small class="cell-5 text-right"
+                                    style="margin-top: 0px; color: #757575;"><b>0</b>%
+                                    complete</small>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="cell-2 summary-panel">
-                        Active <h1>10</h1>
-                    </div>   
-                    
-                    <div class="cell-2 summary-panel">
-                        Completed <h1>4</h1>
+                    <div class="cell-6">
+                        <div class="row summary-panel" style="height: 225px;">
+                            <div class="cell-6 summ-tile">
+                                <span class="summ-tile-text">Modular Performance</span>
+                                <table class="table subcompact" data-show-table-info="false" data-role="table"
+                                    data-show-search="false" data-show-rows-steps="false"
+                                    data-show-pagination="true" data-pagination-short-mode="true" data-rows="3"
+                                    id="module-frag-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Module</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="cell-6 summ-tile">
+                                <span class="summ-tile-text">Modular Occupasion</span>
+                                <canvas id="mod-occup-chart"></canvas>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="cell-7 summary-panel">
-                        Modular Info
-                        <table class="table compact">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Module</th>
-                                    <th>Total</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>ETL</td>
-                                    <td>23</td>
-                                </tr>
-                        </table>
+                    <div class="cell-4">
+                        <div class="cell-12 summary-panel" style="height :225px">
+                            <span class="summ-tile-text">Monthly Performance</span>
+                            <canvas id="performance-chart" ></canvas>
+                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <!-- Task View-->
-            <div class="cell-6" style="height: 564px;overflow-y: auto;">
-                <ul id="task-list" style="list-style-type:none;margin-left :0px">
+            <!-- TASK VIEW-->
+            <div class="cell-12 ovr-task-panel">
+                <h4>Next to do</h4>
+                <ul class="ovr-task-list" id="task-list">
                     <li>
 
                         <div class="cell-12 task-card-panel" id="task-panel">
 
                             <!-- TASK CARD HEADER -->
                             <div class="row">
-
-                                <div class="cell-9 task-card-header-title">
-                                    <h5 style="margin-bottom:0px">Title</h5>
-                                    <span style="display: none;">id</span>
+                                <div class="cell-1 text-center">
+                                    <span class="mif-bug mif-3x fg-orange"></span>
                                 </div>
-                                <div class="cell-3 d-flex flex-justify-start">
+                                <div class="cell-8 task-card-header-title">
+                                    <p style="overflow: hidden;text-overflow: ellipsis; white-space: nowrap;"><strong style="margin-bottom:0px; margin-top: 10px;">This is test tile to verify length oh div block that contains data regarding task in title section</strong></p>
+                                    <span style="display: none;">id</span>
+                                    <div class="row">
+                                        <span class="task-panel-subheader"><small>Critical</small> | <small>Module</small> |
+                                            <small>20-3-2019</small></span>
+                                    </div>        
+                                </div>
+                                <div class="cell-1 flex-self-center">
+                                    <code>in_progress</code>
+                                </div>
+                                <div class="cell-2 d-flex flex-self-center">
                                     <!-- <a class="ml-auto"><span class="mif-more-vert"></span></a>
                                     <ul class="d-menu context" data-role="dropdown">
                                         <li onClick="operationTrigger(this.id , 'Completed', 'update_task')"><a href="#"><span class="mif-done icon"></span>Complete</a></li>
@@ -69,48 +123,6 @@
                                     <button class="task-panel-btn button cycle outline" onClick="operationTrigger(this.id , 'delete_task')"><span class="mif-bin mif-lg fg-red"></span></button>
                                     <button class="task-panel-btn button cycle outline" onClick="operationTrigger(this.id , 'edit_task')"><span class="mif-pencil mif-lg fg-blue"></span></button>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <span class="task-panel-subheader"><small>Critical</small> | <small>Module</small> |
-                                    <small>20-3-2019</small></span>
-                            </div>
-
-
-                            <!-- TASK CARD BODY -->
-                            <div class="row task-card-body">
-                                <h6><small>
-                                        Description here as lorem sasii asdlasi duilasduilas uldiasd isayisal dasidlsa
-                                        dylasdyiasyd isady sladlsayid las dilsad isadisyadias di sydy siadylsad
-                                        lhakfhuekshufhksueu usek f e fksefhkuse kuf sekufhskuehf sukehf ksehfksefkse
-                                        fkseh fkues hfuk adliwjiald aw dalw djiawdi lawjd jjaiwjdlai jdilaw jdiawjdl
-                                        awdjliadlif yafayf a fa f a f af Description here as lorem sasii asdlasi
-                                        duilasduilas uldiasd isayisal dasidlsa dylasdyiasyd isady sladlsayid las dilsad
-                                        isadisyadias di sydy siadylsad lhakfhuekshufhksueu usek f e fksefhkuse kuf
-                                        sekufhskuehf sukehf ksehfksefkse fkseh fkues hfuk adliwjiald aw dalw djiawdi
-                                        lawjd jjaiwjdlai jdilaw jdiawjdl awdjliadlif yafayf a fa f a f af
-                                    </small></h6>
-                            </div>
-
-                            <!-- TASK CARD FOOTER -->
-                            <div class="row d-flex flex-align-center task-card-footer">
-
-                                <div class="cell-8">
-                                    <strong>Assigned by :</strong>
-                                    <span class="text-secondry"></span>
-                                </div>
-                                <div class="cell-3">
-                                    <span class="tally">In_Progress</span>
-                                </div>
-                                <div class="cell-1">
-                                    <button class="button cycle outline"><span
-                                            class="mif-info mif-lg fg-blue"></span></button>
-                                </div>
-                                <!-- <div class="cell-6 ">
-                                        <button class="button cycle outline" onClick="operationTrigger(this.id , 'complete_task')"><span class="mif-done mif-lg fg-green"></span></button>
-                                        <button class="button cycle outline" onClick="operationTrigger(this.id , 'delete_task')"><span class="mif-bin mif-lg fg-red"></span></button>
-                                        <button class="button cycle outline" onClick="operationTrigger(this.id , 'edit_task')"><span class="mif-pencil mif-lg fg-blue"></span></button>
-                                    </div> -->
-
                             </div>
                         </div>
 

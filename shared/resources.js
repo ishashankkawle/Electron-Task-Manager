@@ -7,6 +7,7 @@ module.exports = {
     "STR_TASK" : "Task",
     "STR_DESCRIPTION" : "Description",
     "STR_IOB" : "Issue or Bugs",
+    "STR_USERID" : "U15",
 
 
     "firebaseConfig" :{

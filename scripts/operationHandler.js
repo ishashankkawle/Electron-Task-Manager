@@ -65,10 +65,15 @@ async function operationSwitch(params , values)
         case "home_getData":
             loadMask(1 , "fetching data");
             let data = await taskm.getAllTaskData();
-            await taskm.getTaskSummaryData();
+            let summaryData = await taskm.getTaskSummaryData();
             let element = document.getElementById("task-panel");
             let element_list = document.getElementById("task-list");
+            let moduleTable = document.getElementById("module-frag-table").getElementsByTagName('tbody')[0];
+            let summarySec = document.getElementById("summary-section");
+            let perfChart = document.getElementById("performance-chart");
+            let modOccupChart = document.getElementById("mod-occup-chart");
             ovl.parseTaskSectionObject(data , element , element_list);
+            ovl.parseSummarySectionObject(summaryData , summarySec , moduleTable , perfChart , modOccupChart);
             loadMask(0);
             break; 
 
