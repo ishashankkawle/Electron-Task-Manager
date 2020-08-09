@@ -24,7 +24,12 @@ function loadUIElement( locationId , screenName , path)
 
     if(screenName == 'views/overview' )
     {
-        operationTrigger('home_getData');
+        operationTrigger('base_getAllOverviewData');
+    }
+
+    if(screenName == 'views/taskboard' )
+    {
+        operationTrigger('base_getAllTaskData');
     }
 
     if(path != undefined)

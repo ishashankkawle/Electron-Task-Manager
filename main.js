@@ -4,7 +4,7 @@ const ipc = require('electron').ipcMain;
 
 function createWindow () {
     // Create the browser window.
-    win = new BrowserWindow({ width: 2000, height: 2000 })
+    win = new BrowserWindow({ show:true, frame:false, width: 2000, height: 2000 })
 
     // and load the index.html of the app.
     win.loadFile('index.html')
