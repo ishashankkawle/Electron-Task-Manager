@@ -1,11 +1,15 @@
 let dbOperations = require('../core/databaseOperations');
+let res = require('../shared/resources');
+
 
 module.exports = class taskManager 
 {
     async getAllTaskData()
     {
         const dbOps = new dbOperations();
-        let result= await dbOps.getAllData("Task_Master");
+        let condition = "\"TaskOwner\" = " + "\'"+res["STR_USERID"] +"\'"
+        let columnsToFetch = "*"
+        let result= await dbOps.getData("View_TaskMaster" , columnsToFetch , condition);
         return result;
     }
 
@@ -13,17 +17,18 @@ module.exports = class taskManager
     {
         const dbOps = new dbOperations();
         let result = {};
-        let totalcount= await dbOps.getData("Task_Master" , "COUNT(*)");
-        let activeCondition = " \"TaskStatus\" IN ( \'New\' , \'In_Progress\') ";
-        let completeCondition = " \"TaskStatus\"  = \'Completed\' ";
-        let activeCount= await dbOps.getData("Task_Master" , "COUNT(*)" , activeCondition);
-        let completeCount= await dbOps.getData("Task_Master" , "COUNT(*)" , completeCondition);
+        let condition = " \"TaskOwner\" = \'" + res["STR_USERID"]+"\'"
+        let totalcount= await dbOps.getData("View_TaskMaster" , "COUNT(*)" ,condition );
+        let activeCondition = " \"TaskStatus\" IN ( \'New\' , \'In_Progress\') AND \"TaskOwner\" = \'" + res["STR_USERID"]+"\'";
+        let completeCondition = " \"TaskStatus\"  = \'Completed\' AND \"TaskOwner\" = \'" + res["STR_USERID"]+"\'";
+        let activeCount= await dbOps.getData("View_TaskMaster" , "COUNT(*)" , activeCondition);
+        let completeCount= await dbOps.getData("View_TaskMaster" , "COUNT(*)" , completeCondition);
         result["total"] = totalcount["rows"][0]["count"];
         result["active"] = activeCount["rows"][0]["count"];
         result["complete"] = completeCount["rows"][0]["count"];
         let opt = "GROUP BY \"Module\"";
         let arrColms = [" \"Module\" " , "count(0)"];
-        let moduleFragmentationData = await dbOps.getData("Task_Master" ,arrColms , "" , opt);
+        let moduleFragmentationData = await dbOps.getData("View_TaskMaster" ,arrColms , condition , opt);
         result["ModuleData"] = moduleFragmentationData["rows"];
         return result;
     }

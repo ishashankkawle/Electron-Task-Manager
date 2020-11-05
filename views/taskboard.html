@@ -1,75 +1,95 @@
 <!-- Logs View -->
-<div class="grid" id="LogsPanel" style="left: 20px;padding-right:40px; ">
-
-    <!-- TASK SUMMARY -->
-    <div class="row" >
-        <div id="all-tsk-summ-actv" class="cell-3 tasklist-summ-card border-radius" style="margin-left: 0px;">
-            <div class="row flex-align-center">
-                <div class="cell-2" style="padding-bottom: 0px;"><span class="mif-files-empty fg-green mif-3x"></span></div>
-                <div class="cell-7" style="padding-bottom: 0px;">
-                    <h2 style="margin-top:0px ; margin-bottom:0px">100</h2>
+<div class="screen-panel">
+    <div class="col-sm-12">
+        <!-- TASK SUMMARY -->
+        <div class="row gen-card-row gen-screen-nav-space">
+            <div id="all-tsk-summ-new" class="col-sm-2 card gen-card">
+                <div class="row card-body p-0">
+                    <div class="col-sm-3 ">
+                        <span class="material-icons ">description</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <p class="gen-text-normal-secondry">New tasks</p>
+                        <div class="tsb-summary-card">
+                            <div class="gen-section align-self-center">
+                                <h4 class="col-sm-12 tsb-summary-card-value">0</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row flex-align-center" style="margin-left: 5px;">
-                <p class="text-secondary">New tasks</p>
-            </div>
-        </div>
-        <div id= "all-tsk-summ-prgs" class="cell-3 tasklist-summ-card border-radius" style="margin-left: 0px;">
-            <div class="row flex-align-center">
-                <div class="cell-2" style="padding-bottom: 0px;"><span class="mif-cog fg-orange mif-3x"></span></div>
-                <div class="cell-7" style="padding-bottom: 0px;">
-                    <h2 style="margin-top:0px ; margin-bottom:0px">100</h2>
+            <div id="all-tsk-summ-cmpl" class="col-sm-2 card gen-card">
+                <div class="row card-body p-0">
+                    <div class="col-sm-3 ">
+                        <span class="material-icons ">grading</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <p class="gen-text-normal-secondry">Completed tasks</p>
+                        <div class="tsb-summary-card">
+                            <div class="gen-section align-self-center">
+                                <h4 class="col-sm-12 tsb-summary-card-value">0</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row flex-align-center" style="margin-left: 5px;">
-                <p class="text-secondary">In-progress or Assigned tasks</p>
-            </div>
-        </div>
-        <div id= "all-tsk-summ-cmpl" class="cell-3 tasklist-summ-card border-radius" style="margin-left: 0px;">
-            <div class="row flex-align-center">
-                <div class="cell-2" style="padding-bottom: 0px;"><span class="mif-done_all fg-blue mif-3x"></span></div>
-                <div class="cell-7" style="padding-bottom: 0px;">
-                    <h2 style="margin-top:0px ; margin-bottom:0px">100</h2>
+            <div id="all-tsk-summ-tot" class="col-sm-2 card gen-card">
+                <div class="row card-body p-0">
+                    <div class="col-sm-3 ">
+                        <span class="material-icons ">list</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <p class="gen-text-normal-secondry">Total tasks</p>
+                        <div class="tsb-summary-card">
+                            <div class="gen-section align-self-center">
+                                <h4 class="col-sm-12 tsb-summary-card-value">0</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row flex-align-center" style="margin-left: 5px;">
-                <p class="text-secondary">Completed tasks</p>
+            <div id="all-tsk-slf-cmpl" class="col-sm-2 card gen-card ml-auto">
+                <div class="row card-body p-0">
+                    <div class="col-sm-3 ">
+                        <span class="material-icons ">fact_check</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <p class="gen-text-normal-secondry">Self Completes</p>
+                        <div class="tsb-summary-card">
+                            <div class="gen-section align-self-center">
+                                <h4 class="col-sm-12 tsb-summary-card-value">0</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="all-tsk-slf-del" class="col-sm-2 card gen-card">
+                <div class="row card-body p-0">
+                    <div class="col-sm-3 ">
+                        <span class="material-icons ">notification_important</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <p class="gen-text-normal-secondry">Self Deletes</p>
+                        <div class="tsb-summary-card">
+                            <div class="gen-section align-self-center">
+                                <h4 class="col-sm-12 tsb-summary-card-value">0</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- TASK TABLE -->
-    <div class="row">
-        <div class="cell-12 bg-white border-radius" style="padding: 5px;box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.113), 0 6px 20px 0 rgba(0, 0, 0, 0.113);">
-            <div class="row flex-align-end" style="border-bottom: 1px solid #e0e0e0;margin-bottom: 0px;margin-left: 0;margin-right: 0;">
-                <div class="cell-10"><h5 style="margin-bottom: 0px;">Task List</h5></div>
-                <div class="cell-2 d-flex flex-justify-start">
-                    <span class="mif-refresh ml-auto mif-lg task-table-btn" style="border-left: 0px;"></span> 
-                    <span class="mif-add mif-lg task-table-btn"></span> 
-                    <span class="mif-cogs mif-lg task-table-btn"></span> 
-                    <span class="mif-done mif-lg task-table-btn"></span> 
-                    <span class="mif-bin mif-lg task-table-btn"></span>
-                </div>
+    <div class="col-sm-12 gen-card-row gen-screen-nav-space" id="summary-section">
+        <div class="col-sm-12 card gen-card">
+            <div class="card-header gen-card-header">
+                <h5 class="card-title">Task Board</h5>
             </div>
-
-            
-                
-            <!-- <table id="all-tsk-data-tbl" class="table compact row-border row-hover" data-check="true" data-check-style="2" data-show-table-info="false" data-role="table" data-show-search="false" data-show-rows-steps="false" data-show-pagination="true" data-pagination-short-mode="true" data-rows="7" style="padding: 0px; margin: 0px;"> -->
-            <table id="all-tsk-data-tbl" class="table compact row-border row-hover"  style="padding: 0px; margin: 0px;">    
-                <thead>
-                    <tr></tr>
-                    <tr>
-                        <th><input type="checkbox" data-role="checkbox"></th>
-                        <th data-sortable="true">Module</th>
-                        <th data-sortable="true">Title</th>
-                        <th data-sortable="true">Date End</th>
-                        <th data-sortable="true">Status</th>
-                        <th data-sortable="true">Owner</th>
-                    </tr>
-                </thead>
-                <tbody style="color:#484848">
-                </tbody>
-            </table>
+            <div class="card-body p-0">
+                <table id="task-board-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
+            </div>
         </div>
     </div>
 

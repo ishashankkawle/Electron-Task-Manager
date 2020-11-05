@@ -1,13 +1,12 @@
 loadMask(1, "loading modues");
-// let XL = require('././core/exlHandler');
 let Util = require('././core/util');
-// let fs = require('fs');
-// let res = require('././shared/resources');
 let Admin = require('././scripts/adminManager');
 let TaskM = require('././scripts/taskManager');
 let Ove_ViewLdr = require('././scripts/Overview_ViewLoader');
 let AllTask_ViewLdr = require('././scripts/AllTask_ViewLoader');
 let Adm_ViewLdr = require('././scripts/Admin_ViewLoader');
+let res = require('././shared/resources');
+
 
 const util = new Util();
 const admin = new Admin();
@@ -15,6 +14,7 @@ const taskm = new TaskM();
 const ovl = new Ove_ViewLdr();
 const atvl = new AllTask_ViewLdr();
 const adm = new Adm_ViewLdr();
+
 loadMask(0);
 
 async function operationTrigger(...args) {
@@ -27,15 +27,14 @@ async function operationTrigger(...args) {
     }
 }
 
-async function operationSwitch(params, values) 
-{
-    switch (params) 
-    {
+async function operationSwitch(params, values) {
+    switch (params) {
         //---------------------------------------------------------------------
-        // BASE OPERATIONS
+        // OVERVIEW OPERATIONS
         //---------------------------------------------------------------------
         case "base_getAllOverviewData":
             loadMask(1, "fetching data");
+            //let data = await taskm.getAllTaskData();
             let data = await taskm.getAllTaskData();
             let summaryData = await taskm.getTaskSummaryData();
             let element = document.getElementById("task-panel");
@@ -44,6 +43,7 @@ async function operationSwitch(params, values)
             let summarySec = document.getElementById("summary-section");
             let perfChart = document.getElementById("performance-chart");
             let modOccupChart = document.getElementById("mod-occup-chart");
+            loadMask(1, "populating ui view");
             ovl.parseTaskSectionObject(data, element, element_list);
             ovl.parseSummarySectionObject(summaryData, summarySec, moduleTable, perfChart, modOccupChart);
             loadMask(0);
@@ -53,48 +53,83 @@ async function operationSwitch(params, values)
             loadMask(1, "fetching data");
             let all_data = await taskm.getAllTaskData();
             all_data = all_data["rows"];
-            let allTaskActiveTile = document.getElementById("all-tsk-summ-actv")
-            let allTaskProgressTile = document.getElementById("all-tsk-summ-prgs")
+            let allTaskNewTile = document.getElementById("all-tsk-summ-new")
             let allTaskCompleteTile = document.getElementById("all-tsk-summ-cmpl")
+            let allTaskTotalTile = document.getElementById("all-tsk-summ-tot")
+            let allTaskSelfCompleteTile = document.getElementById("all-tsk-slf-cmpl")
+            let allTaskSelfDeleteTile = document.getElementById("all-tsk-slf-del")
             loadMask(1, "populating ui view");
-            let allTaskDataTable = document.getElementById("all-tsk-data-tbl").getElementsByTagName('tbody')[0];
-            atvl.parseSummaryTaskData(all_data ,allTaskActiveTile , allTaskProgressTile, allTaskCompleteTile);
-            atvl.parseTaskTableData(all_data ,allTaskDataTable);
+            atvl.parseSummaryTaskData(all_data, allTaskNewTile, allTaskCompleteTile, allTaskTotalTile, allTaskSelfCompleteTile, allTaskSelfDeleteTile);
+            atvl.loadDataOnTaskTable(all_data);
             loadMask(0);
             break;
 
         //---------------------------------------------------------------------
-        // OTHER OPERATIONS
+        // ADMIN OPERATIONS
         //---------------------------------------------------------------------
+        case "admin_createProject":
+            loadMask(1, 'creatig new project');
+            admin.createProject(params);
+            loadMask(0);
+            break;
+
+        case "admin_createUser":
+            {
+                loadMask(1, 'creatig new user');
+                await admin.createUser(params);
+                let email = document.getElementById('adm-Usr-Email').value;
+                let projectId = document.getElementById('adm-Usr-Project').value;
+                let userId = await admin.getUserId(email);
+                admin.createUserAssignerMap(userId, res["STR_USERID"]);
+                admin.createUserProjectMap(userId, projectId)
+                loadMask(0);
+                break;
+            }
+
+        case "admin_transferUser":
+            {
+                loadMask(1 , 'updating user mappings');
+                let userToTransfer = document.getElementById('adm-UsrAsi-Source').value;
+                let targetUser = document.getElementById('adm-UsrAsi-Target').value;
+                admin.updateUserAssignerMap(userToTransfer , targetUser);
+                let projectId = await admin.getProjectIdFromUser(targetUser);
+                admin.updateUserProjectMap(userToTransfer , projectId);
+                loadMask(0);
+                break;
+            }
+
         case "admin_createTask":
             loadMask(1, 'creatig new task');
             admin.saveTask(params);
             loadMask(0);
             break;
 
-        case "admin_createUser":
-            loadMask(1, 'creating new user');
-            admin.saveUser(params);
+        case "admin_createAsset":
+            loadMask(1, 'creating new Asset');
+            let projectId = document.getElementById("adm-Ast-Project").value;
+            let category = document.getElementById("adm-Ast-Category").value;
+            let categoryName = document.getElementById("adm-Ast-CatName").value;
+            switch (category) {
+                case "Module":
+                    console.log("IN MODULE SWITCH")
+                    await admin.createModule(categoryName);
+                    let moduleId = await admin.getModuleId(categoryName);
+                    admin.createModuleProjectMap(moduleId, projectId);
+                    break;
+                case "Type":
+                    await admin.createType(categoryName);
+                    let typeId = await admin.getTypeId(categoryName);
+                    admin.createTypeProjectMap(typeId, projectId);
+                    break;
+                case "Priority":
+                    await admin.createPriority(categoryName);
+                    let priorityId = await admin.getPriorityId(categoryName);
+                    admin.createPriorityProjectMap(priorityId, projectId);
+                    break;
+            }
             loadMask(0);
             break;
 
-        case "admin_createModule":
-            loadMask(1, 'creating new module');
-            admin.saveModule(params);
-            loadMask(0);
-            break;
-
-        case "admin_createType":
-            loadMask(1, 'creating new type');
-            admin.saveType(params);
-            loadMask(0);
-            break;
-
-        case "admin_createPriority":
-            loadMask(1, 'creaating new priority');
-            admin.savePriority(params);
-            loadMask(0);
-            break;
 
         case "update_task":
             loadMask(1, "performing operation");

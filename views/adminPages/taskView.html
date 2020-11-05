@@ -1,50 +1,58 @@
-<!-- CREATE TASK VIEW -->
-<div>
-    <h4>Create Task</h4>
-    <div data-role="panel">
+<div class="col-sm-9 card gen-card">
+    <div class="card-header gen-card-header">
+        <h5 class="card-title">Create New Task</h5>
+    </div>
+    <div class="card-body p-0">
         <div class="form-group">
-            <label>Module Name</label>
-            <select data-role="select" id="TaskView-Module">
-                <option value="PricePlan">PricePlan</option>
-                <option value="PricePlan_Workbench">PricePlan Workbench</option>
-                <option value="PricePlan_Workflow">Priceplan Workflow</option>
-                <option value="Admin">Admin</option>
-            </select>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="adm-Tsk-Project">Project</label>
+                    <select class="form-control" id="adm-Tsk-Project">
+                        <option value="ETM Task Manager">Proj1</option>
+                        <option value="ETM Task Manager">Proj2</option>
+                        <option value="ETM Task Manager">Proj3</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="adm-Tsk-Module">Module</label>
+                    <select class="form-control" id="adm-Tsk-Module">
+                        <option value="ETL">ETL</option>
+                        <option value="Security">Security</option>
+                        <option value="Backend-Development">Backend-Development</option>
+                        <option value="UI Development">UI Development</option>
+                        <option value="Data Operations">Data Operations</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="form-group">
-            <label>Task Title</label>
-            <input type="text" class="mt-1" placeholder="Enter Task Title" data-role="input" id="TaskView-Title"
-                required>
+            <input type="text" class="form-control" id="adm-Tsk-Title" placeholder="Title">
         </div>
 
         <div class="form-group">
-            <label>Task Details</label>
-            <textarea data-role="textarea" data-prepend="<span class='mif-bubbles'></span>"
-                data-auto-size="true" data-max-height="200" placeholder="Enter task Description"
-                id="TaskView-Description" required></textarea>
+            <textarea class="form-control" id="adm-Tsk-Desc" rows="3" placeholder="Description"></textarea>
         </div>
 
         <div class="form-group">
             <div class="row">
-                <div class="cell-3">
-                    <label>ETA</label>
-                    <input id="TaskView-ETA" type="text" data-role="calendarpicker" data-cls-calendar="compact">
+                <div class="col-sm-4">
+                    <label for="adm-Tsk-ETA">ETA</label>
+                    <input class="form-control" id="adm-Tsk-ETA" type="date">
                 </div>
 
-                <div class="cell-3">
-                    <label>Owner</label>
-                    <select data-role="select" id="TaskView-Owner">
-                        <option value="Sunil">Sunil</option>
+                <div class="col-sm-4">
+                    <label for="adm-Tsk-Assigner">Assigned By</label>
+                    <select class="form-control" id="adm-Tsk-Assigner">
                         <option value="Abid">Abid</option>
                         <option value="Ashish">Ashish</option>
                         <option value="Raghav">Raghav</option>
                     </select>
                 </div>
 
-                <div class="cell-3">
-                    <label>Assigned To</label>
-                    <select data-role="select" id="TaskView-Assign">
+                <div class="col-sm-4">
+                    <label for="adm-Tsk-Owner">Assigned To</label>
+                    <select class="form-control" id="adm-Tsk-Owner">
                         <option value="Shashank">Shashank</option>
                         <option value="Nitin">Nitin</option>
                         <option value="Rohit">Rohit</option>
@@ -57,44 +65,29 @@
         <div class="form-group">
             <div class="row">
 
-                <div class="cell-3">
-                    <label>Type</label>
-                    <select data-role="select" id="TaskView-Type">
-                        <option data-template="<span class='mif-codepen fg-pink icon'></span> $1"
-                            value="Feature">Feature</option>
-                        <option data-template="<span class='mif-warning fg-yellow icon'></span> $1"
-                            value="Defect">Defect</option>
-                        <option data-template="<span class='mif-bug fg-orange icon'></span> $1" value="Bug">Bug
-                        </option>
+                <div class="col-sm-4">
+                    <label for="adm-Tsk-Type">Type</label>
+                    <select class="form-control" id="adm-Tsk-Type">
+                        <option value="Feature">Feature</option>
+                        <option value="Defect">Defect</option>
+                        <option value="Bug">Bug</option>
                     </select>
                 </div>
 
-                <div class="cell-3">
-                    <label>Priority</label>
-                    <select data-role="select" id="TaskView-Priority">
-                        <option class="fg-red" value="Critical">Critical</option>
-                        <option class="fg-orange" value="Major">Major</option>
-                        <option class="fg-cyan" value="Moderate">Moderate</option>
-                        <option class="fg-green" value="Minor">Minor</option>
-                    </select>
-                </div>
-
-                <div class="cell-3">
-                    <label>Order</label>
-                    <select data-role="select" id="TaskView-Order">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
+                <div class="col-sm-4">
+                    <label for="adm-Tsk-Priority">Priority</label>
+                    <select class="form-control" id="adm-Tsk-Priority">
+                        <option value="Critical">Critical</option>
+                        <option value="Major">Major</option>
+                        <option value="Moderate">Moderate</option>
+                        <option value="Minor">Minor</option>
                     </select>
                 </div>
 
             </div>
         </div>
         <div class="form-group">
-            <button class="button success" onclick="operationTrigger('admin_createTask')">Submit data</button>
-            <input type="button" class="button" value="Cancel">
+            <button class="btn btn-success" onclick="operationTrigger('admin_createTask')">Submit data</button>
         </div>
     </div>
 </div>

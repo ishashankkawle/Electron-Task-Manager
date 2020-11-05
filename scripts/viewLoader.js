@@ -2,6 +2,13 @@ const ipc = require('electron').ipcRenderer;
 
 function loadLandingPage()
 {
+    toggleDisplayElement('main-nav');
+    loadUIElement('display' , 'views/login' , 'Login');
+}
+
+function validateLogin()
+{
+    toggleDisplayElement('main-nav');
     loadUIElement('display' , 'views/overview' , 'Overview');
 }
 
@@ -32,6 +39,12 @@ function loadUIElement( locationId , screenName , path)
         operationTrigger('base_getAllTaskData');
     }
 
+    if(screenName == 'views/admin')
+    {
+        //@TODO
+        //Apply Security on Verticle NavBar to remove Project , User Create , Asset Create Buttons
+    }
+    
     if(path != undefined)
     {
         document.getElementById("path-name").innerText = path;

@@ -33,7 +33,7 @@ module.exports = class Util
         return objJSON;
     }
 
-    generateCustomArrayString(wrapper , arr)
+    generateCustomArrayString(wrapper , arr , arrIndexToIgnore)
     {
         let str="";
 
@@ -44,15 +44,42 @@ module.exports = class Util
 
         for (let index = 0; index < (arr.length)-1; index++) 
         {
-            if(index == 0)
+            let igoreFlag = false;
+            if( arrIndexToIgnore != undefined)
             {
-                str = wrapper + arr[index] + wrapper + ",";
+                for (let index2 = 0; index2 < arrIndexToIgnore.length; index2++) 
+                {
+                    if(index == arrIndexToIgnore[index2])
+                    {
+                        igoreFlag = true;
+                    }    
+                    
+                }
+            }
+            if(!igoreFlag)
+            {
+                if(index == 0)
+                {
+                    str = wrapper + arr[index] + wrapper + ",";
+                }
+                else
+                {
+                    str = str + wrapper + arr[index] + wrapper + ",";
+                }
             }
             else
             {
-                str = str + wrapper + arr[index] + wrapper + ",";
+                console.log("STR = " + arr[index]);
+                str = str + arr[index] + ",";
             }
         }
         return str + wrapper+arr[(arr.length)-1]+wrapper
+    }
+
+    getCurrentDateString()
+    {
+        let currentDateObj = new Date();
+        let dateStr = currentDateObj.getDate()+"-"+currentDateObj.getMonth()+"-"+currentDateObj.getFullYear();
+        return dateStr;
     }
 }

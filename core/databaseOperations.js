@@ -12,54 +12,6 @@ module.exports = class dbOps
         return new pg.Client(res["PostgresConnection"]);
     }
 
-    addData(tableName , inputColumn , inputData , client)
-    {
-        var query = "INSERT INTO " + tableName + "(" + util.generateCustomArrayString("\"" , inputColumn) + ", \"DateCreated\") VALUES (nextval('master_db_id_sequence') , " + util.generateCustomArrayString("\'" , inputData) + " , current_timestamp)";
-
-        if(client == undefined)
-        {
-            client = new pg.Client(res["PostgresConnection"]);
-        }
-
-        var result = this.executeQuery (query , client);
-        console.log(result);
-    }
-
-    addEncryptedData(tableName , inputColumn , inputData , arrEncryptedColumnIndex , client)
-    {
-        if(client == undefined)
-        {
-            client = new pg.Client(res["PostgresConnection"]);
-        }
-
-        var query = "INSERT INTO " + tableName + "(" + util.generateCustomArrayString("\"" , inputColumn) + ", \"DateCreated\") VALUES (nextval('master_db_id_sequence') , ";
-
-        for (let index = 0; index < inputData.length; index++) 
-        {
-            let flag = false;
-            for (let enc_index = 0; enc_index < arrEncryptedColumnIndex.length; enc_index++) 
-            {
-                if(index == arrEncryptedColumnIndex[enc_index])
-                {
-                    flag = true;
-                }
-            }
-
-            let element = inputData[index];
-
-            if(flag == true)
-            {
-                query = query + " PGP_SYM_ENCRYPT( '" + element + "' , 'AES_KEY') ,"
-            }
-            else
-            {
-                query = query + " '" + element + "' ,"        
-            }    
-        }
-        query = query + " current_timestamp)"
-        this.executeQuery(query , client);
-    }
-
     async getAllData(tableName , client)
     {
         let query = "SELECT * FROM " + tableName
@@ -73,7 +25,7 @@ module.exports = class dbOps
         return result;
     }
 
-    async getData(tableName , arrColumns , condition , opions, client)
+    async getData(tableName , arrColumns , condition , options, client)
     {
         let query ="SELECT " + arrColumns.toString() + " FROM " + tableName;
 
@@ -87,12 +39,14 @@ module.exports = class dbOps
             query = query + " WHERE " + condition;
         }
 
-        if(opions !== undefined)
+        if(options !== undefined)
         {
-            query = query + " " + opions;
+            query = query + " " + options;
         }
 
+        console.log("QUERY : " + query);
         let result = await this.executeQuery(query , client);
+        console.log(result);
         return result;
     }
 
@@ -103,6 +57,20 @@ module.exports = class dbOps
         await client.query(query).then((result)=>{response = result;}).catch((error)=>{response = error;});
         client.end();
         return response
+    }
+
+    async addData(tableName , inputColumn , inputData , client)
+    {
+        var query = "INSERT INTO " + tableName + "(" + inputColumn +") VALUES (" + inputData + " )";
+
+        if(client == undefined)
+        {
+            client = new pg.Client(res["PostgresConnection"]);
+        }
+
+        console.log(query);
+        var result = this.executeQuery (query , client);
+        return result;
     }
 
     async updateData(tableName , arrColumns , arrValues , condition , client)
@@ -128,7 +96,9 @@ module.exports = class dbOps
         {
             query = query + " WHERE " + condition;
         }
+        console.log("UPDATE QUERY : " + query);
         let result = await this.executeQuery(query , client);
+        console.log(result);
         return result;
     }
 

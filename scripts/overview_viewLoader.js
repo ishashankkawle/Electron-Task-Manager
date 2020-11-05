@@ -13,10 +13,10 @@ module.exports = class Overview_ViewLoader {
             const data_element = datarows[index];
             let node = panel_element.cloneNode(true);
 
-            let title = node.children[0].children[1].children[0].children[0];
+            let title = node.children[0].children[1].children[0];
             let id = node.children[0].children[1].children[1];
-            let moduleName = node.children[0].children[1].children[2].children[0].children[1];
-            let priority = node.children[0].children[1].children[2].children[0].children[0];
+            let moduleName = node.children[0].children[1].children[2].children[0].children[0];
+            let priority = node.children[0].children[1].children[2].children[0].children[1];
             let status = node.children[0].children[2].children[0];
             let endDate = node.children[0].children[1].children[2].children[0].children[2];
 
@@ -26,10 +26,8 @@ module.exports = class Overview_ViewLoader {
             priority.innerHTML = data_element["Priority"];
             status.innerHTML = data_element["TaskStatus"];
             endDate = data_element["DateTerminated"];
-            //description.innerHTML = data_element["Description"];
-            //owner.innerHTML = data_element["Owner"];
 
-            panel_element.style.borderLeftColor = conf["TaskTypeToCardColorMap"][data_element["Type"]]
+            //panel_element.style.borderLeftColor = conf["TaskTypeToCardColorMap"][data_element["Type"]]
 
             //btn_task_complete.id = "dne"+data_element["TaskId"];
             //btn_task_inprgss.id = "inp"+data_element["TaskId"];
@@ -45,13 +43,14 @@ module.exports = class Overview_ViewLoader {
 
     }
 
-    async parseSummarySectionObject(data, root_element, module_table, perf_chart, mod_occup_chart) {
-        let activeTile = root_element.children[0].children[0].children[0].children[0].children[0].children[1]
-        let completeTile = root_element.children[0].children[0].children[1].children[0].children[0].children[1]
-        let activeProgressBar = root_element.children[0].children[0].children[0].children[1].children[0]
-        let activeProgressBarValue = root_element.children[0].children[0].children[0].children[1].children[1].children[0]
-        let completeProgressBar = root_element.children[0].children[0].children[1].children[1].children[0]
-        let completeProgressBarValue = root_element.children[0].children[0].children[1].children[1].children[1].children[0]
+    async parseSummarySectionObject(data, root_element, module_table, perf_chart, mod_occup_chart) 
+    {
+        let activeTile = root_element.children[0].children[1].children[0].children[0].children[1]
+        let completeTile = root_element.children[0].children[1].children[1].children[0].children[1]
+        let activeProgressBar = root_element.children[0].children[1].children[0].children[1].children[0].children[0]
+        let activeProgressBarValue = root_element.children[0].children[1].children[0].children[1].children[1].children[0]
+        let completeProgressBar = root_element.children[0].children[1].children[1].children[1].children[0].children[0]
+        let completeProgressBarValue = root_element.children[0].children[1].children[1].children[1].children[1].children[0]
 
         let totaTaskCount = parseInt(data["total"]);
         let percActive = parseInt(data["active"]) * 100 / totaTaskCount;
@@ -68,8 +67,8 @@ module.exports = class Overview_ViewLoader {
         //---------------------------------------------------------------
         activeTile.innerHTML = data["active"]
         completeTile.innerHTML = data["complete"]
-        activeProgressBar.setAttribute('data-value', percActive)
-        completeProgressBar.setAttribute('data-value', perComplete)
+        activeProgressBar.setAttribute("style", "width : " +percActive+"%")
+        completeProgressBar.setAttribute("style", "width : "+perComplete+ "%")
         activeProgressBarValue.innerHTML = percActive
         completeProgressBarValue.innerHTML = perComplete
 

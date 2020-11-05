@@ -3,14 +3,13 @@
   "version": "0.1.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start":"electron ."
   },
   "devDependencies": {
     "electron": "^7.2.4"
   },
   "dependencies": {
     "electron-reload": "^1.5.0",
-    "firebase": "^7.2.0",
     "pg": "^7.18.2",
     "xlsx": "^0.14.1",
     "yarn": "^1.22.0"
