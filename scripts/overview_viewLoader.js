@@ -1,4 +1,5 @@
 let conf = require('../scripts/config');
+const res = require('../shared/resources')
 
 module.exports = class Overview_ViewLoader {
     async parseTaskSectionObject(data, panel_element, list_element) {
@@ -11,40 +12,34 @@ module.exports = class Overview_ViewLoader {
         //for (let index = 0; index < datarows.length; index++) 
         for (let index = 0; index < 3; index++) {
             const data_element = datarows[index];
-            let node = panel_element.cloneNode(true);
+            if (data_element["TaskStatus"] == res["WORKFLOW"]["STR_WF_INPROGRESS"] || data_element["TaskStatus"] == res["WORKFLOW"]["STR_WF_NEW"]) {
 
-            let title = node.children[0].children[1].children[0];
-            let id = node.children[0].children[1].children[1];
-            let moduleName = node.children[0].children[1].children[2].children[0].children[0];
-            let priority = node.children[0].children[1].children[2].children[0].children[1];
-            let status = node.children[0].children[2].children[0];
-            let endDate = node.children[0].children[1].children[2].children[0].children[2];
+                let node = panel_element.cloneNode(true);
+
+                let title = node.children[0].children[1].children[0];
+                let id = node.children[0].children[1].children[1];
+                let moduleName = node.children[0].children[1].children[2].children[0].children[0];
+                let priority = node.children[0].children[1].children[2].children[0].children[1];
+                let status = node.children[0].children[2].children[0];
+                let endDate = node.children[0].children[1].children[2].children[0].children[2];
 
 
-            title.innerHTML = data_element["Title"];
-            moduleName.innerHTML = data_element["Module"];
-            priority.innerHTML = data_element["Priority"];
-            status.innerHTML = data_element["TaskStatus"];
-            endDate = data_element["DateTerminated"];
+                title.innerHTML = data_element["Title"];
+                moduleName.innerHTML = data_element["Module"];
+                priority.innerHTML = data_element["Priority"];
+                status.innerHTML = data_element["TaskStatus"];
+                endDate = data_element["DateTerminated"];
 
-            //panel_element.style.borderLeftColor = conf["TaskTypeToCardColorMap"][data_element["Type"]]
 
-            //btn_task_complete.id = "dne"+data_element["TaskId"];
-            //btn_task_inprgss.id = "inp"+data_element["TaskId"];
-            //btn_task_delete.id = "del"+data_element["TaskId"];
-            //btn_task_edit.id = "edt"+data_element["TaskId"];
-            //context_anchor.id = "con"+data_element["TaskId"];
-            //context_menu.setAttribute('data-toggle-element' , context_anchor.id)
-
-            let listnode = document.createElement("li");
-            listnode.appendChild(node);
-            list_element.appendChild(listnode);
+                let listnode = document.createElement("li");
+                listnode.appendChild(node);
+                list_element.appendChild(listnode);
+            }
         }
 
     }
 
-    async parseSummarySectionObject(data, root_element, module_table, perf_chart, mod_occup_chart) 
-    {
+    async parseSummarySectionObject(data, root_element, module_table, perf_chart, mod_occup_chart) {
         let activeTile = root_element.children[0].children[1].children[0].children[0].children[1]
         let completeTile = root_element.children[0].children[1].children[1].children[0].children[1]
         let activeProgressBar = root_element.children[0].children[1].children[0].children[1].children[0].children[0]
@@ -67,8 +62,8 @@ module.exports = class Overview_ViewLoader {
         //---------------------------------------------------------------
         activeTile.innerHTML = data["active"]
         completeTile.innerHTML = data["complete"]
-        activeProgressBar.setAttribute("style", "width : " +percActive+"%")
-        completeProgressBar.setAttribute("style", "width : "+perComplete+ "%")
+        activeProgressBar.setAttribute("style", "width : " + percActive + "%")
+        completeProgressBar.setAttribute("style", "width : " + perComplete + "%")
         activeProgressBarValue.innerHTML = percActive
         completeProgressBarValue.innerHTML = perComplete
 

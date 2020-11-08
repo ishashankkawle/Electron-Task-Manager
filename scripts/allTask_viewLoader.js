@@ -1,4 +1,6 @@
 const { ipcMain , BrowserWindow } = require("electron");
+let res = require('../shared/resources');
+
 //require ('handsontable');
 //import 'handsontable/dist/handsontable.full.css';
 
@@ -9,7 +11,6 @@ module.exports = class AllTasks_ViewLoader
     openTask()
     {
         win = new BrowserWindow({ show:true, frame:true, width: 2000, height: 2000 })
-
         // and load the index.html of the app.
         win.loadFile('views/taskDetails.html')
         // ipc call to new window to pass task_id
@@ -34,19 +35,19 @@ module.exports = class AllTasks_ViewLoader
         for (let index = 0; index < data.length; index++) 
         {
             const element = data[index];
-            if(element["TaskStatus"] == "New" || element["TaskStatus"] == "In_Progress")
+            if(element["TaskStatus"] == res["WORKFLOW"]["STR_WF_NEW"] || element["TaskStatus"] == res["WORKFLOW"]["STR_WF_INPROGRESS"])
             {
                 activeCount++;
             }
-            if(element["TaskStatus"] == "Completed")
+            if(element["TaskStatus"] == res["WORKFLOW"]["STR_WF_COMPLETE"])
             {
                 completedCount++;
             }
-            if(element["TaskStatus"] == "Self_Completed")
+            if(element["TaskStatus"] == res["WORKFLOW"]["STR_WF_SELFCOMMIT"])
             {
                 selfCmplCount++;
             }
-            if(element["TaskStatus"] == "Self_Deleted")
+            if(element["TaskStatus"] == res["WORKFLOW"]["STR_WF_SELFDELETE"])
             {
                 selfDelCount++;
             }
@@ -58,53 +59,6 @@ module.exports = class AllTasks_ViewLoader
         slfCmplCount.innerHTML = selfCmplCount;       
         slfDelCount.innerHTML = selfDelCount;       
     }
-
-    // parseTaskTableData(moduleData , tableElement)
-    // {
-    //     for (let index = 0; index < moduleData.length; index++) 
-    //     {
-    //         const element = moduleData[index];
-    //         let row = tableElement.insertRow(index);
-    //         row.id = element["TaskId"]
-
-    //         for (let colIndex = 0; colIndex < 6; colIndex++) 
-    //         {
-    //             let cell = row.insertCell(colIndex);
-    //             if (colIndex == 0) {
-    //                 let listnode = document.createElement("input");
-    //                 listnode.setAttribute("type", "checkbox");
-    //                 listnode.setAttribute("data-role", "checkbox");
-    //                 listnode.setAttribute("value" , row.id)
-    //                 cell.appendChild(listnode);
-    //             }
-    //             else if (colIndex == 1) 
-    //             {
-    //                 cell.innerHTML = element["Module"];
-    //             }
-    //             else if (colIndex == 2)
-    //             {
-    //                 cell.innerHTML = element["Title"];
-    //             }
-    //             else if (colIndex == 3)
-    //             {
-    //                 cell.innerHTML = element["DateTerminated"];
-    //             }
-    //             else if (colIndex == 4)
-    //             {
-    //                 cell.innerHTML = element["TaskStatus"];
-    //             }
-    //             else if (colIndex == 5)
-    //             {
-    //                 cell.innerHTML = element["Owner"];
-    //             }
-
-    //             if(colIndex !== 0)
-    //             {
-    //                 cell.onclick = this.openTask
-    //             }
-    //         }
-    //     }
-    // }
 
     loadDataOnTaskTable( moduleData )
     {
@@ -118,15 +72,18 @@ module.exports = class AllTasks_ViewLoader
         {   
             let obj = [];
             const element = moduleData[index];
-            for (let index2 = 0; index2 < arrFields.length; index2++) 
+            if (element["TaskStatus"] == res["WORKFLOW"]["STR_WF_NEW"] || element["TaskStatus"] == res["WORKFLOW"]["STR_WF_INPROGRESS"])
             {
-                obj.push(element[arrFields[index2]].toString());
+                for (let index2 = 0; index2 < arrFields.length; index2++) 
+                {
+                    obj.push(element[arrFields[index2]].toString());
+                }
+                arrDataset.push(obj);
             }
-            arrDataset.push(obj);
         }
          
 
-        let table = $('#task-board-table').DataTable( {
+        res["TASKDATA_TABLE"] = $('#task-board-table').DataTable( {
                 data: arrDataset,
                 columns: [
                     { title: "Asigned By" },
@@ -150,8 +107,7 @@ module.exports = class AllTasks_ViewLoader
                 "dom" : '<"toolbar">frtip'
             } );
 
-        $("div.toolbar").html('<span onclick="loadUIElement(\'display\' ,\'views/admin\' , \'Admin\')" class="material-icons tsb-table-btn" style="border-left: 0px;">queue</span><span class="material-icons tsb-table-btn">next_plan</span><span class="material-icons tsb-table-btn">pending_actions</span><span class="material-icons tsb-table-btn">auto_delete</span><span class="material-icons tsb-table-btn">refresh</span>');
+        $("div.toolbar").html('<span onclick="loadUIElement(\'display\' ,\'views/admin\' , \'Admin\')" class="material-icons tsb-table-btn" style="border-left: 0px;">queue</span><span onclick="operationTrigger(\'tsb_NextTaskWorkflowState\')" class="material-icons tsb-table-btn">next_plan</span><span onclick="operationTrigger(\'tsb_TaskToSelfCommitState\')" class="material-icons tsb-table-btn">pending_actions</span><span onclick="operationTrigger(\'tsb_TaskToSelfDeleteState\')" class="material-icons tsb-table-btn">auto_delete</span><span onclick="loadUIElement(\'display\' ,\'views/taskboard\' , \'All Tasks\')" class="material-icons tsb-table-btn">refresh</span>');
 
-        console.log("ROWS SELEcTEd : " + table.rows( { selected: true } ).count());
     }
 }

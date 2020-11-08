@@ -1,5 +1,6 @@
 let dbOperations = require('../core/databaseOperations');
 let Util = require('../core/util');
+let res = require('../shared/resources');
 
 const util = new Util();
 
@@ -7,27 +8,34 @@ const util = new Util();
 module.exports = class adminManager 
 {
 
-    async saveTask() 
+    async createTask() 
     {
         try 
         {
             let data = [];
             const dbOps = new dbOperations();
-
+            data.push("nextval('master_db_id_sequence')");
             data.push(document.getElementById('adm-Tsk-Project').value);
             data.push(document.getElementById('adm-Tsk-Module').value);
             data.push(document.getElementById('adm-Tsk-Title').value);
             data.push(document.getElementById('adm-Tsk-Desc').value);
             data.push(document.getElementById('adm-Tsk-ETA').value);
             data.push(document.getElementById('adm-Tsk-Owner').value);
-            data.push(document.getElementById('adm-Tsk-Assign').value);
+            data.push(res["STR_USERID"]);
+            data.push(res["WORKFLOW"]["STR_WF_NEW"]);
             data.push(document.getElementById('adm-Tsk-Type').value);
             data.push(document.getElementById('adm-Tsk-Priority').value);
-            data.push(document.getElementById('adm-Tsk-Order').value);
+            data.push(util.getCurrentDateString());
 
-            let keys = ["TaskId" , "Module", "Title", "Description", "DateTerminated", "Owner", "Assign", "Type", "Priority", "Order"];
 
-            await this.saveObject("Task_master" , keys , data , dbOps);
+            let keys = ["TaskId" , "ProjectId" ,  "Module", "Title", "Description", "DateTerminated", "Owner", "Assigner", "TaskStatus" ,"Type", "Priority" , "DateCreated"];
+
+            let keyString = util.generateCustomArrayString("\"" , keys);
+            let arrColsToIgore = [0];
+            let dataString = util.generateCustomArrayString("\'" , data , arrColsToIgore);
+        
+            let result = await this.addObjectToDatabase("Task_master" , keyString , dataString , dbOps);
+            console.log(result);
         }
         catch (error) {
             console.log("Error due to : " + error);

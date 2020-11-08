@@ -17,7 +17,15 @@ module.exports = {
       "type_master" : "TypeId",
       "priority_master" : "PriorityId",
     },
-    
+    "TASKDATA_TABLE":{},
+    "WORKFLOW":{
+      "STR_WF_NEW" : "New",
+      "STR_WF_INPROGRESS" : "In_Progress",
+      "STR_WF_SELFCOMMIT" : "Self_Commit",
+      "STR_WF_SELFDELETE" : "Self_Delete",
+      "STR_WF_COMPLETE" : "Complete",
+      "STR_WF_DELETE" : "Delete",
+    },
     "PostgresConnection" : "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs"
 
 };
