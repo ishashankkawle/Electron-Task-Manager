@@ -39,6 +39,53 @@ module.exports = class taskManager
         return result;
     }
 
+    async getTaskVerificationAssignmentSummary()
+    {
+        const dbOps = new dbOperations();
+        let opt = "GROUP BY \"TaskStatus\"";
+        let arrColms = [" \"TaskStatus\" " , "count(0)"];
+        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"]+"\'"
+        let summaryData = await dbOps.getData("View_TaskMaster" ,arrColms , condition , opt);
+        return summaryData["rows"];
+    }
+
+    async getTaskVerificationRSCUtilzationData()
+    {
+        const dbOps = new dbOperations();
+        let opt = "GROUP BY \"OwnerName\"";
+        let arrColms = [" \"OwnerName\" " , "count(0)"];
+        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"]+"\'"
+        let rscData = await dbOps.getData("View_TaskMaster" ,arrColms , condition , opt);
+        return rscData["rows"];
+    }
+
+    async getTaskVerificationAssignementData()
+    {
+        const dbOps = new dbOperations();
+        let columnsToFetch = [" \"Title\" "," \"DateTerminated\" "," \"TaskStatus\" "," \"OwnerName\" "]
+        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"]+"\'"
+        let assignmentData = await dbOps.getData("View_TaskMaster" ,columnsToFetch , condition );
+        return assignmentData["rows"];
+    }
+
+    async getTaskVerificationCommitData()
+    {
+        const dbOps = new dbOperations();
+        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"]+"\' AND \"TaskStatus\" = \'" + res["WORKFLOW"]["STR_WF_SELFCOMMIT"] + "\'"
+        let arrColumns = [" \"TaskId\" " , " \"Title\" " , " \"Module\" "]
+        let result = await dbOps.getData("View_TaskMaster" , arrColumns , condition);
+        return result["rows"];
+    }
+
+    async getTaskVerificationDeleteData()
+    {
+        const dbOps = new dbOperations();
+        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"]+"\' AND \"TaskStatus\" = \'" + res["WORKFLOW"]["STR_WF_SELFDELETE"] + "\'"
+        let arrColumns = [" \"TaskId\" " , " \"Title\" " , " \"Module\" "]
+        let result = await dbOps.getData("View_TaskMaster" , arrColumns , condition);
+        return result["rows"];
+    }
+
     async updateNextTaskWorkflowState( tableObject )
     {
         let arrData = tableObject.rows( { selected: true } ).data().toArray();
@@ -48,8 +95,9 @@ module.exports = class taskManager
         for (let index = 0; index < arrData.length; index++) 
         {
             const element = arrData[index];
-            let taskId = element[8];
-            let wfState = await this.wf.getNextWorkflowStatus(element[9]);
+            console.log(element);
+            let taskId = element[7];
+            let wfState = await this.wf.getNextWorkflowStatus(element[8]);
             let arrValues = ["\'" + wfState + "\'"];
             let condition = " \"TaskId\" = " + taskId;
             let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
@@ -65,7 +113,7 @@ module.exports = class taskManager
         for (let index = 0; index < arrData.length; index++) 
         {
             const element = arrData[index];
-            let taskId = element[8];
+            let taskId = element[7];
             let wfState = res["WORKFLOW"]["STR_WF_SELFCOMMIT"]
             let arrValues = ["\'" + wfState + "\'"];
             let condition = " \"TaskId\" = " + taskId;
@@ -82,7 +130,7 @@ module.exports = class taskManager
         for (let index = 0; index < arrData.length; index++) 
         {
             const element = arrData[index];
-            let taskId = element[8];
+            let taskId = element[7];
             let wfState = res["WORKFLOW"]["STR_WF_SELFDELETE"]
             let arrValues = ["\'" + wfState + "\'"];
             let condition = " \"TaskId\" = " + taskId;
@@ -91,13 +139,85 @@ module.exports = class taskManager
         }
     }
 
-    async deleteTask(id)
+    async TSKV_updateTaskToComplete(taskData)
     {
+        console.log(taskData);
         const dbOps = new dbOperations();
-        let condition = " \"TaskId\" = " + id;
-        let result = dbOps.deleteData("Task_Master" , condition)
-        return result
+        let taskId = taskData[1];
+        let arrColms = [" \"TaskStatus\" "];
+        let wfState = res["WORKFLOW"]["STR_WF_COMPLETE"]
+        let arrValues = ["\'" + wfState + "\'"];
+        let condition = " \"TaskId\" = " + taskId;
+        let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
+        console.log(result);
     }
+
+    async TSKV_updateTaskToDelete(taskData)
+    {
+        console.log(taskData);
+        const dbOps = new dbOperations();
+        let taskId = taskData[1];
+        let arrColms = [" \"TaskStatus\" "];
+        let wfState = res["WORKFLOW"]["STR_WF_DELETE"]
+        let arrValues = ["\'" + wfState + "\'"];
+        let condition = " \"TaskId\" = " + taskId;
+        let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
+        console.log(result);
+    }
+
+    async TSKV_revertTask(taskData)
+    {
+        console.log(taskData);
+        const dbOps = new dbOperations();
+        let taskId = taskData[1];
+        let arrColms = [" \"TaskStatus\" "];
+        let wfState = res["WORKFLOW"]["STR_WF_INPROGRESS"]
+        let arrValues = ["\'" + wfState + "\'"];
+        let condition = " \"TaskId\" = " + taskId;
+        let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
+        console.log(result);
+    }
+
+    async TSKV_updateTaskToComplete_Multi(tableObject)
+    {
+        let arrData = tableObject.rows( { selected: true } ).data().toArray();
+        console.log(arrData);
+        for (let index = 0; index < arrData.length; index++) 
+        {
+            let data = arrData[index];
+            this.TSKV_updateTaskToComplete(data);
+        }
+    }
+
+    async TSKV_updateTaskToDelete_Multi(tableObject)
+    {
+        let arrData = tableObject.rows( { selected: true } ).data().toArray();
+        console.log(arrData);
+        for (let index = 0; index < arrData.length; index++) 
+        {
+            let data = arrData[index];
+            this.TSKV_updateTaskToDelete(data);
+        }
+    }
+
+    async TSKV_revertTask_Multi(tableObject)
+    {
+        let arrData = tableObject.rows( { selected: true } ).data().toArray();
+        console.log(arrData);
+        for (let index = 0; index < arrData.length; index++) 
+        {
+            let data = arrData[index];
+            this.TSKV_revertTask(data);
+        }
+    }
+
+    // async deleteTask(id)
+    // {
+    //     const dbOps = new dbOperations();
+    //     let condition = " \"TaskId\" = " + id;
+    //     let result = dbOps.deleteData("Task_Master" , condition)
+    //     return result
+    // }
 
 
 }

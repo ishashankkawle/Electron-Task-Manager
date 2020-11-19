@@ -67,7 +67,7 @@ module.exports = class AllTasks_ViewLoader
         //Get DataTable id as parameter
 
         let arrDataset = []; 
-        let arrFields = ["AssignerName","DateCreated","DateTerminated","Description","Module","Order","OwnerName","Priority","TaskId","TaskStatus","Title","Type"]
+        let arrFields = ["AssignerName","DateCreated","DateTerminated","Description","Module","OwnerName","Priority","TaskId","TaskStatus","Title","Type"]
         for (let index = 0; index < moduleData.length; index++) 
         {   
             let obj = [];
@@ -91,7 +91,6 @@ module.exports = class AllTasks_ViewLoader
                     { title: "End Date" },
                     { title: "Description" , visible:false},
                     { title: "Module" },
-                    { title: "Order" , visible:false},
                     { title: "Owner" , visible:false},
                     { title: "Priority" , visible:false},
                     { title: "TaskId" , visible:false},
@@ -99,7 +98,7 @@ module.exports = class AllTasks_ViewLoader
                     { title: "Title" },
                     { title: "Type" }
                 ],
-                "pageLength":7,
+                "pageLength":6,
                 "lengthChange":true,
                 "select": {
                     items: 'row'

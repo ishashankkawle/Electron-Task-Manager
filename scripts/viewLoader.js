@@ -17,17 +17,13 @@ function closeWindow()
     ipc.send('close-app');
 }
 
-function loadUIElement( locationId , screenName , path)
+async function loadUIElement( locationId , screenName , path)
 {
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open('GET' , screenName + '.html');
-    xmlhttp.onreadystatechange = function(){
-        if(this.readyState !== 4) return;
-        if(this.status !== 200) return;
-        document.getElementById(locationId).innerHTML = this.responseText;
+    let responseData = await fetch(screenName + '.html');
+    if (responseData.status === 200) {
+        let data = await responseData.text();
+        document.getElementById(locationId).innerHTML = data;
     }
-    
-    xmlhttp.send();
 
     if(screenName == 'views/overview' )
     {
@@ -37,6 +33,16 @@ function loadUIElement( locationId , screenName , path)
     if(screenName == 'views/taskboard' )
     {
         operationTrigger('base_getAllTaskData');
+    }
+
+    if(screenName == 'views/taskVerificationPages/verificationView' )
+    {
+        operationTrigger('base_getAllVerificationData');
+    }
+
+    if(screenName == 'views/taskVerificationPages/assignmentsView' )
+    {
+        operationTrigger('base_getAllAssignmentData');
     }
 
     if(screenName == 'views/admin')

@@ -79,7 +79,26 @@ module.exports = class Util
     getCurrentDateString()
     {
         let currentDateObj = new Date();
-        let dateStr = currentDateObj.getDate()+"-"+currentDateObj.getMonth()+"-"+currentDateObj.getFullYear();
+        let dateStr = currentDateObj.getMonth()+"-"+currentDateObj.getDate()+"-"+currentDateObj.getFullYear();
         return dateStr;
+    }
+
+    convertArrayForDataTable(arrayOfObjects)
+    {
+        let data = [];
+        for (let index = 0; index < arrayOfObjects.length; index++) 
+        {
+            const element = arrayOfObjects[index];
+            let objectArray = [];
+            for (let key in element) 
+            {
+                if (element.hasOwnProperty(key)) 
+                {
+                    objectArray.push(element[key]);
+                }
+            }
+            data.push(objectArray);
+        }
+        return data;
     }
 }

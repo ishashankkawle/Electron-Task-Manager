@@ -153,6 +153,7 @@ body
   padding: 20px;
   border: none;
   border-radius: 0.5rem;
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.03);
   margin: 1%;
 }
 .gen-card-row
@@ -178,11 +179,6 @@ body
   background: #fff !important;
   border-bottom: none !important;
   padding-left: 0;
-}
-.gen-v-navbar
-{
-  border-left: 0.5px solid lightgray;
-  border-right: 0.5px solid lightgray;
 }
 .ovr-task-panel
 {
@@ -275,6 +271,64 @@ ovr-task-card
 {
   border-bottom: 0.5px solid lightgray;
 }
+.gen-list-element:hover
+{
+  background-color: #e7ebf2;
+}
 .toolbar {
   float: left;
+}
+.btn-circle {
+  width: 45px;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  padding: 0;
+  border-radius: 50%;
+  border: 0px;
+}
+
+.btn-circle span {
+  position: relative;
+  top: 5px;
+  left:-0.1px;
+}
+
+.btn-circle-sm {
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  font-size: 0.9rem;
+}
+.gen-card-strip
+{
+  padding-top: 2%;
+  padding-bottom: 2%;
+  border:0;
+  border-radius: 0;
+}
+.gen-card-strip-left-end
+{
+  border-top-left-radius:0.5rem;
+  border-bottom-left-radius:0.5rem;
+}
+.gen-card-strip-right-end
+{
+  border-top-right-radius:0.5rem;
+  border-bottom-right-radius:0.5rem;
+}
+.gen-card-strip-card-text
+{
+  margin-bottom: 5%;
+}
+.gen-nav-tabs
+{
+  background: #fff;
+  margin-top: 1%;
+  border-radius: 0.5rem;
+}
+.tskv-summ-bar
+{
+  padding-left: 2.5%;
+  padding-right: 1.2%;
 }

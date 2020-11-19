@@ -1,34 +1,37 @@
-loadMask(1, "loading modues");
-let Util = require('././core/util');
+loadMask(1, "loading modules");
+
 let Admin = require('././scripts/adminManager');
 let TaskM = require('././scripts/taskManager');
 let Ove_ViewLdr = require('././scripts/Overview_ViewLoader');
 let AllTask_ViewLdr = require('././scripts/AllTask_ViewLoader');
-let Adm_ViewLdr = require('././scripts/Admin_ViewLoader');
+let TaskVerification_ViewLdr = require('././scripts/TaskVerification_ViewLoader');
 let res = require('././shared/resources');
 
+loadMask(1, "initializing");
 
-const util = new Util();
 const admin = new Admin();
 const taskm = new TaskM();
 const ovl = new Ove_ViewLdr();
 const atvl = new AllTask_ViewLdr();
-const adm = new Adm_ViewLdr();
+const tskv = new TaskVerification_ViewLdr();
 
 loadMask(0);
 
-async function operationTrigger(...args) {
-    if (args.length == 1) {
+async function operationTrigger(...args) 
+{
+    if (args.length == 1) 
+    {
         operationSwitch(args[0]);
     }
-    else {
-        let len = args.length;
-        operationSwitch(args[len - 1], args);
+    else 
+    {
+        operationSwitch(args[0], args[1]);
     }
 }
 
 async function operationSwitch(params, values) {
-    switch (params) {
+    switch (params) 
+    {
         //---------------------------------------------------------------------
         // OVERVIEW OPERATIONS
         //---------------------------------------------------------------------
@@ -64,6 +67,35 @@ async function operationSwitch(params, values) {
                 loadMask(1, "populating ui view");
                 atvl.parseSummaryTaskData(all_data, allTaskNewTile, allTaskCompleteTile, allTaskTotalTile, allTaskSelfCompleteTile, allTaskSelfDeleteTile);
                 atvl.loadDataOnTaskTable(all_data);
+                loadMask(0);
+                break;
+            }
+        
+        case "base_getAllVerificationData":
+            {
+                loadMask(1 , "fetching verification data");
+                let data = await taskm.getTaskVerificationCommitData();
+                let data2 = await taskm.getTaskVerificationDeleteData();
+                loadMask(1 , "populating ui view");
+                await tskv.loadSelfCommitsVerificationData(data);
+                await tskv.loadSelfDeletesVerificationData(data2);
+                loadMask(0);
+                break;
+            }
+        
+        case "base_getAllAssignmentData" :
+            {
+                loadMask(1 , "fetching assignment data");
+                let summaryData = await taskm.getTaskVerificationAssignmentSummary();
+                let rscData = await taskm.getTaskVerificationRSCUtilzationData();
+                let assignmentData = await taskm.getTaskVerificationAssignementData();
+                console.log(summaryData);
+                console.log(rscData);
+                console.log(assignmentData);
+                loadMask(1 , "populating ui view");
+                tskv.loadAssignmentSummaryData(summaryData);
+                tskv.loadResourceUtilizationData(rscData);
+                tskv.loaTaskdAssignmentData(assignmentData);
                 loadMask(0);
                 break;
             }
@@ -157,6 +189,7 @@ async function operationSwitch(params, values) {
                 loadMask(1, "performing self commit operation");
                 await taskm.updateTaskWorkflowStateToSelfCommit(res["TASKDATA_TABLE"]);
                 loadMask(0);
+                break;
             }
 
         case "tsb_TaskToSelfDeleteState":
@@ -164,34 +197,65 @@ async function operationSwitch(params, values) {
                 loadMask(1, "performing self delete operation");
                 await taskm.updateTaskWorkflowStateToSelfDelete(res["TASKDATA_TABLE"]);
                 loadMask(0);
+                break;
             }
 
+        //---------------------------------------------------------------------
+        // TASK VERIFICATION OPERATIONS
+        //---------------------------------------------------------------------    
         
+        case "tskv_MarkTaskAsComplete":
+            {
+                loadMask(1, "updating task status");
+                await taskm.TSKV_updateTaskToComplete(values);
+                loadMask(0);
+                break;
+            }
+        case "tskv_MarkTaskAsDelete":
+            {
+                loadMask(1, "updating task status");
+                await taskm.TSKV_updateTaskToDelete(values);
+                loadMask(0);
+                break;
+            }
+        case "tskv_MarkTaskAsRevert":
+            {
+                loadMask(1, "updating task status");
+                await taskm.TSKV_revertTask(values);
+                loadMask(0);
+                break;
+            }
+        case "tskv_MarkMultiTaskAsComplete":
+            {
+                loadMask(1, "updating multiple task status");
+                await taskm.TSKV_updateTaskToComplete_Multi(res["TASKVERIFICATION_SLFCOMMIT_TABLE"])
+                loadMask(0);
+                break;
+            }
+        case "tskv_MarkMultiTaskAsDelete":
+            {
+                loadMask(1, "updating multiple task status");
+                await taskm.TSKV_updateTaskToDelete_Multi(res["TASKVERIFICATION_SLFDELETE_TABLE"])
+                loadMask(0);
+                break;
+            }
+        case "tskv_MarkMultiTaskAsRevert":
+            {
+                let tablename = "";
+                if(values == "SelfCommitTable")
+                {
+                    tablename = res["TASKVERIFICATION_SLFCOMMIT_TABLE"]
+                }
+                if(values == "SelfDeleteTable")
+                {
+                    tablename = res["TASKVERIFICATION_SLFDELETE_TABLE"]
+                }
+                await taskm.TSKV_revertTask_Multi(tablename);
+                break;
+            }
 
         default:
             break;
 
     }
 }
-
-// async function InsertTaskInExcel(arrTask, xlWorkbook)
-// {
-//     let exist = await util.checkFileExist(res["FILE_PATH"], res["FILE_NAME"]);
-//     if (!exist) {
-//         xlWorkbook = exl.getNewWorkBook();
-//     }
-//     else {
-//         xlWorkbook = await exl.openWorkBook();
-//     }
-
-
-//     let xlFilePath = res["FILE_PATH"] + res["FILE_NAME"];
-//     let xl = new XL();
-//     let xlSheet = xl.getWorksheetFromWorkbook(xlWorkbook, res["SHEET_NAME"]);
-//     if (xlSheet == undefined) {
-//         xlSheet = xl.getNewWorkSheet();
-//     }
-//     xlSheet = xl.AddDataToSheet(xlSheet, arrTask);
-//     xlWorkbook = xl.AddSheet(xlWorkbook, xlSheet, 'TASKS');
-//     xl.WriteXL(xlWorkbook, xlFilePath);
-// }

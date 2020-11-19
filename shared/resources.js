@@ -7,7 +7,7 @@ module.exports = {
     "STR_TASK" : "Task",
     "STR_DESCRIPTION" : "Description",
     "STR_IOB" : "Issue or Bugs",
-    "STR_USERID" : "874423",
+    "STR_USERID" : "32425",
 
     "ID_COLUMN_CONFIG":{
       "project_master" : "ProjectId",
@@ -18,6 +18,10 @@ module.exports = {
       "priority_master" : "PriorityId",
     },
     "TASKDATA_TABLE":{},
+    "TASKVERIFICATION_SLFCOMMIT_TABLE":{},
+    "TASKVERIFICATION_SLFDELETE_TABLE":{},
+    "TASKVERIFICATION_RESOURCEUTILIZATION_TABLE":{},
+    "TASKVERIFICATION_ASSIGNEDTASK_TABLE":{},
     "WORKFLOW":{
       "STR_WF_NEW" : "New",
       "STR_WF_INPROGRESS" : "In_Progress",
