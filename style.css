@@ -256,7 +256,9 @@ ovr-task-card
 .admin-nav-bar
 {
   margin-left: 4%;
-  background-color: white;
+  padding-left: 0;
+  padding-right: 0;
+  background: #fff;
 }
 .admin-nav-item
 {
@@ -269,7 +271,7 @@ ovr-task-card
 }
 .gen-list-element
 {
-  border-bottom: 0.5px solid lightgray;
+  padding: 12px 30px;
 }
 .gen-list-element:hover
 {

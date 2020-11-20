@@ -50,6 +50,31 @@ async function loadUIElement( locationId , screenName , path)
         //@TODO
         //Apply Security on Verticle NavBar to remove Project , User Create , Asset Create Buttons
     }
+
+    if(screenName == 'views/adminPages/projectView')
+    {
+        operationTrigger('admin_getAllProjectData');
+    }
+
+    if(screenName == 'views/adminPages/userAssignmentView')
+    {
+        operationTrigger('admin_getUserAssignmentSource');
+    }
+
+    if(screenName == 'views/adminPages/taskView')
+    {
+        operationTrigger('admin_getProjectUserListForTask');
+    }
+
+    if(screenName == 'views/adminPages/userView')
+    {
+        operationTrigger('admin_getProjectListForUser');
+    }
+
+    if(screenName == 'views/adminPages/assetView')
+    {
+        operationTrigger('admin_getProjectListForAssets');
+    }
     
     if(path != undefined)
     {

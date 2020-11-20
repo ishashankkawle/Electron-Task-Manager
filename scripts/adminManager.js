@@ -272,7 +272,16 @@ module.exports = class adminManager
         arrColumnsToIgnore.push(0);
         let dataString = util.generateCustomArrayString("\'" , data , arrColumnsToIgnore);
         var result = await this.addObjectToDatabase("Project_master" , keyString , dataString ,dbOps);
-        console.log(JSON.stringify(result));
+        console.log(result);
+    }
+
+    async getProjectIdFromProjectName(ProjectName)
+    {
+        let columns = ["\"ProjectId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectName\" = \'" + ProjectName + "\'"
+        let data = await dbOps.getData("Project_Master" , columns , conditon)
+        return data["rows"][0]["ProjectId"];
     }
 
     async getProjectIdFromUser(userId)
@@ -284,6 +293,82 @@ module.exports = class adminManager
         return data["rows"][0]["ProjectId"];
     }
 
+    async getProjectListData(userId)
+    {
+        let columns = ["\"ProjectName\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" = \'" + userId + "\'"
+        let data = await dbOps.getData("View_ProjectList" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getResourcesUnderUser(userId , roleId)
+    {
+        // let columns = ["\"UserId\"" , "\"Name\""];
+        // const dbOps = new dbOperations();
+        // let conditon = "\"ReportingUserId\" = \'" + userId + "\'";
+        // let data = await dbOps.getData("View_UserMap" , columns , conditon);
+        // return data["rows"];
+        let columns = ["\"UserId\"" , "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ReportingUserId\" = \'" + userId + "\' AND \"UserRoleId\" > \'" + roleId + "\'" 
+        let data = await dbOps.getData("View_UserMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getOtherUsersList(userId , roleId)
+    {
+        let columns = ["\"UserId\"" , "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" <> \'" + userId + "\' AND \"UserRoleId\" = \'" + roleId + "\'" 
+        let data = await dbOps.getData("View_UserMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getProjectListForUser(userId)
+    {
+        let columns = ["\"ProjectName\"" , "\"ProjectId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" = \'" + userId + "\'"
+        let data = await dbOps.getData("View_UserProjectMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getResourceListForUser(userId , roleId)
+    {
+        let columns = ["\"UserId\"" , "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ReportingUserId\" = \'" + userId + "\' AND \"UserRoleId\" >= \'" + roleId + "\'" 
+        let data = await dbOps.getData("View_UserMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getModuleListForProject(projectId)
+    {
+        let columns = ["\"ModuleId\"" , "\"Module\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectId\" = \'" + projectId + "\'"
+        let data = await dbOps.getData("View_moduleProjectMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getTypeListForProject(projectId)
+    {
+        let columns = ["\"TypeId\"" , "\"Type\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectId\" = \'" + projectId + "\'"
+        let data = await dbOps.getData("View_TypeProjectMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getPriorityListForProject(projectId)
+    {
+        let columns = ["\"PriorityId\"" , "\"Priority\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectId\" = \'" + projectId + "\'"
+        let data = await dbOps.getData("View_PriorityProjectMap" , columns , conditon)
+        return data["rows"]
+    }
     //-----------------------------------------------------------
     // GENERIC OPERATIONS
     //-----------------------------------------------------------

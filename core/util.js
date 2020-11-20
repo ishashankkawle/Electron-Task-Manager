@@ -101,4 +101,37 @@ module.exports = class Util
         }
         return data;
     }
+
+    createSelectMenuDataObject(data , keyColumn , dataColumn)
+    {
+        let dataArray = [];
+        for (let index = 0; index < data.length; index++) 
+        {
+            let obj = {};
+            const element = data[index];
+            obj["Option_Text"] = element[keyColumn];
+            obj["Option_Value"] = element[dataColumn];
+            dataArray.push(obj);
+        }
+        return dataArray;
+    }
+    
+    addOptionsInSelectMenu(element , data)
+    {
+        for (let index = 0; index < data.length; index++) 
+        {
+            const obj = data[index]; 
+            let newOption = new Option(obj["Option_Text"],obj["Option_Value"]);
+            element.add(newOption , undefined);
+        }
+    }
+
+    removeOptionsFromSelectMenu(element)
+    {
+        let length = element.options.length;
+        for (let i = length-1; i >= 0; i--) 
+        {
+            element.options[i] = null;
+        }
+    }
 }

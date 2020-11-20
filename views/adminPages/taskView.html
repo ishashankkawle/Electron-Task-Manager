@@ -7,21 +7,11 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label for="adm-Tsk-Project">Project</label>
-                    <select class="form-control" id="adm-Tsk-Project">
-                        <option value="57">Proj1</option>
-                        <option value="57">Proj2</option>
-                        <option value="57">Proj3</option>
-                    </select>
+                    <select class="form-control" id="adm-Tsk-Project" onchange="operationTrigger('admin_getModuleTypePriorityListForTask')"></select>
                 </div>
                 <div class="col-sm-6">
                     <label for="adm-Tsk-Module">Module</label>
-                    <select class="form-control" id="adm-Tsk-Module">
-                        <option value="ETL">ETL</option>
-                        <option value="Security">Security</option>
-                        <option value="Backend-Development">Backend-Development</option>
-                        <option value="UI Development">UI Development</option>
-                        <option value="Data Operations">Data Operations</option>
-                    </select>
+                    <select class="form-control" id="adm-Tsk-Module"></select>
                 </div>
             </div>
         </div>
@@ -43,12 +33,7 @@
 
                 <div class="col-sm-4">
                     <label for="adm-Tsk-Owner">Assigned To</label>
-                    <select class="form-control" id="adm-Tsk-Owner">
-                        <option value="874423">Shashank</option>
-                        <option value="874423">Nitin</option>
-                        <option value="874423">Rohit</option>
-                        <option value="874423">Chinmay</option>
-                    </select>
+                    <select class="form-control" id="adm-Tsk-Owner"></select>
                 </div>
             </div>
         </div>
@@ -58,21 +43,12 @@
 
                 <div class="col-sm-4">
                     <label for="adm-Tsk-Type">Type</label>
-                    <select class="form-control" id="adm-Tsk-Type">
-                        <option value="Feature">Feature</option>
-                        <option value="Defect">Defect</option>
-                        <option value="Bug">Bug</option>
-                    </select>
+                    <select class="form-control" id="adm-Tsk-Type"></select>
                 </div>
 
                 <div class="col-sm-4">
                     <label for="adm-Tsk-Priority">Priority</label>
-                    <select class="form-control" id="adm-Tsk-Priority">
-                        <option value="Critical">Critical</option>
-                        <option value="Major">Major</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Minor">Minor</option>
-                    </select>
+                    <select class="form-control" id="adm-Tsk-Priority"></select>
                 </div>
 
             </div>

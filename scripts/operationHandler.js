@@ -4,6 +4,7 @@ let Admin = require('././scripts/adminManager');
 let TaskM = require('././scripts/taskManager');
 let Ove_ViewLdr = require('././scripts/Overview_ViewLoader');
 let AllTask_ViewLdr = require('././scripts/AllTask_ViewLoader');
+let Admin_ViewLdr = require('././scripts/Admin_ViewLoader');
 let TaskVerification_ViewLdr = require('././scripts/TaskVerification_ViewLoader');
 let res = require('././shared/resources');
 
@@ -14,6 +15,7 @@ const taskm = new TaskM();
 const ovl = new Ove_ViewLdr();
 const atvl = new AllTask_ViewLdr();
 const tskv = new TaskVerification_ViewLdr();
+const advl = new Admin_ViewLdr();
 
 loadMask(0);
 
@@ -106,7 +108,10 @@ async function operationSwitch(params, values) {
         case "admin_createProject":
             {
                 loadMask(1, 'creatig new project');
-                admin.createProject(params);
+                await admin.createProject(params);
+                let title = document.getElementById('adm-Proj-Title').value;
+                let projectId = await admin.getProjectIdFromProjectName(title)
+                admin.createUserProjectMap(res["STR_USERID"], projectId)
                 loadMask(0);
                 break;
             }
@@ -172,6 +177,91 @@ async function operationSwitch(params, values) {
                 break;
             }
 
+        case "admin_getAllProjectData":
+            {
+                loadMask(1, 'getting project data');
+                let data = await admin.getProjectListData(res["STR_USERID"]);
+                advl.loadProjectListData(data);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_getUserAssignmentSource":
+            {
+                loadMask(1, 'getting user assignment data');
+                let data = await admin.getResourcesUnderUser(res["STR_USERID"] , res["STR_ROLEID"]);
+                let allUserData = await admin.getOtherUsersList(res["STR_USERID"] , res["STR_ROLEID"]);
+                advl.loadUserAssignmentDropdown(data , allUserData)
+                loadMask(0);
+                break;
+            }
+        
+        case "admin_getProjectUserListForTask":
+            {
+                loadMask(1, 'getting project list');
+                let data = await admin.getProjectListForUser(res["STR_USERID"]);
+                let userData = await admin.getResourceListForUser(res["STR_USERID"] , res["STR_ROLEID"]);
+                advl.loadTaskProjectDropdown(data);
+                advl.loadTaskUserDropdown(userData);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_getProjectListForUser":
+            {
+                loadMask(1, 'getting project list');
+                let data = await admin.getProjectListForUser(res["STR_USERID"]);
+                console.log(data);
+                advl.loadUserProjectDropdown(data);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_getProjectListForAssets":
+            {
+                loadMask(1, 'getting project list');
+                let data = await admin.getProjectListForUser(res["STR_USERID"]);
+                console.log(data);
+                advl.loadAssetProjectDropdown(data);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_getModuleTypePriorityListForTask":
+            {
+                let projectId = document.getElementById("adm-Tsk-Project").value
+                let moduleData = await admin.getModuleListForProject(projectId);
+                let typeData = await admin.getTypeListForProject(projectId);
+                let priorityData = await admin.getPriorityListForProject(projectId);
+                advl.loadTaskModuleDropdown(moduleData);
+                advl.loadTaskTypeDropdown(typeData);
+                advl.loadTaskPriorityDropdown(priorityData);
+                break;
+            }
+
+        case "admin_getModuleTypePriorityListForAssets":
+            {
+                loadMask(1 , "getting Modules , Types & Priorities");
+                let projectId = document.getElementById("adm-Ast-Project").value
+                let moduleData = await admin.getModuleListForProject(projectId);
+                let typeData = await admin.getTypeListForProject(projectId);
+                let priorityData = await admin.getPriorityListForProject(projectId);
+                advl.loadAssetModuleListData(moduleData);
+                advl.loadAssetTypeListData(typeData);
+                advl.loadAssetPriorityListData(priorityData);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_getTypeListForTask":
+            {
+                loadMask(1, 'getting module list');
+                let projectId = document.getElementById("adm-Tsk-Project").value
+                let data = await admin.getModuleListForProject(projectId);
+                advl.loadTaskModuleDropdown(data);
+                loadMask(0);
+                break;
+            }
         //---------------------------------------------------------------------
         // TASKBOARD OPERATIONS
         //---------------------------------------------------------------------    

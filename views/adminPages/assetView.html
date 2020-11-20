@@ -11,11 +11,7 @@
     
             <div class="form-group">
                 <label for="adm-Ast-Category">Project</label>
-                <select class="form-control" id="adm-Ast-Project">
-                    <option value="54">Proj1</option>
-                    <option value="56">Proj2</option>
-                    <option value="57">Proj3</option>
-                </select>
+                <select class="form-control" id="adm-Ast-Project" onchange="operationTrigger('admin_getModuleTypePriorityListForAssets')"></select>
             </div>
     
             <div class="form-group">
@@ -45,6 +41,7 @@
             <h5 class="card-title">Modules</h5>
         </div>
         <div class="card-body p-0">
+            <table id="admin-asset-module-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
         </div>
     </div>
     <div class="col-sm-2 card gen-card">
@@ -52,6 +49,7 @@
             <h5 class="card-title">Types</h5>
         </div>
         <div class="card-body p-0">
+            <table id="admin-asset-type-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
         </div>
     </div>
     <div class="col-sm-2 card gen-card">
@@ -59,6 +57,7 @@
             <h5 class="card-title">Priorities</h5>
         </div>
         <div class="card-body p-0">
+            <table id="admin-asset-priority-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
         </div>
     </div>
     

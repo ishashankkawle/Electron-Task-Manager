@@ -7,7 +7,8 @@ module.exports = {
     "STR_TASK" : "Task",
     "STR_DESCRIPTION" : "Description",
     "STR_IOB" : "Issue or Bugs",
-    "STR_USERID" : "32425",
+    "STR_USERID" : "240",
+    "STR_ROLEID" : "0",
 
     "ID_COLUMN_CONFIG":{
       "project_master" : "ProjectId",
