@@ -1,5 +1,5 @@
-const { ipcMain , BrowserWindow } = require("electron");
 let res = require('../shared/resources');
+
 
 //require ('handsontable');
 //import 'handsontable/dist/handsontable.full.css';
@@ -7,15 +7,6 @@ let res = require('../shared/resources');
 
 module.exports = class AllTasks_ViewLoader
 {
-
-    openTask()
-    {
-        win = new BrowserWindow({ show:true, frame:true, width: 2000, height: 2000 })
-        // and load the index.html of the app.
-        win.loadFile('views/taskDetails.html')
-        // ipc call to new window to pass task_id
-    }
-
     parseSummaryTaskData(data , activeElement , completeElement , totalElement , slfCompleteElement , slfDeleteElement)
     {
         console.log(data);
@@ -96,7 +87,15 @@ module.exports = class AllTasks_ViewLoader
                     { title: "TaskId" , visible:false},
                     { title: "Status" },
                     { title: "Title" },
-                    { title: "Type" }
+                    { title: "Type" },
+                    { title: ""}
+                ],
+                columnDefs: [
+                    {
+                        "targets": -1,
+                        "data": null,
+                        "defaultContent": "<button id='all-tsk-opn-tsk-btn' onclick=\"openTaskDetails()\" class=\"btn btn-outline-primary btn-sm btn-circle btn-circle-sm\"><span class=\"material-icons md-18\">launch</span></button>"
+                    }
                 ],
                 "pageLength":6,
                 "lengthChange":true,

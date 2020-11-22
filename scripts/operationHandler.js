@@ -45,13 +45,12 @@ async function operationSwitch(params, values) {
                 let summaryData = await taskm.getTaskSummaryData();
                 let element = document.getElementById("task-panel");
                 let element_list = document.getElementById("task-list");
-                let moduleTable = document.getElementById("module-frag-table").getElementsByTagName('tbody')[0];
                 let summarySec = document.getElementById("summary-section");
                 let perfChart = document.getElementById("performance-chart");
                 let modOccupChart = document.getElementById("mod-occup-chart");
                 loadMask(1, "populating ui view");
                 ovl.parseTaskSectionObject(data, element, element_list);
-                ovl.parseSummarySectionObject(summaryData, summarySec, moduleTable, perfChart, modOccupChart);
+                ovl.parseSummarySectionObject(summaryData, summarySec, perfChart, modOccupChart);
                 loadMask(0);
                 break;
             }
@@ -60,7 +59,6 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, "fetching data");
                 let all_data = await taskm.getAllTaskData();
-                all_data = all_data["rows"];
                 let allTaskNewTile = document.getElementById("all-tsk-summ-new")
                 let allTaskCompleteTile = document.getElementById("all-tsk-summ-cmpl")
                 let allTaskTotalTile = document.getElementById("all-tsk-summ-tot")
@@ -229,6 +227,7 @@ async function operationSwitch(params, values) {
 
         case "admin_getModuleTypePriorityListForTask":
             {
+                loadMask(1, 'getting Modules , Types & Priority for project');
                 let projectId = document.getElementById("adm-Tsk-Project").value
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
@@ -236,6 +235,7 @@ async function operationSwitch(params, values) {
                 advl.loadTaskModuleDropdown(moduleData);
                 advl.loadTaskTypeDropdown(typeData);
                 advl.loadTaskPriorityDropdown(priorityData);
+                loadMask(0);
                 break;
             }
 

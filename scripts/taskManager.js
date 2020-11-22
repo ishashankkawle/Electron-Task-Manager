@@ -16,7 +16,7 @@ module.exports = class taskManager
         let condition = "\"TaskOwner\" = " + "\'"+res["STR_USERID"] +"\'"
         let columnsToFetch = "*"
         let result= await dbOps.getData("View_TaskMaster" , columnsToFetch , condition);
-        return result;
+        return result["rows"];
     }
 
     async getTaskSummaryData()
