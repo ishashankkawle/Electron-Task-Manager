@@ -1,0 +1,24 @@
+<div class="row">
+    <div class="col-sm-5 card gen-card">
+        <div class="card-header gen-card-header">
+            <h5 class="card-title">Create New Project</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="form-group">
+                <input type="text" class="form-control" id="adm-Proj-Title" placeholder="Project Title">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="operationTrigger('admin_createProject')">Create</button>
+            </div>
+            <small class="form-text text-muted"><b>Note:</b> As you are creating this project, you will be assigned as project owner for this project. You can transfer ownership of project to other employee with same role after creating project.</small>
+        </div>
+    </div>
+    <div class="col-sm-4 card gen-card">
+        <div class="card-header gen-card-header">
+            <h5 class="card-title">Owned Projects list</h5>
+        </div>
+        <div class="card-body p-0">
+            <table id="admin-project-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
+        </div>
+    </div>
+</div>

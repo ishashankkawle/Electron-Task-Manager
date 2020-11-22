@@ -7,25 +7,30 @@ module.exports = {
     "STR_TASK" : "Task",
     "STR_DESCRIPTION" : "Description",
     "STR_IOB" : "Issue or Bugs",
-    "STR_USERID" : "U15",
+    "STR_USERID" : "250",
+    "STR_ROLEID" : "0",
 
-
-    "firebaseConfig" :{
-      apiKey: "AIzaSyAqtC1eyh9yBQkvMRxz2W5tHR5tQzUBHOo",
-      authDomain: "tss-database-b86b6.firebaseapp.com",
-      databaseURL: "https://tss-database-b86b6.firebaseio.com",
-      projectId: "tss-database-b86b6",
-      storageBucket: "tss-database-b86b6.appspot.com",
-      messagingSenderId: "544782536332",
-      appId: "1:544782536332:web:6cbd101a13f9743c9175a9",
-      measurementId: "G-GHMRQ8EQ6N"
+    "ID_COLUMN_CONFIG":{
+      "project_master" : "ProjectId",
+      "user_master" : "UserId",
+      "task_master" : "TaskId",
+      "module_master" : "ModuleId",
+      "type_master" : "TypeId",
+      "priority_master" : "PriorityId",
     },
-
-    "dbConfig" :{
-      dbEndPoint : "",
-      dbApiKey : "1058fa982e50406eb873e32b92d7d557"
+    "TASKDATA_TABLE":{},
+    "TASKVERIFICATION_SLFCOMMIT_TABLE":{},
+    "TASKVERIFICATION_SLFDELETE_TABLE":{},
+    "TASKVERIFICATION_RESOURCEUTILIZATION_TABLE":{},
+    "TASKVERIFICATION_ASSIGNEDTASK_TABLE":{},
+    "WORKFLOW":{
+      "STR_WF_NEW" : "New",
+      "STR_WF_INPROGRESS" : "In_Progress",
+      "STR_WF_SELFCOMMIT" : "Self_Commit",
+      "STR_WF_SELFDELETE" : "Self_Delete",
+      "STR_WF_COMPLETE" : "Complete",
+      "STR_WF_DELETE" : "Delete",
     },
-
     "PostgresConnection" : "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs"
 
 };

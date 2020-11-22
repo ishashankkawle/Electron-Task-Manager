@@ -1,30 +1,41 @@
 let dbOperations = require('../core/databaseOperations');
+let Util = require('../core/util');
+let res = require('../shared/resources');
 
-module.exports = class adminManager {
+const util = new Util();
 
-    async saveTask() 
+
+module.exports = class adminManager 
+{
+
+    async createTask() 
     {
         try 
         {
             let data = [];
-            //const exl = new XL();
             const dbOps = new dbOperations();
+            data.push("nextval('master_db_id_sequence')");
+            data.push(document.getElementById('adm-Tsk-Project').value);
+            data.push(document.getElementById('adm-Tsk-Module').value);
+            data.push(document.getElementById('adm-Tsk-Title').value);
+            data.push(document.getElementById('adm-Tsk-Desc').value);
+            data.push(document.getElementById('adm-Tsk-ETA').value);
+            data.push(document.getElementById('adm-Tsk-Owner').value);
+            data.push(res["STR_USERID"]);
+            data.push(res["WORKFLOW"]["STR_WF_NEW"]);
+            data.push(document.getElementById('adm-Tsk-Type').value);
+            data.push(document.getElementById('adm-Tsk-Priority').value);
+            data.push(util.getCurrentDateString());
 
-            data.push(document.getElementById('TaskView-Module').value);
-            data.push(document.getElementById('TaskView-Title').value);
-            data.push(document.getElementById('TaskView-Description').value);
-            data.push(document.getElementById('TaskView-ETA').value);
-            data.push(document.getElementById('TaskView-Owner').value);
-            data.push(document.getElementById('TaskView-Assign').value);
-            data.push(document.getElementById('TaskView-Type').value);
-            data.push(document.getElementById('TaskView-Priority').value);
-            data.push(document.getElementById('TaskView-Order').value);
 
-            let keys = ["TaskId" , "Module", "Title", "Description", "DateTerminated", "Owner", "Assign", "Type", "Priority", "Order"];
+            let keys = ["TaskId" , "ProjectId" ,  "Module", "Title", "Description", "DateTerminated", "Owner", "Assigner", "TaskStatus" ,"Type", "Priority" , "DateCreated"];
 
-            //await InsertTaskInExcel(data, xlWorkbook);
-            await this.saveObject("Task_master" , keys , data , dbOps);
-            //await getDataFromDatabase(dbOps);
+            let keyString = util.generateCustomArrayString("\"" , keys);
+            let arrColsToIgore = [0];
+            let dataString = util.generateCustomArrayString("\'" , data , arrColsToIgore);
+        
+            let result = await this.addObjectToDatabase("Task_master" , keyString , dataString , dbOps);
+            console.log(result);
         }
         catch (error) {
             console.log("Error due to : " + error);
@@ -32,92 +43,346 @@ module.exports = class adminManager {
 
     }
 
-    async saveUser()
+    //-----------------------------------------------------------
+    // USER CREATION OPERATIONS
+    //-----------------------------------------------------------
+    async createUser()
     {
-        try {
-            let data = [];
-            const dbOps = new dbOperations();
+        console.log("INSIDE USER CREATION")
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push("nextval('master_db_id_sequence')");
+        data.push(document.getElementById('adm-Usr-Name').value);
+        data.push(document.getElementById('adm-Usr-Contact').value);
+        data.push(document.getElementById('adm-Usr-DOB').value);
+        data.push(document.getElementById('adm-Usr-Email').value);
+        data.push(document.getElementById('adm-Usr-Email').value);
+        data.push(document.getElementById('adm-Usr-Password').value);
+        data.push("0");
+        data.push(util.getCurrentDateString());
+        
+        let keys = [ "UserId", "Name", "Contact", "DOB", "Email", "UserName" , "Password" , "RoleId" , "DateCreated"]
+        let arrEncryptedCols = [5,6];
 
-            data.push(document.getElementById('UserView-Name').value);
-            //data.push(document.getElementById('UserView-UserId').value);
-            data.push(document.getElementById('UserView-Contact').value);
-            data.push(document.getElementById('UserView-DOB').value);
-            data.push(document.getElementById('UserView-Email').value);
-            data.push(document.getElementById('UserView-UserName').value);
-            data.push(document.getElementById('UserView-Password').value);
-           
-            let keys = [ "UserId", "Name", "Contact", "DOB", "Email", "UserName", "Password"]
-            let arrEncryptedCols = [4,5];
-            //await this.insertUserIntoDatabase(data, dbOps);
-            await this.saveObject("User_master" , keys , data, dbOps , true ,arrEncryptedCols);
-
-        } catch (error) {
-            console.log("Error due to : " + error);
+        for (let index = 0; index < data.length; index++) 
+        {
+            let flag = false;
+            for (let index2 = 0; index2 < arrEncryptedCols.length; index2++) 
+            {
+                if(index == arrEncryptedCols[index2])
+                {
+                    flag = true
+                }
+            }     
+            if (flag)
+            {
+                data[index] = " PGP_SYM_ENCRYPT( '" + data[index] + "' , 'AES_KEY') "    
+            }           
         }
+
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let arrColsToIgore = [0,5,6];
+        let dataString = util.generateCustomArrayString("\'" , data , arrColsToIgore);
+        let result = await this.addObjectToDatabase("User_master" , keyString , dataString, dbOps );
+        console.log(result);
     }
 
-    async saveModule()
+    async getUserId(email)
     {
-        try 
-        {
-            let data = [];
-            const dbOps = new dbOperations();
-            data.push(document.getElementById('AssetView-Module').value);
-            let keys = ["ModuleId","Module"];
-            await this.saveObject("Module_master", keys, data, dbOps);
-        } catch (error) {
-            console.log("Error due to : " + error);
-        }
+        let columns = ["\"UserId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"Email\" = \'" + email + "\'"
+        let data = await dbOps.getData("User_master" , columns , conditon)
+        return data["rows"][0]["UserId"];
     }
 
-    async saveType()
+    async createUserAssignerMap(userId , assignerId)
     {
-        try 
-        {
-            let data = [];
-            const dbOps = new dbOperations();
-            data.push(document.getElementById('AssetView-Type').value);
-            let keys = ["TypeId","Type"];
-            await this.saveObject("Type_master", keys, data, dbOps);
-        } catch (error) {
-            console.log("Error due to : " + error);
-        }
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push(userId);
+        data.push(assignerId);
+        let keys = ["UserId" , "ReportingUserId"];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data);
+        let result = dbOps.addData("user_user_map" , keyString , dataString);
+        console.log(result);
     }
 
-    async savePriority()
+    async updateUserAssignerMap(userId , targetUerId)
     {
-        try 
-        {
-            let data = [];
-            const dbOps = new dbOperations();
-            data.push(document.getElementById('AssetView-Priority').value);
-            let keys = ["PriorityId","Priority"];
-            await this.saveObject("Priority_master",keys,  data, dbOps);
-        } catch (error) {
-            console.log("Error due to : " + error);
-        }
+        const dbOps = new dbOperations();
+        let arrColumns = [ "\"ReportingUserId\""];
+        let arrData = [targetUerId];
+        let conditon = "\"UserId\" = '" + userId + "'";
+        let result = dbOps.updateData("user_user_map" , arrColumns , arrData , conditon );
+        console.log(result);
     }
 
-
-    async saveObject(type , keys , arrData , dbOps , isEncrypted , arrEncrypted)
+    async createUserProjectMap(userId , projectId)
     {
-        // let db = dbOps.initialize(res["firebaseConfig"]);
-        // let objData = util.generateJSONObject(keys, arrData);
-        if(isEncrypted)
-        {
-            dbOps.addEncryptedData(type , keys , arrData , arrEncrypted)
-        }   
-        else
-        {
-            dbOps.addData(type , keys , arrData)
-        }
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push(userId);
+        data.push(projectId);
+        let keys = ["UserId" , "ProjectId"];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data);
+        let result = dbOps.addData("user_project_map" , keyString , dataString);
+        console.log(result);
+    }
+
+    async updateUserProjectMap(userId , projectId)
+    {
+        const dbOps = new dbOperations();
+        let arrColumns = [ "\"ProjectId\""];
+        let arrData = [projectId];
+        let conditon = "\"UserId\" = '" + userId + "'";
+        let result = dbOps.updateData("user_project_map" , arrColumns , arrData , conditon );
+        console.log(result);
+    }
+
+    //-----------------------------------------------------------
+    // ASSETS OPERATIONS
+    //-----------------------------------------------------------
+    async createModule(moduleName)
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push("nextval('master_db_id_sequence')");
+        data.push(moduleName);
+        data.push(util.getCurrentDateString());
+        let keys = ["ModuleId","Module","DateCreated"];
+        let arrColsToIgore = [0];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data , arrColsToIgore);
+        var result = await this.addObjectToDatabase("Module_master", keyString, dataString, dbOps);
+        console.log(result);
         
     }
 
-    
-    async getDataFromDatabase(dbOps) {
-        let db = dbOps.initialize(res["firebaseConfig"]);
-        console.log(dbOps.readAllData("Task", db));
+    async getModuleId(moduleName)
+    {
+        let columns = ["\"ModuleId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"Module\" = \'" + moduleName + "\'"
+        let data = await dbOps.getData("Module_master" , columns , conditon)
+        return data["rows"][0]["ModuleId"];
     }
 
+    async createModuleProjectMap(moduleId , projectId)
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push(moduleId);
+        data.push(projectId);
+        let keys = ["ModuleId" , "ProjectId"];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data);
+        let result = dbOps.addData("module_project_map" , keyString , dataString);
+        console.log(result);
+    }
+
+    async createType(typeName)
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push("nextval('master_db_id_sequence')");
+        data.push(typeName);
+        data.push(util.getCurrentDateString());
+        let keys = ["TypeId","Type","DateCreated"];
+        let arrColsToIgore = [0];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data , arrColsToIgore);
+        var result = await this.addObjectToDatabase("Type_master", keyString, dataString, dbOps);
+        console.log(result);        
+    }
+
+    async getTypeId(typeName)
+    {
+        let columns = ["\"TypeId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"Type\" = \'" + typeName + "\'"
+        let data = await dbOps.getData("Type_master" , columns , conditon)
+        return data["rows"][0]["TypeId"];
+    }
+
+    async createTypeProjectMap(typeId , projectId)
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push(typeId);
+        data.push(projectId);
+        let keys = ["TypeId" , "ProjectId"];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data);
+        let result = dbOps.addData("type_project_map" , keyString , dataString);
+        console.log(result);
+    }
+
+    async createPriority(priorityName)
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push("nextval('master_db_id_sequence')");
+        data.push(priorityName);
+        data.push(util.getCurrentDateString());
+        let keys = ["PriorityId","Priority","DateCreated"];
+        let arrColsToIgore = [0];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data , arrColsToIgore);
+        var result = await this.addObjectToDatabase("Priority_master", keyString, dataString, dbOps);
+        console.log(result);        
+    }
+
+    async getPriorityId(priorityName)
+    {
+        let columns = ["\"PriorityId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"Priority\" = \'" + priorityName + "\'"
+        let data = await dbOps.getData("Priority_master" , columns , conditon)
+        return data["rows"][0]["PriorityId"];
+    }
+
+    async createPriorityProjectMap(priorityId , projectId)
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push(priorityId);
+        data.push(projectId);
+        let keys = ["PriorityId" , "ProjectId"];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let dataString = util.generateCustomArrayString("\'" , data);
+        let result = dbOps.addData("priority_project_map" , keyString , dataString);
+        console.log(result);
+    }
+    //-----------------------------------------------------------
+    // PROJECT CREATION OPERATIONS
+    //-----------------------------------------------------------
+    async createProject()
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push("nextval('master_db_id_sequence')");
+        data.push(document.getElementById('adm-Proj-Title').value);
+        data.push(util.getCurrentDateString());
+        let keys = ["ProjectId" , "ProjectName" , "DateCreated"];
+        let keyString = util.generateCustomArrayString("\"" , keys);
+        let arrColumnsToIgnore = [];
+        arrColumnsToIgnore.push(0);
+        let dataString = util.generateCustomArrayString("\'" , data , arrColumnsToIgnore);
+        var result = await this.addObjectToDatabase("Project_master" , keyString , dataString ,dbOps);
+        console.log(result);
+    }
+
+    async getProjectIdFromProjectName(ProjectName)
+    {
+        let columns = ["\"ProjectId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectName\" = \'" + ProjectName + "\'"
+        let data = await dbOps.getData("Project_Master" , columns , conditon)
+        return data["rows"][0]["ProjectId"];
+    }
+
+    async getProjectIdFromUser(userId)
+    {
+        let columns = ["\"ProjectId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" = \'" + userId + "\'"
+        let data = await dbOps.getData("user_project_map" , columns , conditon)
+        return data["rows"][0]["ProjectId"];
+    }
+
+    async getProjectListData(userId)
+    {
+        let columns = ["\"ProjectName\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" = \'" + userId + "\'"
+        let data = await dbOps.getData("View_ProjectList" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getResourcesUnderUser(userId , roleId)
+    {
+        // let columns = ["\"UserId\"" , "\"Name\""];
+        // const dbOps = new dbOperations();
+        // let conditon = "\"ReportingUserId\" = \'" + userId + "\'";
+        // let data = await dbOps.getData("View_UserMap" , columns , conditon);
+        // return data["rows"];
+        let columns = ["\"UserId\"" , "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ReportingUserId\" = \'" + userId + "\' AND \"UserRoleId\" > \'" + roleId + "\'" 
+        let data = await dbOps.getData("View_UserMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getOtherUsersList(userId , roleId)
+    {
+        let columns = ["\"UserId\"" , "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" <> \'" + userId + "\' AND \"UserRoleId\" = \'" + roleId + "\'" 
+        let data = await dbOps.getData("View_UserMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getProjectListForUser(userId)
+    {
+        let columns = ["\"ProjectName\"" , "\"ProjectId\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" = \'" + userId + "\'"
+        let data = await dbOps.getData("View_UserProjectMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getResourceListForUser(userId , roleId)
+    {
+        let columns = ["\"UserId\"" , "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ReportingUserId\" = \'" + userId + "\' AND \"UserRoleId\" >= \'" + roleId + "\'" 
+        let data = await dbOps.getData("View_UserMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getModuleListForProject(projectId)
+    {
+        let columns = ["\"ModuleId\"" , "\"Module\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectId\" = \'" + projectId + "\'"
+        let data = await dbOps.getData("View_moduleProjectMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getTypeListForProject(projectId)
+    {
+        let columns = ["\"TypeId\"" , "\"Type\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectId\" = \'" + projectId + "\'"
+        let data = await dbOps.getData("View_TypeProjectMap" , columns , conditon)
+        return data["rows"]
+    }
+
+    async getPriorityListForProject(projectId)
+    {
+        let columns = ["\"PriorityId\"" , "\"Priority\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectId\" = \'" + projectId + "\'"
+        let data = await dbOps.getData("View_PriorityProjectMap" , columns , conditon)
+        return data["rows"]
+    }
+    //-----------------------------------------------------------
+    // GENERIC OPERATIONS
+    //-----------------------------------------------------------
+    async addObjectToDatabase(type , keys , arrData , dbOps , isEncrypted , arrEncrypted)
+    {
+        if(isEncrypted)
+        {
+            var result = dbOps.addEncryptedData(type , keys , arrData , arrEncrypted)
+        }   
+        else
+        {
+            var result = dbOps.addData(type , keys , arrData)
+        }
+        return result;
+        
+    }
 }

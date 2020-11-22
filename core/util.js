@@ -33,7 +33,7 @@ module.exports = class Util
         return objJSON;
     }
 
-    generateCustomArrayString(wrapper , arr)
+    generateCustomArrayString(wrapper , arr , arrIndexToIgnore)
     {
         let str="";
 
@@ -44,15 +44,104 @@ module.exports = class Util
 
         for (let index = 0; index < (arr.length)-1; index++) 
         {
-            if(index == 0)
+            let igoreFlag = false;
+            if( arrIndexToIgnore != undefined)
             {
-                str = wrapper + arr[index] + wrapper + ",";
+                for (let index2 = 0; index2 < arrIndexToIgnore.length; index2++) 
+                {
+                    if(index == arrIndexToIgnore[index2])
+                    {
+                        igoreFlag = true;
+                    }    
+                    
+                }
+            }
+            if(!igoreFlag)
+            {
+                if(index == 0)
+                {
+                    str = wrapper + arr[index] + wrapper + ",";
+                }
+                else
+                {
+                    str = str + wrapper + arr[index] + wrapper + ",";
+                }
             }
             else
             {
-                str = str + wrapper + arr[index] + wrapper + ",";
+                console.log("STR = " + arr[index]);
+                str = str + arr[index] + ",";
             }
         }
         return str + wrapper+arr[(arr.length)-1]+wrapper
     }
+
+    getCurrentDateString()
+    {
+        let currentDateObj = new Date();
+        let dateStr = currentDateObj.getMonth()+"-"+currentDateObj.getDate()+"-"+currentDateObj.getFullYear();
+        return dateStr;
+    }
+
+    convertArrayForDataTable(arrayOfObjects)
+    {
+        let data = [];
+        for (let index = 0; index < arrayOfObjects.length; index++) 
+        {
+            const element = arrayOfObjects[index];
+            let objectArray = [];
+            for (let key in element) 
+            {
+                if (element.hasOwnProperty(key)) 
+                {
+                    objectArray.push(element[key]);
+                }
+            }
+            data.push(objectArray);
+        }
+        return data;
+    }
+
+    createSelectMenuDataObject(data , keyColumn , dataColumn)
+    {
+        let dataArray = [];
+        for (let index = 0; index < data.length; index++) 
+        {
+            let obj = {};
+            const element = data[index];
+            obj["Option_Text"] = element[keyColumn];
+            obj["Option_Value"] = element[dataColumn];
+            dataArray.push(obj);
+        }
+        return dataArray;
+    }
+    
+    addOptionsInSelectMenu(element , data)
+    {
+        for (let index = 0; index < data.length; index++) 
+        {
+            const obj = data[index]; 
+            let newOption = new Option(obj["Option_Text"],obj["Option_Value"]);
+            element.add(newOption , undefined);
+        }
+    }
+
+    removeOptionsFromSelectMenu(element)
+    {
+        let length = element.options.length;
+        for (let i = length-1; i >= 0; i--) 
+        {
+            element.options[i] = null;
+        }
+    }
+
+    getRandomColor() 
+    {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
 }
