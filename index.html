@@ -1,77 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
+  <head>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <link
-        href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;500;600;700&family=Roboto&display=swap"
-        rel="stylesheet">
+      href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@200;300;400;500;600;700&family=Roboto&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/v/bs4/dt-1.10.22/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/v/bs4/dt-1.10.22/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.css"
+    />
 
     <title>TSS</title>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <!--Navigation Bar-->
-    <div id="main-nav" class="nav-card card">
-        <span class="nav-btn material-icons"
-            onclick="loadUIElement('display' , 'views/overview', 'Overview')">search</span>
-        <span class="nav-btn material-icons"
-            onclick="loadUIElement('display' ,'views/taskboard' , 'All Tasks')">assignment</span>
-        <span class="nav-btn material-icons"
-            onclick="loadUIElement('display' ,'views/taskVerification' , 'Assignment and Task Verifications')">rule</span>
-        <span class="nav-btn material-icons"
-            onclick="loadUIElement('display' ,'views/about' , 'About')">help_outline</span>
-        <span class="nav-btn material-icons"
-            onclick="loadUIElement('display' ,'views/admin' , 'Admin')">admin_panel_settings</span>
-        <span class="nav-btn material-icons" onclick="closeWindow()">exit_to_app</span>
-    </div>
+    <nav
+      class="navbar navbar-expand-lg navbar-light pb-0 border-bottom"
+      id="main-nav"
+      style="background: var(--bg2)"
+    >
+      <a class="navbar-brand" href="#" style="color: var(--accent)"></a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" onclick="loadUIElement('display' , 'views/overview', 'Overview')"
+              >DASHBOARD <span class="sr-only">(current)</span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="loadUIElement('display' ,'views/taskboard' , 'All Tasks')"
+              >TASK</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              onclick="loadUIElement('display' ,'views/taskVerification' , 'Assignment and Task Verifications')"
+              >ASSIGNMENT</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="loadUIElement('display' ,'views/about' , 'About')"
+              >ABOUT</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="loadUIElement('display' ,'views/admin' , 'Admin')"
+              >SETTINGS</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="toggleTheme()"
+              ><span
+                id="theme-icon"
+                class="material-icons"
+                style="font-size: 18px; vertical-align: bottom; font-weight: bold"
+              >
+                brightness_2
+              </span></a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="closeWindow()"
+              ><span
+                class="material-icons"
+                style="font-size: 18px; vertical-align: bottom; font-weight: bold"
+              >
+                power_settings_new
+              </span></a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
 
     <!--PROGRESS BAR -->
     <div class="flare" id="loader-box">
-        <div class="wrapper"></div>
-        <div class="loadbox">
-            <h6 style="margin: 01px;">Loading ... </h6>
-            <hr style="border: 1px solid #ff005e;margin-bottom:  0.5px;">
-        </div>
+      <div class="wrapper"></div>
+      <div class="loadbox">
+        <h6 style="margin: 01px">Loading ...</h6>
+        <hr style="border: 1px solid #ff005e; margin-bottom: 0.5px" />
+      </div>
     </div>
 
     <!-- SCREEN -->
-    <div class="row path-view">
-        <span class="material-icons">home</span><span class="material-icons">chevron_right</span>
-        <h6 class="path-breadcrum" id="path-name"></h6>
+    <div class="path-view d-flex" style="color: var(--text)">
+      <span class="material-icons">home</span><span class="material-icons">chevron_right</span>
+      <h6 class="path-breadcrum" id="path-name"></h6>
     </div>
-    <div id="display" class="grid main-display">
-    </div>
+    <div id="display" class="grid main-display"></div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.js"
+      integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
 
-    <script type="text/javascript"
-        src="https://cdn.datatables.net/v/bs4/dt-1.10.22/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.datatables.net/v/bs4/dt-1.10.22/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.0/sp-1.2.1/sl-1.3.1/datatables.min.js"
+    ></script>
 
     <script src="scripts/viewLoader.js"></script>
     <script src="scripts/operationHandler.js"></script>
     <script>
-        document.getElementById('display').addEventListener('load', loadLandingPage())
+      document.getElementById('display').addEventListener('load', loadLandingPage())
     </script>
-</body>
-
+  </body>
 </html>
