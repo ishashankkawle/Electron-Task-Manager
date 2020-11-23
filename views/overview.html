@@ -1,137 +1,117 @@
-<div class="screen-panel">
-  <div class="col-sm-12">
-    <div id="TaskList">
-      <div class="row gen-card-row gen-screen-nav-space" id="summary-section">
-        <div class="col-sm-2 card gen-card">
-          <div class="card-header gen-card-header">
-            <h5 class="card-title">Task Status</h5>
-          </div>
-          <div class="card-body p-0">
-            <div class="row ovr-summary-panel">
-              <div class="col-sm-6 gen-section align-self-center">
-                <p class="gen-text-normal-secondry">Active</p>
-                <h4 class="col-sm-12" style="padding: 0">0</h4>
+<div
+  id="TaskList"
+  class="container-fluid"
+  style="background-image: linear-gradient(90deg, #4279be, #374c98, #1e226a)"
+>
+  <div class="row" id="summary-section">
+    <div class="col-12">
+      <div class="row">
+        <!--------TASKS------------------------------------------>
+        <div class="col-4 d-flex">
+          <div class="card-body my-auto" style="color: var(--white)">
+            <div class="row">
+              <div class="col-6">
+                <h6 class="m-0">Active Task</h6>
+                <h1 id="overview_active">5</h1>
               </div>
-              <div class="col-sm-6 gen-section align-self-center">
-                <div class="progress">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-                <p class="text-center" style="margin-bottom: 0"><b>0</b>%</p>
+              <div class="col-6">
+                <h6 class="m-0">Progress</h6>
+                <h1 id="overview_active_percentage">10%</h1>
               </div>
-            </div>
-            <div class="row ovr-summary-panel ovr-summary-panel-end">
-              <div class="col-sm-6 gen-section align-self-center">
-                <p class="gen-text-normal-secondry">Complete</p>
-                <h4 class="col-sm-12" style="padding: 0">0</h4>
+              <div class="col-6">
+                <h6 class="m-0">Complete Task</h6>
+                <h1 id="overview_complete">5</h1>
               </div>
-              <div class="col-sm-6 gen-section align-self-center">
-                <div class="progress">
-                  <div
-                    class="progress-bar"
-                    role="progressbar"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-                <p class="text-center" style="margin-bottom: 0"><b>0</b>%</p>
+              <div class="col-6">
+                <h6 class="m-0">Progress</h6>
+                <h1 id="overview_complete_percentage">25%</h1>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="col-sm-3 card gen-card">
-          <div class="card-header gen-card-header">
-            <h5 class="card-title">Modular Performace</h5>
-          </div>
-          <div class="card-body p-0">
-            <table
-              id="ovr-module-frag-table"
-              class="table table-hover gen-text-normal-secondry"
-              width="100%"
-            ></table>
-          </div>
-        </div>
-
-        <div class="col-sm-6 card gen-card">
-          <div class="card-header gen-card-header">
-            <h5 class="card-title">Up next</h5>
-          </div>
-          <div class="card-body p-0">
-            <small id="ovr-noData-msg" class="text-center form-text text-muted"
-              >No tasks available</small
-            >
-            <ul class="ovr-custom-list" id="task-list">
-              <li>
-                <div class="ovr-task-card" id="task-panel">
-                  <div class="row">
-                    <div class="col-sm-1 align-self-center">
-                      <span class="material-icons">build</span>
-                    </div>
-                    <div class="col-sm-7">
-                      <p class="gen-text-normal-bold"></p>
-                      <span style="display: none">id</span>
-                      <div>
-                        <span class="gen-text-normal-secondry"
-                          ><span></span> | <span></span> | <span>20-3-2019</span></span
-                        >
-                      </div>
-                    </div>
-                    <div class="col-sm-2 align-self-center">
-                      <span class="badge badge-success"></span>
-                    </div>
-
-                    <div class="col-sm-2 dropdown align-self-center text-center">
-                      <button
-                        class="btn btn-light dropdown-toggle"
-                        type="button"
-                        id="dropdownMenuButton"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      ></button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" onClick="operationTrigger(this.id , 'delete_task')"
-                          >In_Progress</a
-                        >
-                        <a
-                          class="dropdown-item"
-                          onClick="operationTrigger(this.id , 'complete_task')"
-                          >Self_Commit</a
-                        >
-                        <a class="dropdown-item" onClick="operationTrigger(this.id , 'edit_task')"
-                          >Self_Delete</a
-                        >
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="col-sm-3 card gen-card">
-          <div class="card-header gen-card-header">
-            <h5 class="card-title">Modular Occupasion</h5>
-          </div>
-          <div class="card-body p-0">
-            <canvas id="mod-occup-chart"></canvas>
-          </div>
-        </div>
-
-        <div class="col-sm-3 card gen-card">
-          <div class="card-header gen-card-header">
-            <h5 class="card-title">Monthly Performance</h5>
-          </div>
-          <div class="card-body p-0">
+        <!-----------MONTHLY GRAPH--------------------------------------->
+        <div class="col-4 d-flex">
+          <div class="card-body my-auto" style="color: var(--white)">
+            <h6>Monthly Performance</h6>
             <canvas id="performance-chart"></canvas>
           </div>
         </div>
+        <!------------DOGNUT-------------------------------------->
+        <div class="col-4 d-flex">
+          <div class="card-body my-auto" style="color: var(--white)">
+            <h6>Modular Occupasion</h6>
+            <canvas id="mod-occup-chart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-3 mb-3" id="summary-section">
+  <div class="row">
+    <div class="col-4">
+      <div class="card-body pb-2" style="background: var(--bg2); color: var(--text)">
+        <h5 class="card-title m-0 font-weight-bold">Modular Performace</h5>
+      </div>
+      <table
+        id="ovr-module-frag-table"
+        class="table table-hover"
+        width="100%"
+        style="background: var(--bg2); color: var(--text); font-size: 14px"
+      ></table>
+    </div>
+    <div class="col-8">
+      <div class="card-body" style="background: var(--bg2); color: var(--text)">
+        <h5 class="card-title">Up Next</h5>
+        <small id="ovr-noData-msg" class="text-center form-text text-muted"
+          >No tasks available</small
+        >
+        <ul class="ovr-custom-list" id="task-list">
+          <li>
+            <div class="ovr-task-card" id="task-panel">
+              <div class="row">
+                <div class="col-sm-1 align-self-center">
+                  <span class="material-icons">build</span>
+                </div>
+                <div class="col-sm-7">
+                  <p class="gen-text-normal-bold"></p>
+                  <span style="display: none">id</span>
+                  <div>
+                    <span class="gen-text-normal-secondry"
+                      ><span></span> | <span></span> | <span>20-3-2019</span></span
+                    >
+                  </div>
+                </div>
+                <div class="col-sm-2 align-self-center">
+                  <span class="badge badge-success"></span>
+                </div>
+
+                <div class="col-sm-2 dropdown align-self-center text-center">
+                  <button
+                    class="btn btn-light dropdown-toggle"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  ></button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" onClick="operationTrigger(this.id , 'delete_task')"
+                      >In_Progress</a
+                    >
+                    <a class="dropdown-item" onClick="operationTrigger(this.id , 'complete_task')"
+                      >Self_Commit</a
+                    >
+                    <a class="dropdown-item" onClick="operationTrigger(this.id , 'edit_task')"
+                      >Self_Delete</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
