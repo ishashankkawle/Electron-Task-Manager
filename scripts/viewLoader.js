@@ -16,7 +16,8 @@ function validateLogin() {
 }
 
 function closeWindow() {
-  ipcRenderer.send('close-app')
+  let al = confirm('Do you wish to stop the application ?')
+  if (al) ipcRenderer.send('close-app')
 }
 
 function toggleTheme() {

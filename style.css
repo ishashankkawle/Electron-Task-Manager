@@ -12,6 +12,10 @@ body {
   font-family: 'Nunito Sans', sans-serif;
 }
 
+.box-sh {
+  box-shadow: 0 1px 3px rgba(50, 50, 93, 0.15), 0 1px 0 rgba(0, 0, 0, 0.02);
+}
+
 .nav-link {
   font-size: 12px !important;
   padding: 0.5rem 1rem !important;
@@ -32,6 +36,55 @@ li.nav-item.active {
   border-bottom: 0.9px solid var(--bc) !important;
 }
 
+table#ovr-module-frag-table {
+  border-collapse: collapse !important;
+}
+
+.table {
+  background: var(--bg2) !important;
+  color: var(--text) !important;
+  font-size: 12px !important;
+}
+
+.table thead th {
+  border-bottom: 0px !important;
+}
+
+.table td,
+.table th {
+  border-color: var(--bc) !important;
+  padding: 0.5rem 1rem !important;
+  vertical-align: initial !important;
+}
+
+thead {
+  background: var(--bg3);
+}
+
+.list-group > li {
+  list-style-type: none !important;
+  position: relative;
+  display: block;
+  padding: 0.5rem 1rem;
+  background-color: var(--bg2);
+  border-top: 0.9px solid var(--bc);
+}
+
+.btn-more {
+  padding: 4px 0px !important;
+  color: var(--text);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem !important;
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  background-color: var(--accent) !important;
+}
 .wrapper {
   position: fixed;
   top: 40px;
@@ -57,29 +110,6 @@ li.nav-item.active {
   display: contents;
 }
 
-.nav-card {
-  position: fixed;
-  left: 0;
-  top: 41.5%;
-  z-index: 10;
-  background-color: #303f9f;
-  color: #fff;
-  padding: 0.5%;
-}
-.nav-btn {
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-.ovr-task-card {
-  padding-left: 5px;
-  padding-right: 5px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 3px;
-  /* border-left:3px solid; */
-  background: white;
-  box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 2px 0 rgba(63, 63, 68, 0.15);
-}
 .tskd-task-card {
   padding-left: 5px;
   padding-right: 5px;
@@ -161,15 +191,7 @@ li.nav-item.active {
   border-bottom: none;
   padding-bottom: 0;
 }
-.gen-screen-nav-space {
-  padding-left: 3% !important;
-}
-.gen-text-normal-secondry {
-  padding: 0;
-  margin-bottom: 0;
-  font-size: 12px;
-  color: #808080;
-}
+
 .gen-section {
   padding-left: 0;
   padding-right: 0;
@@ -206,10 +228,7 @@ li.nav-item.active {
   overflow-y: auto;
   margin-left: 15px;
 }
-.ovr-custom-list {
-  list-style-type: none;
-  padding-left: 0;
-}
+
 .ovr-summ-active-card {
   width: 48.667%;
   margin-right: 5px;
@@ -218,9 +237,7 @@ li.nav-item.active {
   margin-left: 7px;
   margin-top: 10px;
 }
-ovr-task-card {
-  margin: 1%;
-}
+
 .ovr-summ-tile-cout-sec {
   margin-bottom: 5px;
 }

@@ -97,7 +97,7 @@ module.exports = class Overview_ViewLoader {
       searching: false,
       info: false,
       lengthChange: false,
-      pageLength: 3,
+      bPaginate: false,
     })
 
     //---------------------------------------------------------------

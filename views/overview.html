@@ -50,53 +50,51 @@
 
 <div class="container-fluid mt-3 mb-3" id="summary-section">
   <div class="row">
+    <!---------------------------------------------------->
     <div class="col-4">
-      <div class="card-body pb-2" style="background: var(--bg2); color: var(--text)">
-        <h5 class="card-title m-0 font-weight-bold">Modular Performace</h5>
+      <div style="background: var(--bg2)" class="box-sh">
+        <div class="card-body pb-2" style="color: var(--text)">
+          <h5 class="card-title m-0 font-weight-bold">Modular Performace</h5>
+        </div>
+        <table id="ovr-module-frag-table" class="table table-hover w-100"></table>
       </div>
-      <table
-        id="ovr-module-frag-table"
-        class="table table-hover"
-        width="100%"
-        style="background: var(--bg2); color: var(--text); font-size: 14px"
-      ></table>
     </div>
-    <div class="col-8">
-      <div class="card-body" style="background: var(--bg2); color: var(--text)">
-        <h5 class="card-title">Up Next</h5>
-        <small id="ovr-noData-msg" class="text-center form-text text-muted"
-          >No tasks available</small
-        >
-        <ul class="ovr-custom-list" id="task-list">
-          <li>
-            <div class="ovr-task-card" id="task-panel">
-              <div class="row">
-                <div class="col-sm-1 align-self-center">
-                  <span class="material-icons">build</span>
-                </div>
-                <div class="col-sm-7">
-                  <p class="gen-text-normal-bold"></p>
-                  <span style="display: none">id</span>
-                  <div>
-                    <span class="gen-text-normal-secondry"
-                      ><span></span> | <span></span> | <span>20-3-2019</span></span
-                    >
-                  </div>
-                </div>
-                <div class="col-sm-2 align-self-center">
-                  <span class="badge badge-success"></span>
-                </div>
 
-                <div class="col-sm-2 dropdown align-self-center text-center">
+    <!---------------------------------------------------->
+    <div class="col-8">
+      <div style="background: var(--bg2)" class="box-sh">
+        <div class="card-body pb-3" style="color: var(--text)">
+          <h5 class="card-title m-0 font-weight-bold">Next in Bucket</h5>
+          <small id="ovr-noData-msg" class="text-center form-text text-muted"
+            >No tasks available</small
+          >
+        </div>
+        <ul class="list-group" id="task-list" style="color: var(--text)">
+          <li>
+            <div class="row" id="task-panel">
+              <div class="col-1">
+                <span class="material-icons" style="font-size: 18px; vertical-align: bottom"
+                  >build</span
+                >
+              </div>
+              <div class="col-9 d-flex">
+                <div style="font-size: 14px" class="my-auto">20-03-2019</div>
+              </div>
+              <div class="col-2">
+                <div class="dropdown align-self-center text-center">
                   <button
-                    class="btn btn-light dropdown-toggle"
+                    class="btn dropdown-toggle btn-more"
                     type="button"
                     id="dropdownMenuButton"
                     data-toggle="dropdown"
                     aria-haspopup="true"
                     aria-expanded="false"
                   ></button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <div
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                    style="background: var(--bg3); color: var(--text); font-size: 14px"
+                  >
                     <a class="dropdown-item" onClick="operationTrigger(this.id , 'delete_task')"
                       >In_Progress</a
                     >
