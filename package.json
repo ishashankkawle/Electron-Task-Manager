@@ -9,7 +9,6 @@
     "electron": "^7.2.4"
   },
   "dependencies": {
-    "electron-reload": "^1.5.0",
     "pg": "^7.18.2",
     "xlsx": "^0.14.1",
     "yarn": "^1.22.0"
