@@ -105,23 +105,34 @@ module.exports = class Overview_ViewLoader {
     //---------------------------------------------------------------
     var ctx2 = mod_occup_chart.getContext('2d')
     var chart2 = new Chart(ctx2, {
-      // The type of chart we want to create
       type: 'doughnut',
-
-      // The data for our dataset
       data: {
         datasets: [
           {
-            data: [],
+            data: moduleCount,
             backgroundColor: colorArray,
           },
         ],
-
-        labels: moduleNames,
+        labels: moduleNames
       },
 
       // Configuration options go here
-      options: {},
+      options: {
+        responsive: true,
+        cutoutPercentage: 70,
+        maintainAspectRatio: true,
+        elements: {
+          arc: {
+            borderWidth: 0,
+            weight: 4
+          }
+        },
+        legend: {
+          labels: {
+            fontColor: 'white'
+          }
+        }
+      }
     })
 
     //---------------------------------------------------------------

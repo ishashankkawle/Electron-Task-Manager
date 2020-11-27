@@ -28,10 +28,8 @@ module.exports = class AllTasks_ViewLoader {
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index]
-      if (
-        element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW'] ||
-        element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS']
-      ) {
+      if (element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW'] || element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS']) 
+      {
         activeCount++
       }
       if (element['TaskStatus'] == res['WORKFLOW']['STR_WF_COMPLETE']) {
