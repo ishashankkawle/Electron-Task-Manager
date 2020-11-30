@@ -40,16 +40,14 @@ async function operationSwitch(params, values) {
         case "base_getAllOverviewData":
             {
                 loadMask(1, "fetching data");
-                //let data = await taskm.getAllTaskData();
                 let data = await taskm.getAllTaskData();
                 let summaryData = await taskm.getTaskSummaryData();
-                let element = document.getElementById("task-panel");
-                let element_list = document.getElementById("task-list");
+                let element_list = document.getElementById("ovr-tsk-list");
                 let summarySec = document.getElementById("summary-section");
                 let perfChart = document.getElementById("performance-chart");
                 let modOccupChart = document.getElementById("mod-occup-chart");
                 loadMask(1, "populating ui view");
-                ovl.parseTaskSectionObject(data, element, element_list);
+                ovl.parseTaskSectionObject(data, element_list);
                 ovl.parseSummarySectionObject(summaryData, summarySec, perfChart, modOccupChart);
                 loadMask(0);
                 break;

@@ -5,40 +5,55 @@ const res = require('../shared/resources')
 const util = new Util()
 
 module.exports = class Overview_ViewLoader {
-  async parseTaskSectionObject(datarows, panel_element, list_element) {
+  async parseTaskSectionObject(datarows, list_element) {
     list_element.innerHTML = ''
     //----------------------------------------------
     // TASK LIST
     //----------------------------------------------
-    //for (let index = 0; index < datarows.length; index++)
-
     if (datarows != undefined && datarows.length != 0) {
       toggleDisplayElement('ovr-noData-msg')
-      for (let index = 0; index < 3; index++) {
+      for (let index = 0; index < 3; index++) 
+      {
         const data_element = datarows[index]
         if (data_element == undefined) {
           continue
         }
-        if (
-          data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS'] ||
-          data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW']
-        ) {
-          let node = panel_element.cloneNode(true)
-          let title = document.getElementById('overview_active_percentage')
-          let id = document.getElementById('overview_active_percentage')
-          let moduleName = document.getElementById('overview_active_percentage')
-          let priority = document.getElementById('overview_active_percentage')
-          let status = document.getElementById('overview_active_percentage')
-          let endDate = document.getElementById('overview_active_percentage')
+        if (data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS'] ||data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW']) 
+        {
 
-          title.innerHTML = data_element['Title']
-          moduleName.innerHTML = data_element['Module']
-          priority.innerHTML = data_element['Priority']
-          status.innerHTML = data_element['TaskStatus']
-          endDate = data_element['DateTerminated']
+          data_element["DateTerminated"] = '10-20-2020'
+
+          let listElementHTML = [
+          '<div class="row" id="ovr-tsk-panel">',
+          '<div class="col-1">',
+          '<span class="material-icons" style="font-size: 18px; vertical-align: bottom">build</span>',
+          '</div>',
+          '<div class="col-2 d-flex">',
+          '<div style="font-size: 14px" class="my-auto" id="ovr-tsk-card-date">' + data_element["DateTerminated"] + '</div>',
+          '</div>',
+          '<div class="col-6 d-flex">',
+          '<div style="font-size: 14px" class="my-auto" id="ovr-tsk-card-title">' + data_element["Title"] + '</div>',
+          '</div>',
+          '<div class="col-2 d-flex">',
+          '<div style="font-size: 10px" class="my-auto"><span id="ovr-tsk-card-module">' + data_element["Module"] + '</span>&nbsp|&nbsp<span id="ovr-tsk-card-priority">' + data_element["Priority"] + '</span>',
+          '</div>',
+          '</div>',
+          '<div class="ml-auto col-1">',
+          '<div class="dropdown align-self-center text-center">',
+          '<button class="btn dropdown-toggle btn-more" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>',
+          '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" style="background: var(--bg3); color: var(--text); font-size: 14px">',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'delete_tas\')">Open</a>',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'delete_tas\')">In_Progress</a>',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'complete_task\')">Self_Commit</a>',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'edit_task\')">Self_Delete</a>',
+          '</div>',
+          '</div>',
+          '</div>',
+          '</div>',
+          ].join("\n");
 
           let listnode = document.createElement('li')
-          listnode.appendChild(node)
+          listnode.innerHTML = listElementHTML
           list_element.appendChild(listnode)
         }
       }

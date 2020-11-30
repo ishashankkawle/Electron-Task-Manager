@@ -33,9 +33,13 @@ module.exports = class adminManager
             let keyString = util.generateCustomArrayString("\"" , keys);
             let arrColsToIgore = [0];
             let dataString = util.generateCustomArrayString("\'" , data , arrColsToIgore);
-        
+            
             let result = await this.addObjectToDatabase("Task_master" , keyString , dataString , dbOps);
-            console.log(result);
+            let obj = util.generateJSONObject(keys , data);
+            obj["TaskId"] = result["rows"][0]["TaskId"];
+            obj["Activity"] = [];
+            let mongoRes = dbOps.addTaskBlobData("TSSTaskHistory" , "TSSTaskHistoryCollection" , obj);
+            console.log(mongoRes);
         }
         catch (error) {
             console.log("Error due to : " + error);

@@ -7,7 +7,7 @@ module.exports = {
   "STR_TASK": "Task",
   "STR_DESCRIPTION": "Description",
   "STR_IOB": "Issue or Bugs",
-  "STR_USERID": "250",
+  "STR_USERID": "240",
   "STR_ROLEID": "0",
 
   "ID_COLUMN_CONFIG": {
@@ -31,7 +31,8 @@ module.exports = {
     "STR_WF_COMPLETE": "Complete",
     "STR_WF_DELETE": "Delete",
   },
-  "PostgresConnection": "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs"
+  "PostgresConnection": "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs",
+  "MongoClusterConnection":"mongodb+srv://ets_admin:SmX9qhyXD0qlUhkF@tsstaskcluster.8gnng.mongodb.net/test"
 
 };
 

@@ -1,6 +1,7 @@
 let pg = require('pg');
 let res = require('../shared/resources');
 let Util = require('../core/util');
+const {MongoClient} = require('mongodb');
 
 const util = new Util();
 
@@ -10,6 +11,32 @@ module.exports = class dbOps
     getDatabaseClient()
     {
         return new pg.Client(res["PostgresConnection"]);
+    }
+
+    getMongoDatabaseClient()
+    {
+        return new MongoClient(res["MongoClusterConnection"]);
+    }
+    
+    async getTaskBlobData(tableName , collectionName , query , client)
+    {
+        if(client == undefined)
+        {
+            client = this.getMongoDatabaseClient();            
+        }
+        
+        try 
+        {
+            await client.connect();
+            let db = client.db(tableName);
+            let collection = db.collection(collectionName);
+            let result = await collection.findOne(query);
+            return result;
+        } 
+        finally
+        {
+            client.close();
+        }
     }
 
     async getAllData(tableName , client)
@@ -23,6 +50,28 @@ module.exports = class dbOps
 
         let result = await this.executeQuery(query , client);
         return result;
+    }
+
+    async addTaskBlobData(tableName , collectionName , data , client)
+    {
+        if(client == undefined)
+        {
+            client = this.getMongoDatabaseClient();            
+        }
+        
+        try 
+        {
+            await client.connect();
+            let db = client.db(tableName);
+            let collection = db.collection(collectionName);
+            console.log(data);
+            let result = await collection.insertOne(data);
+            console.log(result);
+        } 
+        finally
+        {
+            client.close();
+        }
     }
 
     async getData(tableName , arrColumns , condition , options, client)
@@ -61,7 +110,7 @@ module.exports = class dbOps
 
     async addData(tableName , inputColumn , inputData , client)
     {
-        var query = "INSERT INTO " + tableName + "(" + inputColumn +") VALUES (" + inputData + " )";
+        var query = "INSERT INTO " + tableName + "(" + inputColumn +") VALUES (" + inputData + " ) RETURNING * ";
 
         if(client == undefined)
         {

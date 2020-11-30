@@ -3,7 +3,8 @@ let Util = require('../core/util')
 
 const util = new Util()
 
-module.exports = class TaskVerification_ViewLoader {
+module.exports = class TaskVerification_ViewLoader 
+{
   loadSelfCommitsVerificationData(tabledata) {
     let arrSelfCommitData = []
     let arrFields = ['TaskId', 'Title', 'Module']
