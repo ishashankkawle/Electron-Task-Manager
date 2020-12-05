@@ -1,5 +1,5 @@
 const { ipcRenderer } = require('electron')
-var isDark = false
+let isDark = false
 
 function loadLandingPage() {
   toggleDisplayElement('main-nav')
@@ -8,6 +8,14 @@ function loadLandingPage() {
 
 function loadTaskDetailsPage() {
   loadUIElement('task-display', 'taskDetailsPages/taskDetails')
+  loadMask(1 , "loading task details");
+  let taskId = 0;
+  ipcRenderer.on('transfer-taskid', (event, arg) => {        
+        taskId = arg;
+    });
+  console.log("taskId = " +taskId)
+  operationTrigger_TaskDetails("base_getAllSelectedTaskData" , taskId);
+  loadMask(0);
 }
 
 function validateLogin() {

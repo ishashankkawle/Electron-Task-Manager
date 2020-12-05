@@ -21,21 +21,21 @@ function createWindow() {
   Menu.setApplicationMenu(mainMenu)
 }
 
-function createTaskWindow(args) {
+async function createTaskWindow(args) {
   let secondWindow = new BrowserWindow({
     show: true,
     width: 800,
     height: 600,
     webPreferences: { nodeIntegration: true },
   })
-  secondWindow.loadURL(
+  await secondWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, '/views/taskDetailsIndex.html'),
       protocol: 'file:',
       slashes: true,
     })
   )
-  secondWindow.webContents.send('transfer-taskid', args)
+  secondWindow.send('transfer-taskid', args)
 
   //MENU
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)

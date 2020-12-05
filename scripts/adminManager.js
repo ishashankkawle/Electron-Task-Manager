@@ -38,7 +38,7 @@ module.exports = class adminManager
             let obj = util.generateJSONObject(keys , data);
             obj["TaskId"] = result["rows"][0]["TaskId"];
             obj["Activity"] = [];
-            let mongoRes = dbOps.addTaskBlobData("TSSTaskHistory" , "TSSTaskHistoryCollection" , obj);
+            let mongoRes = dbOps.addBlobData("TSSTaskHistory" , "TSSTaskHistoryCollection" , obj);
             console.log(mongoRes);
         }
         catch (error) {

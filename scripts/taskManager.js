@@ -19,6 +19,15 @@ module.exports = class taskManager
         return result["rows"];
     }
 
+    async getSingleTaskData(userId , taskId)
+    {
+        const dbOps = new dbOperations();
+        let condition = "\"TaskOwner\" = \'" + userId +"\' And \"TaskId\" = \'" + taskId + "\'"
+        let columnsToFetch = "*"
+        let result= await dbOps.getData("View_TaskMaster" , columnsToFetch , condition);
+        return result["rows"];
+    }
+
     async getTaskSummaryData()
     {
         const dbOps = new dbOperations();

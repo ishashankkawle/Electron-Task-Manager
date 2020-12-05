@@ -18,7 +18,7 @@ module.exports = class dbOps
         return new MongoClient(res["MongoClusterConnection"]);
     }
     
-    async getTaskBlobData(tableName , collectionName , query , client)
+    async getBlobData(tableName , collectionName , query , client)
     {
         if(client == undefined)
         {
@@ -52,7 +52,7 @@ module.exports = class dbOps
         return result;
     }
 
-    async addTaskBlobData(tableName , collectionName , data , client)
+    async addBlobData(tableName , collectionName , data , client)
     {
         if(client == undefined)
         {
