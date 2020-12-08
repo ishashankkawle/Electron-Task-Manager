@@ -104,7 +104,7 @@ module.exports = class AllTasks_ViewLoader {
           targets: -1,
           data: null,
           defaultContent:
-            '<button id=\'all-tsk-opn-tsk-btn\' onclick="openTaskDetails()" class="btn btn-outline-primary btn-sm btn-circle btn-circle-sm"><span class="material-icons md-18">launch</span></button>',
+            '<button id=\'all-tsk-opn-tsk-btn\' class="btn btn-outline-primary btn-sm btn-circle btn-circle-sm"><span class="material-icons md-18">launch</span></button>',
         },
       ],
       pageLength: 6,
@@ -113,6 +113,11 @@ module.exports = class AllTasks_ViewLoader {
         items: 'row',
       },
       dom: '<"toolbar">frtip',
+    });
+
+    $('#task-board-table tbody').on('click', '#all-tsk-opn-tsk-btn', function () {
+      var data = res['TASKDATA_TABLE'].row($(this).parents('tr')).data()
+      operationTrigger('tsb_OpenTaskDetails' , data)
     })
   }
 }

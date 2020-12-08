@@ -118,13 +118,31 @@ module.exports = class Util {
         return color;
     }
 
-    generateJSONObject(keyArray , dataArray)
+    generateCustomWrapperArray(wrapper, arr, arrIndexToIgnore) 
     {
-        let obj = {};
-        for (let index = 0; index < keyArray.length; index++) 
-        {
-            obj[keyArray[index]] = dataArray[index]            
+        let finalArray = [];
+
+        for (let index = 0; index < (arr.length); index++) {
+            let igoreFlag = false;
+            if (arrIndexToIgnore != undefined) 
+            {
+                for (let index2 = 0; index2 < arrIndexToIgnore.length; index2++) {
+                    if (index == arrIndexToIgnore[index2]) 
+                    {
+                        igoreFlag = true;
+                    }
+
+                }
+            }
+            if (!igoreFlag) 
+            {
+                finalArray.push(wrapper + arr[index] + wrapper)
+            }
+            else 
+            {
+                finalArray.push(arr[index]);
+            }
         }
-        return obj;
+        return finalArray;
     }
 }

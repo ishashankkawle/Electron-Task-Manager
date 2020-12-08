@@ -8,7 +8,11 @@ module.exports = {
   "STR_DESCRIPTION": "Description",
   "STR_IOB": "Issue or Bugs",
   "STR_USERID": "250",
+  "STR_USERNAME": "Shashank",
   "STR_ROLEID": "0",
+
+  "STR_BLOBDBNAME" : "TSSTaskHistory",
+  "STR_BLOBDBCOLLECTIONAME" : "TSSTaskHistoryCollection",
 
   "ID_COLUMN_CONFIG": {
     "project_master": "ProjectId",

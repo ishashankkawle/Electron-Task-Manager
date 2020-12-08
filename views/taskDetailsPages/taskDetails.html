@@ -1,7 +1,8 @@
 <div class="row">
     <div class="mx-auto col-sm-10 card gen-card">
         <div class="card-header gen-card-header">
-            <h2 class="card-title">Task Title</h2>
+            <h2 id="tskd-title" class="card-title">Task Title</h2>
+            <p><small>id:<span id="tskd-taskid"></span></small></p>
         </div>
         <div class="card-body p-0">
 
@@ -11,33 +12,33 @@
                     </p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="gen-p-margin-bottom"><small><strong>Project : </strong><span>Project name</span></small>
+                    <p class="gen-p-margin-bottom"><small><strong>Project : </strong><span id="tskd-project">Project name</span></small>
                     </p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="gen-p-margin-bottom"><small><strong>Module : </strong><span>Module name</span></small></p>
+                    <p class="gen-p-margin-bottom"><small><strong>Module : </strong><span id="tskd-module">Module name</span></small></p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="gen-p-margin-bottom"><small><strong>Type : </strong><span>Type name</span></small></p>
+                    <p class="gen-p-margin-bottom"><small><strong>Type : </strong><span id="tskd-type">Type name</span></small></p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="gen-p-margin-bottom"><small><strong>Priority : </strong><span>Priority name</span></small>
+                    <p class="gen-p-margin-bottom"><small><strong>Priority : </strong><span id="tskd-priority">Priority name</span></small>
                     </p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="gen-p-margin-bottom"><small><strong>Status : </strong><span>Task Status</span></small></p>
+                    <p class="gen-p-margin-bottom"><small><strong>Status : </strong><span id="tskd-status">Task Status</span></small></p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="gen-p-margin-bottom"><small><strong>Assigned By : </strong><span>Assigner Name</span></small></p>
+                    <p class="gen-p-margin-bottom"><small><strong>Assigned By : </strong><span id="tskd-assigner">Assigner Name</span></small></p>
                 </div>
                 <div class="col-sm-6">
-                    <p class="gen-p-margin-bottom"><small><strong>Owned By : </strong><span>Task owner</span></small></p>
+                    <p class="gen-p-margin-bottom"><small><strong>Owned By : </strong><span id="tskd-owner">Task owner</span></small></p>
                 </div>
             </div>
 
             <hr style="border-style: dashed;">
             <h5>Description:</h5>
-            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+            <small id="tskd-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
                 et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
                 aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
                 dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
@@ -45,50 +46,7 @@
             <hr style="border-style: dashed;">
             <h5>Activity:</h5>
             <div>
-                <ul class="tskd-activity-list">
-                    <li class="tskd-task-card tskd-task-card-comment">
-                        <div class="col-sm-12">
-                            <small class="text-muted">Shashank Kawle</small
-                                class="text-muted"><small>&nbsp|&nbsp</small><small
-                                class="text-muted">10-20-2020</small>
-                        </div>
-                        <hr class="gen-hr">
-                        <div class="col-sm-12">
-                            <small>some coments</small>
-                        </div>
-                    </li>
-                    <li class="tskd-task-card tskd-task-card-alert">
-                        <div class="col-sm-12">
-                            <small class="text-muted">Shashank Kawle</small
-                                class="text-muted"><small>&nbsp|&nbsp</small><small
-                                class="text-muted">10-20-2020</small>
-                        </div>
-                        <hr class="gen-hr">
-                        <div class="col-sm-12">
-                            <small>Workflow State Change :</small><br />
-                            <div class="col-sm-12">
-                                <small class="badge badge-success">New</small><i
-                                    class="material-icons tskd-ico-position-fix">arrow_right_alt</i><small
-                                    class="badge badge-success">In-Progress</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="tskd-task-card tskd-task-card-update">
-                        <div class="col-sm-12">
-                            <small class="text-muted">Shashank Kawle</small
-                                class="text-muted"><small>&nbsp|&nbsp</small><small
-                                class="text-muted">10-20-2020</small>
-                        </div>
-                        <hr class="gen-hr">
-                        <div class="col-sm-12">
-                            <small><span class="badge badge-primary">Owner</span> Update :</small><br />
-                            <div class="col-sm-12">
-                                <small class="badge badge-light">Mandar Parab</small><i
-                                    class="material-icons tskd-ico-position-fix">arrow_right_alt</i><small
-                                    class="badge badge-light">Shashank Kawle</small>
-                            </div>
-                        </div>
-                    </li>
+                <ul id="tskd-activity-list" class="tskd-activity-list">
                 </ul>
             </div>
 
@@ -115,10 +73,10 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <textarea class="form-control" id="tskd-comment-input" rows="3"
-                                    placeholder="Add new comment"></textarea>
+                                    placeholder="Add new comment" style="white-space: pre-wrap"></textarea>
                             </div>
                             <div class="form-group">
-                                <button class="btn btn-success">Add</button>
+                                <button class="btn btn-success" onclick="operationTrigger_TaskDetails('tskd_AddCommentInTask')">Add</button>
                             </div>
 
                         </div>
@@ -140,12 +98,11 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="adm-Tsk-Project">Project</label>
-                                        <select class="form-control" id="adm-Tsk-Project"
-                                            onchange="operationTrigger('admin_getModuleTypePriorityListForTask')"></select>
+                                        <select class="form-control" id="tskd-mod-project" onchange="operationTrigger_TaskDetails('tskd_getModuleTypePriorityListForTask')"></select>
                                     </div>
                                     <div class="col-sm-6">
                                         <label for="adm-Tsk-Module">Module</label>
-                                        <select class="form-control" id="adm-Tsk-Module"></select>
+                                        <select class="form-control" id="tskd-mod-module" onchange="operationTrigger_TaskDetails('tskd_checkModuleUpdate')"></select>
                                     </div>
                                 </div>
                             </div>
@@ -153,12 +110,12 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <label for="adm-Tsk-ETA">ETA</label>
-                                        <input class="form-control" id="adm-Tsk-ETA" type="date">
+                                        <input class="form-control" id="tskd-mod-eta" type="date">
                                     </div>
 
                                     <div class="col-sm-6">
                                         <label for="adm-Tsk-Owner">Assigned To</label>
-                                        <select class="form-control" id="adm-Tsk-Owner"></select>
+                                        <select class="form-control" id="tskd-mod-owner" onchange="operationTrigger_TaskDetails('tskd_checkOwnerUpdate')"></select>
                                     </div>
                                 </div>
                             </div>
@@ -168,19 +125,19 @@
 
                                     <div class="col-sm-6">
                                         <label for="adm-Tsk-Type">Type</label>
-                                        <select class="form-control" id="adm-Tsk-Type"></select>
+                                        <select class="form-control" id="tskd-mod-type" onchange="operationTrigger_TaskDetails('tskd_checkTypeUpdate')"></select>
                                     </div>
 
                                     <div class="col-sm-6">
                                         <label for="adm-Tsk-Priority">Priority</label>
-                                        <select class="form-control" id="adm-Tsk-Priority"></select>
+                                        <select class="form-control" id="tskd-mod-priority" onchange="operationTrigger_TaskDetails('tskd_checkPriorityUpdate')"></select>
                                     </div>
 
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-success">Update Task</button>
+                                <button class="btn btn-success" onclick="operationTrigger_TaskDetails('tskd_UpdateTaskFields')">Update Task</button>
                             </div>
 
                         </div>

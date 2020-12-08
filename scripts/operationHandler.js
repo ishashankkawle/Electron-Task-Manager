@@ -288,6 +288,12 @@ async function operationSwitch(params, values) {
                 break;
             }
 
+        case "tsb_OpenTaskDetails":
+            {
+                let arrTaskIds = values;
+                openTaskDetails(arrTaskIds[7])
+                break;
+            }
         //---------------------------------------------------------------------
         // TASK VERIFICATION OPERATIONS
         //---------------------------------------------------------------------    
@@ -329,6 +335,7 @@ async function operationSwitch(params, values) {
             }
         case "tskv_MarkMultiTaskAsRevert":
             {
+                loadMask(1 , "reverting tasks");
                 let tablename = "";
                 if(values == "SelfCommitTable")
                 {
@@ -339,6 +346,7 @@ async function operationSwitch(params, values) {
                     tablename = res["TASKVERIFICATION_SLFDELETE_TABLE"]
                 }
                 await taskm.TSKV_revertTask_Multi(tablename);
+                loadMask(0);
                 break;
             }
 

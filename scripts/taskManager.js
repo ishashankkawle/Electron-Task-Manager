@@ -1,6 +1,9 @@
 let dbOperations = require('../core/databaseOperations');
 let res = require('../shared/resources');
 let Workflow = require('../core/workflowOperations');
+const Util = require('../core/util');
+
+const util = new Util();
 
 
 module.exports = class taskManager 
@@ -26,6 +29,14 @@ module.exports = class taskManager
         let columnsToFetch = "*"
         let result= await dbOps.getData("View_TaskMaster" , columnsToFetch , condition);
         return result["rows"];
+    }
+
+    async getTaskActivityData(taskId)
+    {
+        const dbOps = new dbOperations();
+        let query = { "TaskId" : taskId }
+        let result = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+        return result;
     }
 
     async getTaskSummaryData()
@@ -111,6 +122,16 @@ module.exports = class taskManager
             let condition = " \"TaskId\" = " + taskId;
             let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
             console.log(result);
+
+            let query = { "TaskId" : taskId }
+            let obj = this.getBlobDocWorkflowUpdateObj(element[8] , wfState)
+            let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+            let activitySet = taskData["Activity"]
+            activitySet.push(obj);
+            let updateObject = {"Activity" : activitySet , "TaskStatus" : wfState}
+            let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+            console.log(resultBlob);
+
         }
     }
 
@@ -128,6 +149,15 @@ module.exports = class taskManager
             let condition = " \"TaskId\" = " + taskId;
             let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
             console.log(result);
+
+            let query = { "TaskId" : taskId }
+            let obj = this.getBlobDocWorkflowUpdateObj(element[8] , wfState)
+            let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+            let activitySet = taskData["Activity"]
+            activitySet.push(obj);
+            let updateObject = {"Activity" : activitySet , "TaskStatus" : wfState}
+            let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+            console.log(resultBlob);
         }
     }
 
@@ -145,6 +175,15 @@ module.exports = class taskManager
             let condition = " \"TaskId\" = " + taskId;
             let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
             console.log(result);
+
+            let query = { "TaskId" : taskId }
+            let obj = this.getBlobDocWorkflowUpdateObj(element[8] , wfState)
+            let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+            let activitySet = taskData["Activity"]
+            activitySet.push(obj);
+            let updateObject = {"Activity" : activitySet , "TaskStatus" : wfState}
+            let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+            console.log(resultBlob);
         }
     }
 
@@ -153,12 +192,23 @@ module.exports = class taskManager
         console.log(taskData);
         const dbOps = new dbOperations();
         let taskId = taskData[1];
-        let arrColms = [" \"TaskStatus\" "];
+        let arrColms = ["TaskStatus"];
+        arrColms = util.generateCustomWrapperArray("\"" , arrColms)
         let wfState = res["WORKFLOW"]["STR_WF_COMPLETE"]
-        let arrValues = ["\'" + wfState + "\'"];
+        let arrValues = [wfState];
+        arrValues = util.generateCustomWrapperArray("\'" , arrValues)
         let condition = " \"TaskId\" = " + taskId;
         let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
         console.log(result);
+
+        let query = { "TaskId" : taskId }
+        let obj = this.getBlobDocWorkflowUpdateObj(res["WORKFLOW"]["STR_WF_SELFCOMMIT"] , wfState)
+        let taskBlobData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+        let activitySet = taskBlobData["Activity"]
+        activitySet.push(obj);
+        let updateObject = {"Activity" : activitySet , "TaskStatus" : wfState}
+        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+        console.log(resultBlob);
     }
 
     async TSKV_updateTaskToDelete(taskData)
@@ -166,12 +216,23 @@ module.exports = class taskManager
         console.log(taskData);
         const dbOps = new dbOperations();
         let taskId = taskData[1];
-        let arrColms = [" \"TaskStatus\" "];
+        let arrColms = ["TaskStatus"];
+        arrColms = util.generateCustomWrapperArray("\"" , arrColms)
         let wfState = res["WORKFLOW"]["STR_WF_DELETE"]
-        let arrValues = ["\'" + wfState + "\'"];
+        let arrValues = [wfState];
+        arrValues = util.generateCustomWrapperArray("\'" , arrValues)
         let condition = " \"TaskId\" = " + taskId;
         let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
         console.log(result);
+
+        let query = { "TaskId" : taskId }
+        let obj = this.getBlobDocWorkflowUpdateObj(res["WORKFLOW"]["STR_WF_SELFDELETE"] , wfState)
+        let taskBlobData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+        let activitySet = taskBlobData["Activity"]
+        activitySet.push(obj);
+        let updateObject = {"Activity" : activitySet , "TaskStatus" : wfState}
+        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+        console.log(resultBlob);
     }
 
     async TSKV_revertTask(taskData)
@@ -179,12 +240,23 @@ module.exports = class taskManager
         console.log(taskData);
         const dbOps = new dbOperations();
         let taskId = taskData[1];
-        let arrColms = [" \"TaskStatus\" "];
+        let arrColms = ["TaskStatus"];
+        arrColms = util.generateCustomWrapperArray("\"" , arrColms)
         let wfState = res["WORKFLOW"]["STR_WF_INPROGRESS"]
-        let arrValues = ["\'" + wfState + "\'"];
+        let arrValues = [wfState];
+        arrValues = util.generateCustomWrapperArray("\'" , arrValues)
         let condition = " \"TaskId\" = " + taskId;
         let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
         console.log(result);
+
+        let query = { "TaskId" : taskId }
+        let taskBlobData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+        let activitySet = taskBlobData["Activity"]
+        let obj = this.getBlobDocWorkflowUpdateObj(taskBlobData["TaskStatus"] , wfState)
+        activitySet.push(obj);
+        let updateObject = {"Activity" : activitySet , "TaskStatus" : wfState}
+        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+        console.log(resultBlob);
     }
 
     async TSKV_updateTaskToComplete_Multi(tableObject)
@@ -228,5 +300,137 @@ module.exports = class taskManager
     //     return result
     // }
 
+    
+
+    getBlobDocUpdateObj(data)
+    {
+        let obj = {};
+        obj["userNameBy"] = res["STR_USERNAME"]
+        obj["userId"] = res["STR_USERID"]
+        obj["dateUpdated"] = util.getCurrentDateString();
+        obj["updateType"] = "comment"
+        obj["activityData"] = data;
+        return obj;
+    }
+
+    getBlobDocWorkflowUpdateObj(oldWorkflow , newWorkflow)
+    {
+        let obj = {};
+        obj["userNameBy"] = res["STR_USERNAME"]
+        obj["userId"] = res["STR_USERID"]
+        obj["dateUpdated"] = util.getCurrentDateString();
+        obj["updateType"] = "workflow"
+        obj["prevWorkflowState"] = oldWorkflow;
+        obj["nextWorkflowState"] = newWorkflow;
+        return obj;
+    }
+
+    getBlobDocFieldUpdateObj(data)
+    {
+        let obj = {};
+        obj["userNameBy"] = res["STR_USERNAME"]
+        obj["userId"] = res["STR_USERID"]
+        obj["dateUpdated"] = util.getCurrentDateString();
+        obj["updateType"] = "field"
+        obj["fieldsUpdated"] = {}
+        if(Object.keys(data["Project"]).length !== 0 )
+        {
+            obj["fieldsUpdated"]["Project"] = {}
+            obj["fieldsUpdated"]["Project"]["OldProjectId"] = data["Project"]["OldProjectId"]
+            obj["fieldsUpdated"]["Project"]["OldProjectName"] = data["Project"]["OldProject"]
+            obj["fieldsUpdated"]["Project"]["NewProjectId"] = data["Project"]["NewProjectId"]
+            obj["fieldsUpdated"]["Project"]["NewProjectName"] = data["Project"]["NewProject"]
+        }
+        if(Object.keys(data["Module"]).length !== 0 )
+        {
+            obj["fieldsUpdated"]["Module"] = {}
+            obj["fieldsUpdated"]["Module"]["OldModule"] = data["Module"]["OldModule"]
+            obj["fieldsUpdated"]["Module"]["NewModule"] = data["Module"]["NewModule"]
+        }
+        if(Object.keys(data["Type"]).length !== 0 )
+        {
+            obj["fieldsUpdated"]["Type"] = {}
+            obj["fieldsUpdated"]["Type"]["OldType"] = data["Type"]["OldType"]
+            obj["fieldsUpdated"]["Type"]["NewType"] = data["Type"]["NewType"]
+        }
+        if(Object.keys(data["Priority"]).length !== 0 )
+        {
+            obj["fieldsUpdated"]["Priority"] = {}
+            obj["fieldsUpdated"]["Priority"]["OldPriority"] = data["Priority"]["OldPriority"]
+            obj["fieldsUpdated"]["Priority"]["NewPriority"] = data["Priority"]["NewPriority"]
+        }
+        if(Object.keys(data["OwnerName"]).length !== 0 )
+        {
+            obj["fieldsUpdated"]["OwnerName"] = {}
+            obj["fieldsUpdated"]["OwnerName"]["OldOwner"] = data["OwnerName"]["OldOwner"]
+            obj["fieldsUpdated"]["OwnerName"]["OldOwnerId"] = data["OwnerName"]["OldOwnerId"]
+            obj["fieldsUpdated"]["OwnerName"]["NewOwner"] = data["OwnerName"]["NewOwner"]
+            obj["fieldsUpdated"]["OwnerName"]["NewOwnerId"] = data["OwnerName"]["NewOwnerId"]
+        }
+        return obj;
+    }
+
+    async UpdateBlobTaskWithNewComment(taskId , data)
+    {
+        let obj = this.getBlobDocUpdateObj(data);
+        const dbOps = new dbOperations();
+        let query = { "TaskId" : taskId }
+        let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+        console.log(taskData);
+        let activitySet = taskData["Activity"]
+        activitySet.push(obj);
+        let updateObject = {"Activity" : activitySet}
+        let result = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+        console.log(result);
+    }
+
+    async updateTaskFields(data)
+    {
+        let arrColms = [];
+        let arrValues = [];
+
+        if(Object.keys(data["Project"]).length !== 0 )
+        {
+            arrColms.push("ProjectId");
+            arrValues.push(data["Project"]["NewProjectId"]);
+        }
+        if(Object.keys(data["Module"]).length !== 0 )
+        {
+            arrColms.push("Module");
+            arrValues.push(data["Module"]["NewModule"]);
+        }
+        if(Object.keys(data["Type"]).length !== 0 )
+        {
+            arrColms.push("Type");
+            arrValues.push(data["Type"]["NewType"]);
+        }
+        if(Object.keys(data["Priority"]).length !== 0 )
+        {
+            arrColms.push("Priority");
+            arrValues.push(data["Priority"]["NewPriority"]);
+        }
+        if(Object.keys(data["OwnerName"]).length !== 0 )
+        {
+            arrColms.push("TaskOwner");
+            arrValues.push(data["OwnerName"]["NewOwnerId"]);
+        }
+
+        arrColms = util.generateCustomWrapperArray("\"" , arrColms)
+        arrValues = util.generateCustomWrapperArray("\'" , arrValues)
+        const dbOps = new dbOperations();
+        let condition = " \"TaskId\" = " + data["TaskId"];
+        let result = await dbOps.updateData("Task_Master" , arrColms , arrValues , condition)
+
+        let obj = this.getBlobDocFieldUpdateObj(data);
+        console.log(obj)
+        let query = { "TaskId" : data["TaskId"] }
+        let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query);
+        let activitySet = taskData["Activity"]
+        activitySet.push(obj);
+        let updateObject = {"Activity" : activitySet}
+        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"] , res["STR_BLOBDBCOLLECTIONAME"] , query , updateObject);
+        console.log(resultBlob);
+        return result;
+    }
 
 }

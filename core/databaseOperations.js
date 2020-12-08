@@ -64,7 +64,6 @@ module.exports = class dbOps
             await client.connect();
             let db = client.db(tableName);
             let collection = db.collection(collectionName);
-            console.log(data);
             let result = await collection.insertOne(data);
             console.log(result);
         } 
@@ -149,6 +148,27 @@ module.exports = class dbOps
         let result = await this.executeQuery(query , client);
         console.log(result);
         return result;
+    }
+
+    async updateBlobData(tableName , collectionName , queryObject , updateObject , client)
+    {
+        if(client == undefined)
+        {
+            client = this.getMongoDatabaseClient();            
+        }
+        
+        try 
+        {
+            await client.connect();
+            let db = client.db(tableName);
+            let collection = db.collection(collectionName);
+            let result = await collection.updateOne(queryObject , {$set:updateObject});
+            console.log(result);
+        } 
+        finally
+        {
+            client.close();
+        }
     }
 
     async deleteData(tableName , condition , client)

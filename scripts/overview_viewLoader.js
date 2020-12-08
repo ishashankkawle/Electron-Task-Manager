@@ -10,17 +10,20 @@ module.exports = class Overview_ViewLoader {
     //----------------------------------------------
     // TASK LIST
     //----------------------------------------------
-    if (datarows != undefined && datarows.length != 0) {
+    if (datarows != undefined && datarows.length != 0) 
+    {
       toggleDisplayElement('ovr-noData-msg')
       for (let index = 0; index < 3; index++) 
       {
+        console.log(datarows)
         const data_element = datarows[index]
-        if (data_element == undefined) {
+        if (data_element == undefined) 
+        {
           continue
         }
-        if (data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS'] ||data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW']) 
+        if (data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS'] || data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW']) 
         {
-
+          console.log(data_element)
           data_element["DateTerminated"] = '10-20-2020'
 
           let listElementHTML = [

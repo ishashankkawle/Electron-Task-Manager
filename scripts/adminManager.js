@@ -308,11 +308,6 @@ module.exports = class adminManager
 
     async getResourcesUnderUser(userId , roleId)
     {
-        // let columns = ["\"UserId\"" , "\"Name\""];
-        // const dbOps = new dbOperations();
-        // let conditon = "\"ReportingUserId\" = \'" + userId + "\'";
-        // let data = await dbOps.getData("View_UserMap" , columns , conditon);
-        // return data["rows"];
         let columns = ["\"UserId\"" , "\"Name\""];
         const dbOps = new dbOperations();
         let conditon = "\"ReportingUserId\" = \'" + userId + "\' AND \"UserRoleId\" > \'" + roleId + "\'" 

@@ -6,16 +6,12 @@ function loadLandingPage() {
   loadUIElement('display', 'views/login', 'Login')
 }
 
-function loadTaskDetailsPage() {
+function loadTaskDetailsPage(callback) {
   loadUIElement('task-display', 'taskDetailsPages/taskDetails')
-  loadMask(1 , "loading task details");
-  let taskId = 0;
-  ipcRenderer.on('transfer-taskid', (event, arg) => {        
-        taskId = arg;
-    });
-  console.log("taskId = " +taskId)
-  operationTrigger_TaskDetails("base_getAllSelectedTaskData" , taskId);
-  loadMask(0);
+
+  ipcRenderer.on('transfer-taskid',  (event , arg) =>{
+      operationTrigger_TaskDetails("base_getAllSelectedTaskData" , arg)
+  });
 }
 
 function validateLogin() {
@@ -146,7 +142,6 @@ function loadMask(status, secondaryText) {
   }
 }
 
-function openTaskDetails() {
-  let data = '249'
+function openTaskDetails(data) {
   ipcRenderer.send('open-task', data)
 }
