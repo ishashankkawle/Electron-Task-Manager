@@ -3,8 +3,7 @@ let Util = require('../core/util')
 
 const util = new Util()
 
-module.exports = class TaskVerification_ViewLoader 
-{
+module.exports = class TaskVerification_ViewLoader {
   loadSelfCommitsVerificationData(tabledata) {
     let arrSelfCommitData = []
     let arrFields = ['TaskId', 'Title', 'Module']
@@ -50,9 +49,9 @@ module.exports = class TaskVerification_ViewLoader
       dom: '<"toolbar">frtip',
     })
 
-    $('div.toolbar', res['TASKVERIFICATION_SLFCOMMIT_TABLE'].table().container()).html(
-      '<span onclick="operationTrigger(\'tskv_MarkMultiTaskAsComplete\')" class="material-icons tsb-table-btn" style="border-left: 0px;">check_circle_outline</span><span onclick="operationTrigger(\'tskv_MarkMultiTaskAsRevert\' , \'SelfCommitTable\')" class="material-icons tsb-table-btn">restore</span><span onclick="loadUIElement(\'display\' ,\'views/taskboard\' , \'All Tasks\')" class="material-icons tsb-table-btn">refresh</span>'
-    )
+    // $('div.toolbar', res['TASKVERIFICATION_SLFCOMMIT_TABLE'].table().container()).html(
+    //   '<span onclick="operationTrigger(\'tskv_MarkMultiTaskAsComplete\')" class="material-icons tsb-table-btn" style="border-left: 0px;">check_circle_outline</span><span onclick="operationTrigger(\'tskv_MarkMultiTaskAsRevert\' , \'SelfCommitTable\')" class="material-icons tsb-table-btn">restore</span><span onclick="loadUIElement(\'display\' ,\'views/taskboard\' , \'All Tasks\')" class="material-icons tsb-table-btn">c</span>'
+    // )
 
     $('#tskv-selfcommits-table tbody').on('click', '#tskv-ver-cmpl-btn', function () {
       console.log('COMPLETE')
@@ -113,9 +112,9 @@ module.exports = class TaskVerification_ViewLoader
       dom: '<"toolbar">frtip',
     })
 
-    $('div.toolbar', res['TASKVERIFICATION_SLFDELETE_TABLE'].table().container()).html(
-      '<span onclick="operationTrigger(\'tskv_MarkMultiTaskAsDelete\')" class="material-icons tsb-table-btn" style="border-left: 0px;">delete_outline</span><span onclick="operationTrigger(\'tskv_MarkMultiTaskAsRevert\' , \'SelfDeleteTable\')" class="material-icons tsb-table-btn">restore</span><span onclick="loadUIElement(\'display\' ,\'views/taskboard\' , \'All Tasks\')" class="material-icons tsb-table-btn">refresh</span>'
-    )
+    // $('div.toolbar', res['TASKVERIFICATION_SLFDELETE_TABLE'].table().container()).html(
+    //   '<span onclick="operationTrigger(\'tskv_MarkMultiTaskAsDelete\')" class="material-icons tsb-table-btn" style="border-left: 0px;">delete_outline</span><span onclick="operationTrigger(\'tskv_MarkMultiTaskAsRevert\' , \'SelfDeleteTable\')" class="material-icons tsb-table-btn">restore</span><span onclick="loadUIElement(\'display\' ,\'views/taskboard\' , \'All Tasks\')" class="material-icons tsb-table-btn">refresh</span>'
+    // )
 
     $('#tskv-selfdeletes-table tbody').on('click', '#tskv-ver-del-btn', function () {
       console.log('COMPLETE')
@@ -133,17 +132,17 @@ module.exports = class TaskVerification_ViewLoader
   loadAssignmentSummaryData(data) {
     let parentElement = document.getElementById('tskv-assign-summary-section')
     let newValue =
-      parentElement.children[0].children[0].children[0].children[1].children[0].children[0]
+      parentElement.children[0].children[0].children[0].children[1].children[0]
     let inProgressValue =
-      parentElement.children[1].children[0].children[0].children[1].children[0].children[0]
+      parentElement.children[1].children[0].children[0].children[1].children[0]
     let pendingCommitValue =
-      parentElement.children[2].children[0].children[0].children[1].children[0].children[0]
+      parentElement.children[2].children[0].children[0].children[1].children[0]
     let pendingDeleteValue =
-      parentElement.children[3].children[0].children[0].children[1].children[0].children[0]
+      parentElement.children[3].children[0].children[0].children[1].children[0]
     let completeValue =
-      parentElement.children[4].children[0].children[0].children[1].children[0].children[0]
+      parentElement.children[4].children[0].children[0].children[1].children[0]
     let deleteValue =
-      parentElement.children[5].children[0].children[0].children[1].children[0].children[0]
+      parentElement.children[5].children[0].children[0].children[1].children[0]
 
     let newCount = 0
     let inpCount = 0

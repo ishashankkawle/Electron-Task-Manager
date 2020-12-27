@@ -1,22 +1,20 @@
 <div class="screen-panel">
     <div class="row">
-        <div class="col-sm-12 gen-screen-nav-space">
 
-            <div class="col-sm-12" style="padding-left: 2.5%;">
-                <ul class="nav nav-tabs gen-nav-tabs">
-                    <li class="nav-item"
-                        onclick="loadUIElement('tskv-display' , 'views/taskVerificationPages/verificationView')">
-                        <a class="nav-link">Pending Verifictions</a>
-                    </li>
-                    <li class="nav-item"
-                        onclick="loadUIElement('tskv-display' , 'views/taskVerificationPages/assignmentsView')">
-                        <a class="nav-link">Assignments</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="col-sm-12" id="tskv-display"></div>
-
+        <div class="col-sm-12 p-0 border-bottom">
+            <ul class="nav navbar-light" style="background: var(--bg2)">
+                <li class="nav-item"
+                    onclick="loadUIElement('tskv-display' , 'views/taskVerificationPages/verificationView')">
+                    <a class="nav-link">Pending Verifictions</a>
+                </li>
+                <li class="nav-item"
+                    onclick="loadUIElement('tskv-display' , 'views/taskVerificationPages/assignmentsView')">
+                    <a class="nav-link">Assignments</a>
+                </li>
+            </ul>
         </div>
+
+        <div class="col-sm-12 p-0" id="tskv-display"></div>
+
     </div>
 </div>

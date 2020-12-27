@@ -7,8 +7,17 @@
   --bc: #dee2e6;
 }
 
+.row
+{
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 body {
   background-color: var(--bg);
+  color: var(--text);
   font-family: 'Nunito Sans', sans-serif;
 }
 
@@ -99,7 +108,22 @@ thead {
   padding: 8px;
 }
 
-div#task-board-table_info {
+div#task-board-table_info 
+{
+  color: var(--text);
+  text-align: center;
+  font-weight: bold;
+}
+
+div#tskv-selfcommits-table_info
+{
+  color: var(--text);
+  text-align: center;
+  font-weight: bold;
+}
+
+div#tskv-selfdeletes-table_info
+{
   color: var(--text);
   text-align: center;
   font-weight: bold;
@@ -179,7 +203,7 @@ label {
 
 .wrapper {
   position: fixed;
-  top: 40px;
+  top: 0;
   left: 0;
   z-index: 98;
   width: 100%;
@@ -368,13 +392,8 @@ label {
   position: absolute;
   bottom: 0;
   top: 4.5%;
-  left: 0;
-  right: 0;
 }
 .admin-nav-bar {
-  margin-left: 4%;
-  padding-left: 0;
-  padding-right: 0;
   background: #fff;
 }
 .admin-nav-item {
@@ -385,10 +404,10 @@ label {
   margin-top: 2%;
 }
 .gen-list-element {
-  padding: 12px 30px;
+  padding: 3% 5%;
 }
 .gen-list-element:hover {
-  background-color: #e7ebf2;
+  background-color: var(--bg);
 }
 .toolbar {
   float: left;

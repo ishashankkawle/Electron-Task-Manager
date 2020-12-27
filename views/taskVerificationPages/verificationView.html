@@ -1,20 +1,48 @@
-<div class="row gen-card-row">
+<div class="row">
 
-    <div class="col-sm-5 card gen-card" style="height: fit-content;">
-        <div class="card-header gen-card-header">
-            <h5 class="card-title">Pending Self Commits for Approval</h5>
+    <div class="col box-sh m-1" style="height: fit-content;background: var(--bg2)">
+        <nav class="navbar navbar-expand-lg border-bottom">
+            <a class="navbar-brand font-weight-bold" style="color: var(--text)">Pending Self-Commits</a>
+        </nav>
+        <div class="d-flex">
+            <ul class="d-flex mb-0 task-ul">
+                <li class="nav-item">
+                    <span onclick="operationTrigger('tskv_MarkMultiTaskAsComplete')"
+                        class="material-icons table-btn">check_circle_outline</span>
+                </li>
+                <li class="nav-item">
+                    <span onclick="operationTrigger('tskv_MarkMultiTaskAsRevert' , 'SelfCommitTable')"
+                        class="material-icons table-btn">restore</span>
+                </li>
+                <li class="nav-item">
+                    <span onclick="loadUIElement('display' ,'views/taskboard' , 'All Tasks')"
+                        class="material-icons table-btn">refresh</span>
+                </li>
+            </ul>
         </div>
-        <div class="card-body p-0">
-            <table id="tskv-selfcommits-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
-        </div>
+        <table id="tskv-selfcommits-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
     </div>
 
-    <div class="col-sm-5 card gen-card" style="height: fit-content;">
-        <div class="card-header gen-card-header">
-            <h5 class="card-title">Pending Self Deletes for Approval</h5>
+    <div class="col box-sh m-1" style="height: fit-content;background: var(--bg2)">
+        <nav class="navbar navbar-expand-lg border-bottom">
+            <a class="navbar-brand font-weight-bold" style="color: var(--text)">Pending Self-Deletes</a>
+        </nav>
+        <div class="d-flex">
+            <ul class="d-flex mb-0 task-ul">
+                <li class="nav-item">
+                    <span onclick="operationTrigger('tskv_MarkMultiTaskAsDelete')"
+                        class="material-icons table-btn">delete_outline</span>
+                </li>
+                <li class="nav-item">
+                    <span onclick="operationTrigger('tskv_MarkMultiTaskAsRevert' , 'SelfCommitTable')"
+                        class="material-icons table-btn">restore</span>
+                </li>
+                <li class="nav-item">
+                    <span onclick="loadUIElement('display' ,'views/taskboard' , 'All Tasks')"
+                        class="material-icons table-btn">refresh</span>
+                </li>
+            </ul>
         </div>
-        <div class="card-body p-0">
-            <table id="tskv-selfdeletes-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
-        </div>
+        <table id="tskv-selfdeletes-table" class="table table-hover gen-text-normal-secondry" width="100%"></table>
     </div>
 </div>

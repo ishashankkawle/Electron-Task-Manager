@@ -1,37 +1,28 @@
-<div class="col-sm-9 card gen-card">
-    <div class="card-header gen-card-header">
-        <h5 class="card-title">Create New Task</h5>
+<div class="col-12 m-1 p-3 box-sh" style="background: var(--bg2)">
+    <div class="card-body pt-4 pb-4 pl-1" style="color: var(--text)">
+        <h5 class="card-title m-0 font-weight-bold">Create New Task</h5>
     </div>
     <div class="card-body p-0">
+
+        <div class="form-group">
+            <input type="text" class="form-control m-1" id="adm-Tsk-Title" placeholder="Title">
+        </div>
+
+        <div class="form-group">
+            <textarea class="form-control m-1" id="adm-Tsk-Desc" rows="3" placeholder="Description"></textarea>
+        </div>
+
         <div class="form-group">
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col p-0 m-1">
                     <label for="adm-Tsk-Project">Project</label>
                     <select class="form-control" id="adm-Tsk-Project" onchange="operationTrigger('admin_getModuleTypePriorityListForTask')"></select>
                 </div>
-                <div class="col-sm-6">
+                <div class="col p-0 m-1">
                     <label for="adm-Tsk-Module">Module</label>
                     <select class="form-control" id="adm-Tsk-Module"></select>
                 </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <input type="text" class="form-control" id="adm-Tsk-Title" placeholder="Title">
-        </div>
-
-        <div class="form-group">
-            <textarea class="form-control" id="adm-Tsk-Desc" rows="3" placeholder="Description"></textarea>
-        </div>
-
-        <div class="form-group">
-            <div class="row">
-                <div class="col-sm-4">
-                    <label for="adm-Tsk-ETA">ETA</label>
-                    <input class="form-control" id="adm-Tsk-ETA" type="date">
-                </div>
-
-                <div class="col-sm-4">
+                <div class="col p-0 m-1">
                     <label for="adm-Tsk-Owner">Assigned To</label>
                     <select class="form-control" id="adm-Tsk-Owner"></select>
                 </div>
@@ -40,21 +31,24 @@
 
         <div class="form-group">
             <div class="row">
-
-                <div class="col-sm-4">
+                <div class="col p-0 m-1">
+                    <label for="adm-Tsk-ETA">ETA</label>
+                    <input class="form-control" id="adm-Tsk-ETA" type="date">
+                </div>
+                <div class="col p-0 m-1">
                     <label for="adm-Tsk-Type">Type</label>
                     <select class="form-control" id="adm-Tsk-Type"></select>
                 </div>
-
-                <div class="col-sm-4">
+                <div class="col p-0 m-1">
                     <label for="adm-Tsk-Priority">Priority</label>
                     <select class="form-control" id="adm-Tsk-Priority"></select>
                 </div>
-
+                
             </div>
         </div>
+
         <div class="form-group">
-            <button class="btn btn-success" onclick="operationTrigger('admin_createTask')">Submit data</button>
+            <button class="btn btn-success m-1" onclick="operationTrigger('admin_createTask')">Submit data</button>
         </div>
     </div>
 </div>
