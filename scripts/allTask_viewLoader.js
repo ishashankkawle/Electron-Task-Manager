@@ -17,8 +17,8 @@ module.exports = class AllTasks_ViewLoader {
     let actCount = document.getElementById('taskboard_new')
     let cpmCount = document.getElementById('taskboard_complete')
     let totCount = document.getElementById('taskboard_total')
-    let slfCmplCount = document.getElementById('taskboard_self_complete')
-    let slfDelCount = document.getElementById('taskboard_self_complete')
+    let slfCmplCount = document.getElementById('taskboard_self_commit')
+    let slfDelCount = document.getElementById('taskboard_self_delete')
 
     let activeCount = 0
     let completedCount = 0
@@ -45,7 +45,7 @@ module.exports = class AllTasks_ViewLoader {
 
     actCount.innerHTML = activeCount
     cpmCount.innerHTML = completedCount
-    totCount.innerHTML = totalCount
+    //totCount.innerHTML = totalCount
     slfCmplCount.innerHTML = selfCmplCount
     slfDelCount.innerHTML = selfDelCount
   }
