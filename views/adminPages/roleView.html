@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-4 m-1 p-3 box-sh" style="background: var(--bg2)">
+        <div class="card-body pt-4 pb-4 pl-1" style="color: var(--text)">
+            <h5 class="card-title m-0 font-weight-bold">Create New Role</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="form-group p-1">
+                <div class="row mb-2">
+                    <div class="col p-0 mt-1 mr-1">
+                        <input class="form-control" type="email" data-role="input" id="adm-Usr-Email" placeholder="Role Name">
+                    </div>
+                    <div class="col p-0 mt-1 mr-1">
+                        <input class="form-control" type="number" data-role="input" min="1" id="adm-Usr-Email" placeholder="Role order">
+                    </div>
+                </div>
+                <div class="row">
+                    <button class="btn btn-success" onclick="operationTrigger('')">Create Role</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4 m-1">
+        <div style="background: var(--bg2)" class="box-sh">
+            <div class="card-body pb-2" style="color: var(--text)">
+                <h5 class="card-title m-0 font-weight-bold">Current Role List</h5>
+            </div>
+            <table id="admin-project-table" class="table table-hover w-100"></table>
+        </div>
+    </div>
+</div>
