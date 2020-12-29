@@ -73,9 +73,18 @@ module.exports = class dbOps
         }
     }
 
-    async getData(tableName , arrColumns , condition , options, client)
+    async getData(tableName , arrColumns , condition , isDistinct, options, client)
     {
-        let query ="SELECT " + arrColumns.toString() + " FROM " + tableName;
+        let query = "";
+
+        if(isDistinct == true)
+        {
+            query = "SELECT DISTINCT " + arrColumns.toString() + " FROM " + tableName;
+        }
+        else
+        {
+            query ="SELECT " + arrColumns.toString() + " FROM " + tableName;
+        }
 
         if(client == undefined)
         {

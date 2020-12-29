@@ -102,7 +102,7 @@ module.exports = class Admin_ViewLoader
     loadUserAssignmentDropdown(sourceData , destinationData)
     {
         let updatedSourceData = util.createSelectMenuDataObject(sourceData , "Name" , "UserId");
-        let updatedDestinaionData = util.createSelectMenuDataObject(destinationData , "Name" , "UserId");
+        let updatedDestinaionData = util.createSelectMenuDataObject(destinationData , "ProjectName" , "ProjectId");
         let sourceElement = document.getElementById("adm-UsrAsi-Source");
         let destinationElement = document.getElementById("adm-UsrAsi-Target");
         let opt = new Option("select");
@@ -126,6 +126,7 @@ module.exports = class Admin_ViewLoader
     {
         let updatedData = util.createSelectMenuDataObject(data , "Name" , "UserId");
         let sourceElement = document.getElementById("adm-Tsk-Owner");
+        util.removeOptionsFromSelectMenu(sourceElement);
         let opt = new Option("select");
         sourceElement.add(opt , undefined);
         util.addOptionsInSelectMenu(sourceElement , updatedData);

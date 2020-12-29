@@ -58,10 +58,11 @@ module.exports = class TaskDetails_ViewLoader {
     loadUserDropdown(data) {
         for (let index = 0; index < data.length; index++) {
             const element = data[index];
-            this.projectMap[element["UserId"]] = element["Name"]
+            this.userMap[element["UserId"]] = element["Name"]
         }
         let updatedData = util.createSelectMenuDataObject(data, "Name", "UserId");
         let sourceElement = document.getElementById("tskd-mod-owner");
+        util.removeOptionsFromSelectMenu(sourceElement);
         let opt = new Option("select");
         sourceElement.add(opt, undefined);
         util.addOptionsInSelectMenu(sourceElement, updatedData);
@@ -157,7 +158,7 @@ module.exports = class TaskDetails_ViewLoader {
             this.objFieldUpdateStatus["OwnerName"] = {}
             this.objFieldUpdateStatus["OwnerName"]["OldOwner"] = this.objCurrentTaskDetails["OwnerName"];
             this.objFieldUpdateStatus["OwnerName"]["OldOwnerId"] = this.objCurrentTaskDetails["TaskOwner"];
-            this.objFieldUpdateStatus["OwnerName"]["NewOwner"] = this.userMap[owner];
+            this.objFieldUpdateStatus["OwnerName"]["NewOwner"] = this.userMap[ownerId];
             this.objFieldUpdateStatus["OwnerName"]["NewOwnerId"] = ownerId;
         }
         console.log("FINAL OBJ = " + JSON.stringify(this.objFieldUpdateStatus))
@@ -278,7 +279,7 @@ module.exports = class TaskDetails_ViewLoader {
                         }
                         if(field == "OwnerName")
                         {
-                            elm = this.getFieldListNode(dataItem , "Owner" , "OldOwner" , "NewOwner")
+                            elm = this.getFieldListNode(dataItem , "OwnerName" , "OldOwner" , "NewOwner")
                         }
                         list.appendChild(elm)
                     }

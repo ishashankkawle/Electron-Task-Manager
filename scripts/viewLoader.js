@@ -82,7 +82,7 @@ async function loadUIElement(locationId, screenName, path) {
   }
 
   if (screenName == 'views/adminPages/taskView') {
-    operationTrigger('admin_getProjectUserListForTask')
+    operationTrigger('admin_getProjectListForTask')
   }
 
   if (screenName == 'views/adminPages/userView') {

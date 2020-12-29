@@ -1,22 +1,11 @@
 let res = require('../shared/resources')
 
-//require ('handsontable');
-//import 'handsontable/dist/handsontable.full.css';
-
-module.exports = class AllTasks_ViewLoader {
-  parseSummaryTaskData(
-    data,
-    activeElement,
-    completeElement,
-    totalElement,
-    slfCompleteElement,
-    slfDeleteElement
-  ) {
-    console.log(data)
-
+module.exports = class AllTasks_ViewLoader 
+{
+  parseSummaryTaskData(data) 
+  {
     let actCount = document.getElementById('taskboard_new')
     let cpmCount = document.getElementById('taskboard_complete')
-    let totCount = document.getElementById('taskboard_total')
     let slfCmplCount = document.getElementById('taskboard_self_commit')
     let slfDelCount = document.getElementById('taskboard_self_delete')
 
@@ -45,16 +34,12 @@ module.exports = class AllTasks_ViewLoader {
 
     actCount.innerHTML = activeCount
     cpmCount.innerHTML = completedCount
-    //totCount.innerHTML = totalCount
     slfCmplCount.innerHTML = selfCmplCount
     slfDelCount.innerHTML = selfDelCount
   }
 
-  loadDataOnTaskTable(moduleData) {
-    //@TODO
-    //Set DataTable pageLength value dynamically by precalculating using TaskBoard Element size / Window size
-    //Get DataTable id as parameter
-
+  loadDataOnTaskTable(moduleData) 
+  {
     let arrDataset = []
     let arrFields = [
       'AssignerName',
@@ -117,7 +102,7 @@ module.exports = class AllTasks_ViewLoader {
 
     $('#task-board-table tbody').on('click', '#all-tsk-opn-tsk-btn', function () {
       var data = res['TASKDATA_TABLE'].row($(this).parents('tr')).data()
-      operationTrigger('tsb_OpenTaskDetails' , data)
+      operationTrigger('tsb_OpenTaskDetails' , data[7])
     })
   }
 }

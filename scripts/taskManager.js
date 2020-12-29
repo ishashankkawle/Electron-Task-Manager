@@ -22,10 +22,11 @@ module.exports = class taskManager
         return result["rows"];
     }
 
-    async getSingleTaskData(userId , taskId)
+    async getSingleTaskData(taskId)
     {
         const dbOps = new dbOperations();
-        let condition = "\"TaskOwner\" = \'" + userId +"\' And \"TaskId\" = \'" + taskId + "\'"
+        //let condition = "\"TaskOwner\" = \'" + userId +"\' And \"TaskId\" = \'" + taskId + "\'"
+        let condition = "\"TaskId\" = \'" + taskId + "\'"
         let columnsToFetch = "*"
         let result= await dbOps.getData("View_TaskMaster" , columnsToFetch , condition);
         return result["rows"];
@@ -189,7 +190,6 @@ module.exports = class taskManager
 
     async TSKV_updateTaskToComplete(taskData)
     {
-        console.log(taskData);
         const dbOps = new dbOperations();
         let taskId = taskData[1];
         let arrColms = ["TaskStatus"];
@@ -213,7 +213,6 @@ module.exports = class taskManager
 
     async TSKV_updateTaskToDelete(taskData)
     {
-        console.log(taskData);
         const dbOps = new dbOperations();
         let taskId = taskData[1];
         let arrColms = ["TaskStatus"];
@@ -237,7 +236,6 @@ module.exports = class taskManager
 
     async TSKV_revertTask(taskData)
     {
-        console.log(taskData);
         const dbOps = new dbOperations();
         let taskId = taskData[1];
         let arrColms = ["TaskStatus"];
@@ -262,7 +260,6 @@ module.exports = class taskManager
     async TSKV_updateTaskToComplete_Multi(tableObject)
     {
         let arrData = tableObject.rows( { selected: true } ).data().toArray();
-        console.log(arrData);
         for (let index = 0; index < arrData.length; index++) 
         {
             let data = arrData[index];
@@ -273,7 +270,6 @@ module.exports = class taskManager
     async TSKV_updateTaskToDelete_Multi(tableObject)
     {
         let arrData = tableObject.rows( { selected: true } ).data().toArray();
-        console.log(arrData);
         for (let index = 0; index < arrData.length; index++) 
         {
             let data = arrData[index];
@@ -284,7 +280,6 @@ module.exports = class taskManager
     async TSKV_revertTask_Multi(tableObject)
     {
         let arrData = tableObject.rows( { selected: true } ).data().toArray();
-        console.log(arrData);
         for (let index = 0; index < arrData.length; index++) 
         {
             let data = arrData[index];
@@ -411,7 +406,7 @@ module.exports = class taskManager
         }
         if(Object.keys(data["OwnerName"]).length !== 0 )
         {
-            arrColms.push("TaskOwner");
+            arrColms.push("Owner");
             arrValues.push(data["OwnerName"]["NewOwnerId"]);
         }
 

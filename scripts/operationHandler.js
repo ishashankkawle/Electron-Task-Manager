@@ -19,21 +19,17 @@ const advl = new Admin_ViewLdr();
 
 loadMask(0);
 
-async function operationTrigger(...args) 
-{
-    if (args.length == 1) 
-    {
+async function operationTrigger(...args) {
+    if (args.length == 1) {
         operationSwitch(args[0]);
     }
-    else 
-    {
+    else {
         operationSwitch(args[0], args[1]);
     }
 }
 
 async function operationSwitch(params, values) {
-    switch (params) 
-    {
+    switch (params) {
         //---------------------------------------------------------------------
         // OVERVIEW OPERATIONS
         //---------------------------------------------------------------------
@@ -68,29 +64,26 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
-        
+
         case "base_getAllVerificationData":
             {
-                loadMask(1 , "fetching verification data");
+                loadMask(1, "fetching verification data");
                 let data = await taskm.getTaskVerificationCommitData();
                 let data2 = await taskm.getTaskVerificationDeleteData();
-                loadMask(1 , "populating ui view");
+                loadMask(1, "populating ui view");
                 await tskv.loadSelfCommitsVerificationData(data);
                 await tskv.loadSelfDeletesVerificationData(data2);
                 loadMask(0);
                 break;
             }
-        
-        case "base_getAllAssignmentData" :
+
+        case "base_getAllAssignmentData":
             {
-                loadMask(1 , "fetching assignment data");
+                loadMask(1, "fetching assignment data");
                 let summaryData = await taskm.getTaskVerificationAssignmentSummary();
                 let rscData = await taskm.getTaskVerificationRSCUtilzationData();
                 let assignmentData = await taskm.getTaskVerificationAssignementData();
-                console.log(summaryData);
-                console.log(rscData);
-                console.log(assignmentData);
-                loadMask(1 , "populating ui view");
+                loadMask(1, "populating ui view");
                 tskv.loadAssignmentSummaryData(summaryData);
                 tskv.loadResourceUtilizationData(rscData);
                 tskv.loaTaskdAssignmentData(assignmentData);
@@ -119,7 +112,6 @@ async function operationSwitch(params, values) {
                 let email = document.getElementById('adm-Usr-Email').value;
                 let projectId = document.getElementById('adm-Usr-Project').value;
                 let userId = await admin.getUserId(email);
-                admin.createUserAssignerMap(userId, res["STR_USERID"]);
                 admin.createUserProjectMap(userId, projectId)
                 loadMask(0);
                 break;
@@ -129,10 +121,8 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'updating user mappings');
                 let userToTransfer = document.getElementById('adm-UsrAsi-Source').value;
-                let targetUser = document.getElementById('adm-UsrAsi-Target').value;
-                admin.updateUserAssignerMap(userToTransfer, targetUser);
-                let projectId = await admin.getProjectIdFromUser(targetUser);
-                admin.updateUserProjectMap(userToTransfer, projectId);
+                let projectId = document.getElementById('adm-UsrAsi-Target').value;
+                await admin.createUserProjectMap(userToTransfer, projectId);
                 loadMask(0);
                 break;
             }
@@ -185,20 +175,18 @@ async function operationSwitch(params, values) {
         case "admin_getUserAssignmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getResourcesUnderUser(res["STR_USERID"] , res["STR_ROLEID"]);
-                let allUserData = await admin.getOtherUsersList(res["STR_USERID"] , res["STR_ROLEID"]);
-                advl.loadUserAssignmentDropdown(data , allUserData)
+                let data = await admin.getUsersWithSmallRole(res["STR_USERID"], res["STR_ROLEID"]);
+                let allProjectData = await admin.getAllProjects()
+                advl.loadUserAssignmentDropdown(data, allProjectData)
                 loadMask(0);
                 break;
             }
-        
-        case "admin_getProjectUserListForTask":
+
+        case "admin_getProjectListForTask":
             {
                 loadMask(1, 'getting project list');
                 let data = await admin.getProjectListForUser(res["STR_USERID"]);
-                let userData = await admin.getResourceListForUser(res["STR_USERID"] , res["STR_ROLEID"]);
                 advl.loadTaskProjectDropdown(data);
-                advl.loadTaskUserDropdown(userData);
                 loadMask(0);
                 break;
             }
@@ -230,16 +218,18 @@ async function operationSwitch(params, values) {
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
                 let priorityData = await admin.getPriorityListForProject(projectId);
+                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId , res["STR_USERID"], res["STR_ROLEID"]);
                 advl.loadTaskModuleDropdown(moduleData);
                 advl.loadTaskTypeDropdown(typeData);
                 advl.loadTaskPriorityDropdown(priorityData);
+                advl.loadTaskUserDropdown(userData);
                 loadMask(0);
                 break;
             }
 
         case "admin_getModuleTypePriorityListForAssets":
             {
-                loadMask(1 , "getting Modules , Types & Priorities");
+                loadMask(1, "getting Modules , Types & Priorities");
                 let projectId = document.getElementById("adm-Ast-Project").value
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
@@ -263,7 +253,7 @@ async function operationSwitch(params, values) {
         //---------------------------------------------------------------------
         // TASKBOARD OPERATIONS
         //---------------------------------------------------------------------    
-        
+
         case "tsb_NextTaskWorkflowState":
             {
                 loadMask(1, "performing operation");
@@ -271,7 +261,7 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
-        
+
         case "tsb_TaskToSelfCommitState":
             {
                 loadMask(1, "performing self commit operation");
@@ -290,14 +280,14 @@ async function operationSwitch(params, values) {
 
         case "tsb_OpenTaskDetails":
             {
-                let arrTaskIds = values;
-                openTaskDetails(arrTaskIds[7])
+                //let arrTaskIds = values;
+                openTaskDetails(values);
                 break;
             }
         //---------------------------------------------------------------------
         // TASK VERIFICATION OPERATIONS
         //---------------------------------------------------------------------    
-        
+
         case "tskv_MarkTaskAsComplete":
             {
                 loadMask(1, "updating task status");
@@ -335,14 +325,12 @@ async function operationSwitch(params, values) {
             }
         case "tskv_MarkMultiTaskAsRevert":
             {
-                loadMask(1 , "reverting tasks");
+                loadMask(1, "reverting tasks");
                 let tablename = "";
-                if(values == "SelfCommitTable")
-                {
+                if (values == "SelfCommitTable") {
                     tablename = res["TASKVERIFICATION_SLFCOMMIT_TABLE"]
                 }
-                if(values == "SelfDeleteTable")
-                {
+                if (values == "SelfDeleteTable") {
                     tablename = res["TASKVERIFICATION_SLFDELETE_TABLE"]
                 }
                 await taskm.TSKV_revertTask_Multi(tablename);

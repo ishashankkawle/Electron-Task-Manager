@@ -39,7 +39,8 @@ module.exports = class TaskVerification_ViewLoader {
           targets: -1,
           data: null,
           defaultContent:
-            '<button id=\'tskv-ver-cmpl-btn\' class="btn btn-outline-success btn-sm btn-circle btn-circle-sm"><span class="material-icons">check_circle</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
+            '<button id=\'tskv-ver-cmpl-btn\' class="btn btn-outline-success btn-sm btn-circle btn-circle-sm"><span class="material-icons">check_circle</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button><button id=\'tskv-selfcommit-task-open-btn\' class="btn btn-outline-primary btn-sm btn-circle btn-circle-sm"><span class="material-icons md-18">launch</span></button>',
+            //'<button id=\'tskv-ver-cmpl-btn\' class="btn btn-outline-success btn-sm btn-circle btn-circle-sm"><span class="material-icons">check_circle</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
         },
       ],
       select: {
@@ -48,10 +49,6 @@ module.exports = class TaskVerification_ViewLoader {
       },
       dom: '<"toolbar">frtip',
     })
-
-    // $('div.toolbar', res['TASKVERIFICATION_SLFCOMMIT_TABLE'].table().container()).html(
-    //   '<span onclick="operationTrigger(\'tskv_MarkMultiTaskAsComplete\')" class="material-icons tsb-table-btn" style="border-left: 0px;">check_circle_outline</span><span onclick="operationTrigger(\'tskv_MarkMultiTaskAsRevert\' , \'SelfCommitTable\')" class="material-icons tsb-table-btn">restore</span><span onclick="loadUIElement(\'display\' ,\'views/taskboard\' , \'All Tasks\')" class="material-icons tsb-table-btn">c</span>'
-    // )
 
     $('#tskv-selfcommits-table tbody').on('click', '#tskv-ver-cmpl-btn', function () {
       console.log('COMPLETE')
@@ -63,6 +60,12 @@ module.exports = class TaskVerification_ViewLoader {
       console.log('REJECT')
       var data = res['TASKVERIFICATION_SLFCOMMIT_TABLE'].row($(this).parents('tr')).data()
       operationTrigger('tskv_MarkTaskAsRevert', data)
+    })
+
+    $('#tskv-selfcommits-table tbody').on('click', '#tskv-selfcommit-task-open-btn', function () {
+      var data = res['TASKVERIFICATION_SLFCOMMIT_TABLE'].row($(this).parents('tr')).data()
+      console.log(data)
+      operationTrigger('tsb_OpenTaskDetails' , data[1])
     })
   }
 
@@ -102,7 +105,8 @@ module.exports = class TaskVerification_ViewLoader {
           targets: -1,
           data: null,
           defaultContent:
-            '<button id=\'tskv-ver-del-btn\' class="btn btn-outline-warning btn-sm btn-circle btn-circle-sm"><span class="material-icons">delete</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
+            '<button id=\'tskv-ver-del-btn\' class="btn btn-outline-warning btn-sm btn-circle btn-circle-sm"><span class="material-icons">delete</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button><button id=\'tskv-selfdelete-task-open-btn\' class="btn btn-outline-primary btn-sm btn-circle btn-circle-sm"><span class="material-icons md-18">launch</span></button>',
+            //'<button id=\'tskv-ver-del-btn\' class="btn btn-outline-warning btn-sm btn-circle btn-circle-sm"><span class="material-icons">delete</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
         },
       ],
       select: {
@@ -112,9 +116,6 @@ module.exports = class TaskVerification_ViewLoader {
       dom: '<"toolbar">frtip',
     })
 
-    // $('div.toolbar', res['TASKVERIFICATION_SLFDELETE_TABLE'].table().container()).html(
-    //   '<span onclick="operationTrigger(\'tskv_MarkMultiTaskAsDelete\')" class="material-icons tsb-table-btn" style="border-left: 0px;">delete_outline</span><span onclick="operationTrigger(\'tskv_MarkMultiTaskAsRevert\' , \'SelfDeleteTable\')" class="material-icons tsb-table-btn">restore</span><span onclick="loadUIElement(\'display\' ,\'views/taskboard\' , \'All Tasks\')" class="material-icons tsb-table-btn">refresh</span>'
-    // )
 
     $('#tskv-selfdeletes-table tbody').on('click', '#tskv-ver-del-btn', function () {
       console.log('COMPLETE')
@@ -126,6 +127,11 @@ module.exports = class TaskVerification_ViewLoader {
       console.log('REJECT')
       var data = res['TASKVERIFICATION_SLFDELETE_TABLE'].row($(this).parents('tr')).data()
       operationTrigger('tskv_MarkTaskAsRevert', data)
+    })
+
+    $('#tskv-selfdeletes-table tbody').on('click', '#tskv-selfdelete-task-open-btn', function () {
+      var data = res['TASKVERIFICATION_SLFDELETE_TABLE'].row($(this).parents('tr')).data()
+      operationTrigger('tsb_OpenTaskDetails' , data[1])
     })
   }
 

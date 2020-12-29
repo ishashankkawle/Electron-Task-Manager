@@ -14,34 +14,27 @@ const admin = new Admin();
 
 loadMask(0);
 
-async function operationTrigger_TaskDetails(...args) 
-{
-    if (args.length == 1) 
-    {
+async function operationTrigger_TaskDetails(...args) {
+    if (args.length == 1) {
         operationSwitch_TaskDetails(args[0]);
     }
-    else 
-    {
+    else {
         operationSwitch_TaskDetails(args[0], args[1]);
     }
 }
 
-async function operationSwitch_TaskDetails(params, values) 
-{
-    switch (params) 
-    {
+async function operationSwitch_TaskDetails(params, values) {
+    switch (params) {
         case "base_getAllSelectedTaskData":
             {
                 loadMask(1, 'Loading data');
-                let data = await taskm.getSingleTaskData(res["STR_USERID"] , values);
+                console.log(res["STR_USERID"] + "--" + values)
+                let data = await taskm.getSingleTaskData(values);
                 let activityData = await taskm.getTaskActivityData(values);
                 let projectData = await admin.getProjectListForUser(res["STR_USERID"]);
-                let userData = await admin.getResourcesUnderUser(res["STR_USERID"] , res["STR_ROLEID"]);
-
                 tdvl.parseTaskInfoSection(data[0]);
                 tdvl.parseTaskActivityData(activityData["Activity"])
                 tdvl.loadProjectDropdown(projectData);
-                tdvl.loadUserDropdown(userData);
                 loadMask(0);
                 break;
             }
@@ -50,12 +43,12 @@ async function operationSwitch_TaskDetails(params, values)
             {
                 loadMask(1, 'Updating new activity in task');
                 let taskId = document.getElementById("tskd-taskid").innerHTML;
-                let data = document.getElementById("tskd-comment-input").value.replace( /\n/g, "<br>");
-                let result = await taskm.UpdateBlobTaskWithNewComment(taskId , data)
+                let data = document.getElementById("tskd-comment-input").value.replace(/\n/g, "<br>");
+                let result = await taskm.UpdateBlobTaskWithNewComment(taskId, data)
                 loadMask(0);
                 break;
             }
-        
+
         case "tskd_getModuleTypePriorityListForTask":
             {
                 loadMask(1, 'getting Modules , Types & Priority for project');
@@ -63,10 +56,12 @@ async function operationSwitch_TaskDetails(params, values)
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
                 let priorityData = await admin.getPriorityListForProject(projectId);
+                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId , res["STR_USERID"], res["STR_ROLEID"]);
                 tdvl.checkForProjectUpdate(projectId);
                 tdvl.loadModuleDropdown(moduleData);
                 tdvl.loadTypeDropdown(typeData);
                 tdvl.loadPriorityDropdown(priorityData);
+                tdvl.loadUserDropdown(userData);
                 loadMask(0);
                 break;
             }
@@ -98,7 +93,7 @@ async function operationSwitch_TaskDetails(params, values)
             {
                 loadMask(1, 'updating task fields');
                 let data = tdvl.getUpdatedFieldsData();
-                taskm.updateTaskFields(data);
+                await taskm.updateTaskFields(data);
                 loadMask(0);
                 break;
             }

@@ -3,28 +3,71 @@
         <h5 class="card-title m-0 font-weight-bold">User Assignment</h5>
     </div>
     <div class="card-body p-2">
-        <div class="row">
-            <div class="col-4">
-                <label for="adm-Tsk-Owner">User under you</label>
-                <select class="form-control" id="adm-UsrAsi-Source"></select>
+        <div class="row box-sh p-2 mb-3">
+            <div class="col-1 d-flex">
+                <span class="material-icons m-auto task-card-icon"
+                    style="font-size: 42px">link</span>
             </div>
-            <div class="col-1">
-                <span class="material-icons">trending_flat</span>
-            </div>
-            <div class="col-4">
-                <label for="adm-Tsk-Owner">Other User with Same Role</label>
-                <select class="form-control" id="adm-UsrAsi-Target"></select>
+            <div class="col">
+                <div class="row">
+                    <div class="col-4">
+                        <label for="adm-Tsk-Owner">User under you</label>
+                        <select class="form-control" id="adm-UsrAsi-Source"></select>
+                    </div>
+                    <div class="col-1">
+                        <span class="material-icons">trending_flat</span>
+                    </div>
+                    <div class="col-4">
+                        <label for="adm-Tsk-Owner">Project</label>
+                        <select class="form-control" id="adm-UsrAsi-Target"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2 admin-usrAsin-button">
+                        <button class="btn btn-primary" onclick="operationTrigger('admin_transferUser')">Update User Assignment</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 admin-usrAsin-button">
+                        <small class="form-text text-muted"><b>Note:</b> User Assignment is one way process. If you want
+                            to
+                            asign user from Other employee to yourself, please contact respective employee to transfer
+                            perticular user to you.</small>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-2 admin-usrAsin-button">
-                <button class="btn btn-success" onclick="operationTrigger('admin_transferUser')">Transfer User</button>
+
+        <div class="row box-sh p-2 mb-3">
+            <div class="col-1 d-flex">
+                <span class="material-icons m-auto task-card-icon"
+                    style="font-size: 42px">link_off</span>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col-4">
+                        <label for="adm-Tsk-Owner">User under you</label>
+                        <select class="form-control" id="adm-UsrAsi-Source"></select>
+                    </div>
+                    <div class="col-1">
+                        <span class="material-icons">trending_flat</span>
+                    </div>
+                    <div class="col-4">
+                        <label for="adm-Tsk-Owner">Project</label>
+                        <select class="form-control" id="adm-UsrAsi-Target"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2 admin-usrAsin-button">
+                        <button class="btn btn-danger" onclick="operationTrigger('admin_transferUser')">Delete User Assignment</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 admin-usrAsin-button">
+                        <small class="form-text text-muted"><b>Note:</b> You can remove assignments between only those employees which belong to any of projects and your Projects</small>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 admin-usrAsin-button">
-                <small class="form-text text-muted"><b>Note:</b> User Assignment is one way process. If you want to
-                    asign user from Other employee to yourself, please contact respective employee to transfer
-                    perticular user to you.</small>
-            </div>
-        </div>
+    </div>
+</div>
