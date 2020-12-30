@@ -99,18 +99,76 @@ module.exports = class Admin_ViewLoader
         }
     }   
 
+    loadRoleData(data)
+    {
+        let tableData = util.convertArrayForDataTable(data);
+        $('#admin-Role-table').DataTable({
+            data:tableData,
+            columns:[
+                {title:"Role"},
+                {title:"Securiy Level"}
+            ],
+            order: [[ 1, "asc" ]],
+            searching: false,
+            info:false,
+            retrieve: true,
+            paging:false
+        });   
+    }
+
     loadUserAssignmentDropdown(sourceData , destinationData)
     {
         let updatedSourceData = util.createSelectMenuDataObject(sourceData , "Name" , "UserId");
         let updatedDestinaionData = util.createSelectMenuDataObject(destinationData , "ProjectName" , "ProjectId");
         let sourceElement = document.getElementById("adm-UsrAsi-Source");
+        let sourceElement2 = document.getElementById("adm-UsrDeAsi-Source");
         let destinationElement = document.getElementById("adm-UsrAsi-Target");
         let opt = new Option("select");
         let opt2 = new Option("select");
+        let opt3 = new Option("select");
         sourceElement.add(opt , undefined);
         destinationElement.add(opt2 , undefined);
+        sourceElement2.add(opt3 , undefined);
         util.addOptionsInSelectMenu(sourceElement , updatedSourceData);
+        util.addOptionsInSelectMenu(sourceElement2 , updatedSourceData);
         util.addOptionsInSelectMenu(destinationElement , updatedDestinaionData);
+    }
+
+    loadUserRoleDropdown(roleData)
+    {
+        let updatedSourceData = util.createSelectMenuDataObject(roleData , "RoleName" , "SecurityLevel");
+        let sourceElement = document.getElementById("adm-Usr-Role");
+        let opt = new Option("select");
+        sourceElement.add(opt , undefined);
+        util.addOptionsInSelectMenu(sourceElement , updatedSourceData);
+    }
+
+    loadUserAssignmentProjDropdown(data)
+    {
+        let updatedDestinaionData = util.createSelectMenuDataObject(data , "ProjectName" , "ProjectId");
+        let sourceElement = document.getElementById("adm-UsrDeAsi-Target");
+        let opt = new Option("select");
+        sourceElement.add(opt , undefined);
+        util.addOptionsInSelectMenu(sourceElement , updatedDestinaionData);
+    }
+
+    loadRoleAssignmentUserDropdown(userData)
+    {
+        let SourceData = util.createSelectMenuDataObject(userData , "Name" , "UserId");
+        let sourceElement = document.getElementById("adm-Rleassign-User");
+        let opt = new Option("select");
+        sourceElement.add(opt , undefined);
+        util.addOptionsInSelectMenu(sourceElement , SourceData);
+    }
+
+    loadRoleAssignmentRoleDropdown(roleData)
+    {
+        let SourceData = util.createSelectMenuDataObject(roleData , "RoleName" , "SecurityLevel");
+        let sourceElement = document.getElementById("adm-Rleassign-Role");
+        let opt = new Option("select");
+        util.removeOptionsFromSelectMenu(sourceElement)
+        sourceElement.add(opt , undefined);
+        util.addOptionsInSelectMenu(sourceElement , SourceData);
     }
 
     loadTaskProjectDropdown(data)

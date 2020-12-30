@@ -93,6 +93,14 @@ async function loadUIElement(locationId, screenName, path) {
     operationTrigger('admin_getProjectListForAssets')
   }
 
+  if (screenName == 'views/adminPages/roleView') {
+    operationTrigger('admin_getRoleList')
+  }
+
+  if (screenName == 'views/adminPages/roleAssignmentView') {
+    operationTrigger('admin_roleAssigmentSource')
+  }
+
   if (path != undefined) {
     document.getElementById('path-name').innerText = path
   }

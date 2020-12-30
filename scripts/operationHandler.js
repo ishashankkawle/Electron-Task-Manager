@@ -117,12 +117,22 @@ async function operationSwitch(params, values) {
                 break;
             }
 
-        case "admin_transferUser":
+        case "admin_addUserProjectLink":
             {
                 loadMask(1, 'updating user mappings');
                 let userToTransfer = document.getElementById('adm-UsrAsi-Source').value;
                 let projectId = document.getElementById('adm-UsrAsi-Target').value;
                 await admin.createUserProjectMap(userToTransfer, projectId);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_removeUserProjectLink":
+            {
+                loadMask(1, 'removing user mappings');
+                let userToTransfer = document.getElementById('adm-UsrDeAsi-Source').value;
+                let projectId = document.getElementById('adm-UsrDeAsi-Target').value;
+                await admin.removeUserProjectMap(userToTransfer, projectId);
                 loadMask(0);
                 break;
             }
@@ -176,8 +186,29 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'getting user assignment data');
                 let data = await admin.getUsersWithSmallRole(res["STR_USERID"], res["STR_ROLEID"]);
+                let allProjectData = await admin.getAllProjects();
+                advl.loadUserAssignmentDropdown(data, allProjectData);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_removeUserAssignmentSource":
+            {
+                loadMask(1, 'getting user assignment data');
+                let data = await admin.getUsersWithSmallRole(res["STR_USERID"], res["STR_ROLEID"]);
                 let allProjectData = await admin.getAllProjects()
                 advl.loadUserAssignmentDropdown(data, allProjectData)
+                loadMask(0);
+                break;
+            }
+        
+        case "admin_getProjectListToRemoveUserAssignment":
+            {
+                loadMask(1, 'getting project list for user');
+                let userId = document.getElementById('adm-UsrDeAsi-Source').value;
+                let data = await admin.getProjectListForUserDeAssignment(userId , res["STR_USERID"]);
+                console.log(data);
+                advl.loadUserAssignmentProjDropdown(data)
                 loadMask(0);
                 break;
             }
@@ -195,8 +226,9 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'getting project list');
                 let data = await admin.getProjectListForUser(res["STR_USERID"]);
-                console.log(data);
+                let roleData = await admin.getSmallerRoles(res["STR_ROLEID"]);
                 advl.loadUserProjectDropdown(data);
+                advl.loadUserRoleDropdown(roleData);
                 loadMask(0);
                 break;
             }
@@ -250,6 +282,55 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
+
+        case "admin_addRole":
+            {
+                loadMask(1, 'adding Role to system');
+                let roleName = document.getElementById('adm-Role-RoleName').value;
+                let roleOrder = document.getElementById('adm-Role-RoleOrder').value;
+                await admin.createNewRole(roleName , roleOrder);
+                loadMask(0);
+                break;
+            }
+        
+        case "admin_getRoleList":
+            {
+                loadMask(1, 'adding Role to system');
+                let data = await admin.getRoleData();
+                advl.loadRoleData(data)
+                loadMask(0);
+                break;
+            }
+
+        case "admin_roleAssigmentSource":
+            {
+                loadMask(1, 'getting user assignment data');
+                let data = await admin.getUsersWithSmallRole(res["STR_USERID"], res["STR_ROLEID"]);
+                advl.loadRoleAssignmentUserDropdown(data)
+                loadMask(0);
+                break;
+            }
+
+        case "admin_getRoleListForRoleAssignment":
+            {
+                loadMask(1, 'getting role list for user');
+                let userId = document.getElementById('adm-Rleassign-User').value;
+                let data = await admin.getRoleIdForUser(userId);                
+                let roleData = await admin.getValidRoles(data[0] , res["STR_ROLEID"]);
+                advl.loadRoleAssignmentRoleDropdown(roleData)
+                loadMask(0);
+                break;
+            }
+
+        case "admin_updateRoleAssignment":
+            {
+                loadMask(1, 'updating role asssignment for user');
+                let userId = document.getElementById('adm-Rleassign-User').value;
+                let roleId = document.getElementById('adm-Rleassign-Role').value;
+                await admin.updateRoleAssignment(userId , roleId);
+                loadMask(0);
+                break;
+            }
         //---------------------------------------------------------------------
         // TASKBOARD OPERATIONS
         //---------------------------------------------------------------------    
@@ -295,6 +376,7 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
+
         case "tskv_MarkTaskAsDelete":
             {
                 loadMask(1, "updating task status");
@@ -302,6 +384,7 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
+
         case "tskv_MarkTaskAsRevert":
             {
                 loadMask(1, "updating task status");
@@ -309,6 +392,7 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
+
         case "tskv_MarkMultiTaskAsComplete":
             {
                 loadMask(1, "updating multiple task status");
@@ -316,6 +400,7 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
+
         case "tskv_MarkMultiTaskAsDelete":
             {
                 loadMask(1, "updating multiple task status");
@@ -323,6 +408,7 @@ async function operationSwitch(params, values) {
                 loadMask(0);
                 break;
             }
+
         case "tskv_MarkMultiTaskAsRevert":
             {
                 loadMask(1, "reverting tasks");

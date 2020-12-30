@@ -44,7 +44,8 @@ module.exports = class adminManager {
 
     }
 
-    async getAllProjects() {
+    async getAllProjects() 
+    {
         let columns = ["\"ProjectId\"", "\"ProjectName\""];
         const dbOps = new dbOperations();
         let data = await dbOps.getData("Project_Master", columns)
@@ -309,11 +310,63 @@ module.exports = class adminManager {
         return data["rows"]
     }
 
+    async getRoleIdForUser(userId)
+    {
+        let columns = ["\"RoleId\""];
+        const dbOps = new dbOperations();
+        let conditon = " \"UserId\" = '" + userId + "'";
+        let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true);
+        data = data["rows"];
+        let output = [];
+        for (let index = 0; index < data.length; index++) 
+        {
+            output.push(data[index]["RoleId"]);
+        }
+        return output;
+    }
+
+    async getValidRoles(userRoleId , upgraderRoleId)
+    {
+        let columns = ["\"RoleName\" , \"SecurityLevel\""];
+        const dbOps = new dbOperations();
+        let conditon = " \"SecurityLevel\" > '" + upgraderRoleId + "' AND \"SecurityLevel\" < '" + userRoleId + "'";
+        let data = await dbOps.getData("Role_Master", columns, conditon, true);
+        return data["rows"];
+    }
+
     async getProjectListForUser(userId) {
         let columns = ["\"ProjectName\"", "\"ProjectId\""];
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = \'" + userId + "\'"
         let data = await dbOps.getData("View_UserProjectMap", columns, conditon)
+        return data["rows"]
+    }
+
+    async getSmallerRoles(roleId)
+    {
+        let columns = ["\"RoleName\"", "\"SecurityLevel\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"SecurityLevel\" > \'" + roleId + "\'"
+        let data = await dbOps.getData("Role_Master", columns, conditon)
+        return data["rows"]
+    }
+
+    async getProjectListForUserDeAssignment(userId , assignerUserId)
+    {
+        let columns = "*";
+        let source = "(SELECT \"ProjectId\" , \"ProjectName\" FROM VIEW_USERPROJECTMAP  WHERE \"UserId\" = '"+ userId + "' )vupm"
+        const dbOps = new dbOperations();
+        let condition;
+        let option = "JOIN (SELECT \"ProjectId\" , \"ProjectName\" FROM VIEW_USERPROJECTMAP WHERE \"UserId\" = '" + assignerUserId + "')vupm1 ON (vupm.\"ProjectId\"::TEXT = vupm1.\"ProjectId\")"
+        let data = await dbOps.getData(source, columns, condition, false, option)
+        return data["rows"]
+    }
+
+    async removeUserProjectMap(userId , projectId)
+    {
+        const dbOps = new dbOperations();
+        let conditon = "\"UserId\" = \'" + userId + "\' AND \"ProjectId\" = '" + projectId + "'" 
+        let data = await dbOps.deleteData("User_Project_Map", conditon)
         return data["rows"]
     }
 
@@ -358,6 +411,40 @@ module.exports = class adminManager {
         let conditon = "\"ProjectId\" = \'" + projectId + "\'"
         let data = await dbOps.getData("View_PriorityProjectMap", columns, conditon)
         return data["rows"]
+    }
+
+    async createNewRole(roleName , roleOrder)
+    {
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push("nextval('master_db_id_sequence')");
+        data.push(roleName);
+        data.push(roleOrder);
+        let arrColsToIgore = [0];
+        let keys = ["RoleId", "RoleName", "SecurityLevel"];
+        let keyString = util.generateCustomArrayString("\"", keys);
+        let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
+        var result = await this.addObjectToDatabase("Role_Master", keyString, dataString, dbOps);
+        console.log(result);
+    }
+
+    async getRoleData()
+    {
+        let columns = ["\"RoleName\"", "\"SecurityLevel\""];
+        const dbOps = new dbOperations();
+        let option = "Order By \"SecurityLevel\" ASC";
+        let data = await dbOps.getData("Role_Master", columns, "" , false , option)
+        return data["rows"];
+    }
+
+    async updateRoleAssignment(userId , roleId)
+    {
+        const dbOps = new dbOperations();
+        let arrColumns = ["\"RoleId\""];
+        let arrData = [roleId];
+        let conditon = "\"UserId\" = '" + userId + "'";
+        let result = dbOps.updateData("user_master", arrColumns, arrData, conditon);
+        console.log(result);
     }
 
     //-----------------------------------------------------------

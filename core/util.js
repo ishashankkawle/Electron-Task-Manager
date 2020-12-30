@@ -54,7 +54,6 @@ module.exports = class Util {
                 }
             }
             else {
-                console.log("STR = " + arr[index]);
                 str = str + arr[index] + ",";
             }
         }

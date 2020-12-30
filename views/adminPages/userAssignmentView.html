@@ -24,15 +24,15 @@
                 </div>
                 <div class="row">
                     <div class="col-2 admin-usrAsin-button">
-                        <button class="btn btn-primary" onclick="operationTrigger('admin_transferUser')">Update User Assignment</button>
+                        <button class="btn btn-primary" onclick="operationTrigger('admin_addUserProjectLink')">Update User Assignment</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 admin-usrAsin-button">
                         <small class="form-text text-muted"><b>Note:</b> User Assignment is one way process. If you want
                             to
-                            asign user from Other employee to yourself, please contact respective employee to transfer
-                            perticular user to you.</small>
+                            assign user from Other employee to yourself, please contact respective employee to assign
+                            perticular user to your project.</small>
                     </div>
                 </div>
             </div>
@@ -47,19 +47,19 @@
                 <div class="row">
                     <div class="col-4">
                         <label for="adm-Tsk-Owner">User under you</label>
-                        <select class="form-control" id="adm-UsrAsi-Source"></select>
+                        <select class="form-control" id="adm-UsrDeAsi-Source" onchange="operationTrigger('admin_getProjectListToRemoveUserAssignment')"></select>
                     </div>
                     <div class="col-1">
                         <span class="material-icons">trending_flat</span>
                     </div>
                     <div class="col-4">
                         <label for="adm-Tsk-Owner">Project</label>
-                        <select class="form-control" id="adm-UsrAsi-Target"></select>
+                        <select class="form-control" id="adm-UsrDeAsi-Target"></select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-2 admin-usrAsin-button">
-                        <button class="btn btn-danger" onclick="operationTrigger('admin_transferUser')">Delete User Assignment</button>
+                        <button class="btn btn-danger" onclick="operationTrigger('admin_removeUserProjectLink')">Delete User Assignment</button>
                     </div>
                 </div>
                 <div class="row">

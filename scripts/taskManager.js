@@ -55,7 +55,7 @@ module.exports = class taskManager
         result["complete"] = completeCount["rows"][0]["count"];
         let opt = "GROUP BY \"Module\"";
         let arrColms = [" \"Module\" " , "count(0)"];
-        let moduleFragmentationData = await dbOps.getData("View_TaskMaster" ,arrColms , condition , opt);
+        let moduleFragmentationData = await dbOps.getData("View_TaskMaster" ,arrColms , condition , false, opt);
         result["ModuleData"] = moduleFragmentationData["rows"];
         return result;
     }

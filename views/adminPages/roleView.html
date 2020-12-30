@@ -7,14 +7,14 @@
             <div class="form-group p-1">
                 <div class="row mb-2">
                     <div class="col p-0 mt-1 mr-1">
-                        <input class="form-control" type="email" data-role="input" id="adm-Usr-Email" placeholder="Role Name">
+                        <input class="form-control" type="email" data-role="input" id="adm-Role-RoleName" placeholder="Role Name">
                     </div>
                     <div class="col p-0 mt-1 mr-1">
-                        <input class="form-control" type="number" data-role="input" min="1" id="adm-Usr-Email" placeholder="Role order">
+                        <input class="form-control" type="number" data-role="input" min="1" id="adm-Role-RoleOrder" placeholder="Security Level">
                     </div>
                 </div>
                 <div class="row">
-                    <button class="btn btn-success" onclick="operationTrigger('')">Create Role</button>
+                    <button class="btn btn-primary" onclick="operationTrigger('admin_addRole')">Create Role</button>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
             <div class="card-body pb-2" style="color: var(--text)">
                 <h5 class="card-title m-0 font-weight-bold">Current Role List</h5>
             </div>
-            <table id="admin-project-table" class="table table-hover w-100"></table>
+            <table id="admin-Role-table" class="table table-hover w-100"></table>
         </div>
     </div>
 </div>
