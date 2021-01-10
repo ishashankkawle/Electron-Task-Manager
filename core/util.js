@@ -62,7 +62,7 @@ module.exports = class Util {
 
     getCurrentDateString() {
         let currentDateObj = new Date();
-        let dateStr = currentDateObj.getMonth() + "-" + currentDateObj.getDate() + "-" + currentDateObj.getFullYear();
+        let dateStr = (currentDateObj.getMonth() + 1) + "-" + currentDateObj.getDate() + "-" + currentDateObj.getFullYear();
         return dateStr;
     }
 

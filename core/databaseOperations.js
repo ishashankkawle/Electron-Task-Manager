@@ -31,6 +31,12 @@ module.exports = class dbOps
             let db = client.db(tableName);
             let collection = db.collection(collectionName);
             let result = await collection.findOne(query);
+            // let cursor = await collection.find(query); 
+            // let resultArray= [];
+            // while (cursor.hasNext()) 
+            // {
+            //     resultArray.push(cursor.next());
+            // }
             return result;
         } 
         finally
@@ -127,6 +133,7 @@ module.exports = class dbOps
 
         console.log(query);
         var result = this.executeQuery (query , client);
+        console.log(result);
         return result;
     }
 

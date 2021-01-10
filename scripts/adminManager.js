@@ -8,7 +8,6 @@ const util = new Util();
 module.exports = class adminManager {
 
     async createTask() {
-        try {
             let data = [];
             const dbOps = new dbOperations();
             data.push("nextval('master_db_id_sequence')");
@@ -37,20 +36,15 @@ module.exports = class adminManager {
             obj["Activity"] = [];
             let mongoRes = dbOps.addBlobData("TSSTaskHistory", "TSSTaskHistoryCollection", obj);
             console.log(mongoRes);
-        }
-        catch (error) {
-            console.log("Error due to : " + error);
-        }
-
     }
 
-    async getAllProjects() 
-    {
+    async getAllProjects() {
         let columns = ["\"ProjectId\"", "\"ProjectName\""];
         const dbOps = new dbOperations();
         let data = await dbOps.getData("Project_Master", columns)
         return data["rows"];
     }
+
     //-----------------------------------------------------------
     // USER CREATION OPERATIONS
     //-----------------------------------------------------------
@@ -119,14 +113,12 @@ module.exports = class adminManager {
     //     console.log(result);
     // }
 
-    async createUserProjectMap(userId, projectId) 
-    {
+    async createUserProjectMap(userId, projectId) {
         let columns = ["\"UserId\"", "\"ProjectId\""];
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = '" + userId + "' AND \"ProjectId\" = '" + projectId + "'";
         let dataCount = await dbOps.getData("user_project_map", columns, conditon)
-        if (dataCount["rowCount"] == 0)
-        {
+        if (dataCount["rowCount"] == 0) {
             let data = [];
             const dbOps = new dbOperations();
             data.push(userId);
@@ -143,6 +135,16 @@ module.exports = class adminManager {
         let arrColumns = ["\"ProjectId\""];
         let arrData = [projectId];
         let conditon = "\"UserId\" = '" + userId + "' AND \"ProjectId\" = '" + currentProjectId + "'";
+        let result = dbOps.updateData("user_project_map", arrColumns, arrData, conditon);
+        console.log(result);
+    }
+
+    async updateUserProjectMapforDeleteOperation(projectId , userId , currentUsserId)
+    {
+        const dbOps = new dbOperations();
+        let arrColumns = ["\"UserId\""];
+        let arrData = [userId];
+        let conditon = "\"UserId\" = '" + currentUsserId + "' AND \"ProjectId\" = '" + projectId + "'";
         let result = dbOps.updateData("user_project_map", arrColumns, arrData, conditon);
         console.log(result);
     }
@@ -300,33 +302,20 @@ module.exports = class adminManager {
         return data["rows"]
     }
 
-    async getUsersWithSmallRole(userId, roleId) {
-        let projectId = await this.getProjectIdFromUser(userId);
-        let projectIdString = util.generateCustomArrayString("\'" , projectId);
-        let columns = ["\"UserId\"", "\"Name\""];
-        const dbOps = new dbOperations();
-        let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" > \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
-        let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
-        return data["rows"]
-    }
-
-    async getRoleIdForUser(userId)
-    {
+    async getRoleIdForUser(userId) {
         let columns = ["\"RoleId\""];
         const dbOps = new dbOperations();
         let conditon = " \"UserId\" = '" + userId + "'";
         let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true);
         data = data["rows"];
         let output = [];
-        for (let index = 0; index < data.length; index++) 
-        {
+        for (let index = 0; index < data.length; index++) {
             output.push(data[index]["RoleId"]);
         }
         return output;
     }
 
-    async getValidRoles(userRoleId , upgraderRoleId)
-    {
+    async getValidRoles(userRoleId, upgraderRoleId) {
         let columns = ["\"RoleName\" , \"SecurityLevel\""];
         const dbOps = new dbOperations();
         let conditon = " \"SecurityLevel\" > '" + upgraderRoleId + "' AND \"SecurityLevel\" < '" + userRoleId + "'";
@@ -342,8 +331,7 @@ module.exports = class adminManager {
         return data["rows"]
     }
 
-    async getSmallerRoles(roleId)
-    {
+    async getSmallerRoles(roleId) {
         let columns = ["\"RoleName\"", "\"SecurityLevel\""];
         const dbOps = new dbOperations();
         let conditon = "\"SecurityLevel\" > \'" + roleId + "\'"
@@ -351,10 +339,9 @@ module.exports = class adminManager {
         return data["rows"]
     }
 
-    async getProjectListForUserDeAssignment(userId , assignerUserId)
-    {
+    async getProjectListForUserDeAssignment(userId, assignerUserId) {
         let columns = "*";
-        let source = "(SELECT \"ProjectId\" , \"ProjectName\" FROM VIEW_USERPROJECTMAP  WHERE \"UserId\" = '"+ userId + "' )vupm"
+        let source = "(SELECT \"ProjectId\" , \"ProjectName\" FROM VIEW_USERPROJECTMAP  WHERE \"UserId\" = '" + userId + "' )vupm"
         const dbOps = new dbOperations();
         let condition;
         let option = "JOIN (SELECT \"ProjectId\" , \"ProjectName\" FROM VIEW_USERPROJECTMAP WHERE \"UserId\" = '" + assignerUserId + "')vupm1 ON (vupm.\"ProjectId\"::TEXT = vupm1.\"ProjectId\")"
@@ -362,26 +349,42 @@ module.exports = class adminManager {
         return data["rows"]
     }
 
-    async removeUserProjectMap(userId , projectId)
-    {
+    async removeUserProjectMap(userId, projectId) {
         const dbOps = new dbOperations();
-        let conditon = "\"UserId\" = \'" + userId + "\' AND \"ProjectId\" = '" + projectId + "'" 
+        let conditon = "\"UserId\" = \'" + userId + "\' AND \"ProjectId\" = '" + projectId + "'"
         let data = await dbOps.deleteData("User_Project_Map", conditon)
         return data["rows"]
     }
 
-    async getUsersWithSmallOrEqualRole(userId, roleId) {
+    async getUsersWithSmallRoleFromSameProject(userId, roleId) {
         let projectId = await this.getProjectIdFromUser(userId);
-        let projectIdString = util.generateCustomArrayString("\'" , projectId);
+        let projectIdString = util.generateCustomArrayString("\'", projectId);
         let columns = ["\"UserId\"", "\"Name\""];
         const dbOps = new dbOperations();
-        let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" >= \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
-        let data = await dbOps.getData("View_UserProjectMap", columns, conditon ,true)
+        let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" > \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
+        let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
         return data["rows"]
     }
 
-    async getUsersFromProjectWithSmallOrEqualRole(projectId , userId, roleId)
-    {
+    async getUsersWithSmallOrEqualRoleFromSameProject(userId, roleId) {
+        let projectId = await this.getProjectIdFromUser(userId);
+        let projectIdString = util.generateCustomArrayString("\'", projectId);
+        let columns = ["\"UserId\"", "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" >= \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
+        let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
+        return data["rows"]
+    }
+
+    async getUsersWithEqualRole(userId, roleId) {
+        let columns = ["\"UserId\"", "\"Name\""];
+        const dbOps = new dbOperations();
+        let conditon = "\"RoleId\" = \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
+        let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
+        return data["rows"]
+    }
+
+    async getUsersFromProjectWithSmallOrEqualRole(projectId, userId, roleId) {
         let columns = ["\"UserId\"", "\"Name\""];
         const dbOps = new dbOperations();
         let conditon = "\"ProjectId\" = '" + projectId + "' AND \"RoleId\" >= \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
@@ -413,8 +416,7 @@ module.exports = class adminManager {
         return data["rows"]
     }
 
-    async createNewRole(roleName , roleOrder)
-    {
+    async createNewRole(roleName, roleOrder) {
         let data = [];
         const dbOps = new dbOperations();
         data.push("nextval('master_db_id_sequence')");
@@ -428,23 +430,31 @@ module.exports = class adminManager {
         console.log(result);
     }
 
-    async getRoleData()
-    {
+    async getRoleData() {
         let columns = ["\"RoleName\"", "\"SecurityLevel\""];
         const dbOps = new dbOperations();
         let option = "Order By \"SecurityLevel\" ASC";
-        let data = await dbOps.getData("Role_Master", columns, "" , false , option)
+        let data = await dbOps.getData("Role_Master", columns, "", false, option)
         return data["rows"];
     }
 
-    async updateRoleAssignment(userId , roleId)
-    {
+    async updateRoleAssignment(userId, roleId) {
         const dbOps = new dbOperations();
         let arrColumns = ["\"RoleId\""];
         let arrData = [roleId];
         let conditon = "\"UserId\" = '" + userId + "'";
         let result = dbOps.updateData("user_master", arrColumns, arrData, conditon);
         console.log(result);
+    }
+
+    generateUserMap(userData)
+    {
+        let output = {}
+        for (let index = 0; index < userData.length; index++) 
+        {
+           output[userData[index]["UserId"]] = userData[index]["Name"]
+        }
+        return output;
     }
 
     //-----------------------------------------------------------

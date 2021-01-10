@@ -101,6 +101,10 @@ async function loadUIElement(locationId, screenName, path) {
     operationTrigger('admin_roleAssigmentSource')
   }
 
+  if (screenName == 'views/adminPages/accountDeleteView') {
+    operationTrigger('admin_getAcountDeleteData')
+  }
+
   if (path != undefined) {
     document.getElementById('path-name').innerText = path
   }

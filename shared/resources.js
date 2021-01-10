@@ -8,13 +8,17 @@ module.exports = {
   "STR_DESCRIPTION": "Description",
   "STR_IOB": "Issue or Bugs",
   //-------------------------------------------------------------------------
-  // "STR_USERID": "250",
-  // "STR_USERNAME": "Mandar",
-  // "STR_ROLEID": "5",
+  "STR_USERID": "250",
+  "STR_USERNAME": "Mandar",
+  "STR_ROLEID": "5",
 
-  "STR_USERID": "240",
-  "STR_USERNAME": "Shashank",
-  "STR_ROLEID": "0",
+  // "STR_USERID": "240",
+  // "STR_USERNAME": "Shashank",
+  // "STR_ROLEID": "0",
+
+  // "STR_USERID": "311",
+  // "STR_USERNAME": "TEST User 1",
+  // "STR_ROLEID": "0",
   //-------------------------------------------------------------------------
   
   "STR_BLOBDBNAME" : "TSSTaskHistory",

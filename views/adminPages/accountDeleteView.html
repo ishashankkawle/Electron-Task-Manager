@@ -15,29 +15,19 @@
                 <div class="row mb-2">
                     <div class="col-4 p-0">
                         <label for="adm-Tsk-Owner">Projects under you</label>
-                        <select class="form-control" id="adm-UsrAsi-Source"></select>
+                        <select class="form-control" id="adm-accDel-Project"></select>
                     </div>
                     <div class="col-1 mt-auto mb-auto ml-3 mr-3">
                         <span class="material-icons">trending_flat</span>
                     </div>
                     <div class="col-4 p-0">
                         <label for="adm-Tsk-Owner">User with same role</label>
-                        <select class="form-control" id="adm-UsrAsi-Source"></select>
+                        <select class="form-control" id="adm-accDel-ProjectUser"></select>
                     </div>
                 </div>
                 <div class="row">
-                    <button type="button" class="btn btn-primary btn-sm">Update Assignment</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="operationTrigger('admin_accDeleteProjectAssign')">Update Assignment</button>
                 </div>
-            </div>
-        </div>
-        <div class="row box-sh p-2 mb-3">
-            <div class="col-1 d-flex">
-                <span class="material-icons m-auto task-card-icon" style="font-size: 42px">transfer_within_a_station</span>
-            </div>
-            <div class="col">
-                User Assignment
-                <small class="form-text text-muted mb-1">Re-assign the emloyees under you to another user with same role.</small>
-                <button type="button" class="btn btn-primary btn-sm" onclick="loadUIElement('adminView' , 'views/adminPages/userAssignmentView')">Open User Assignments</button>
             </div>
         </div>
         <div class="row box-sh p-2 mb-3">
@@ -52,7 +42,7 @@
                     <div class="col-12 p-0">
                         <small class="form-text text-muted">You can change task assignment for indiviaual task from Task Board.</small>
                     </div>
-                    <button type="button" class="btn btn-primary btn-sm" onclick="loadUIElement('display' ,'views/taskboard' , 'All Tasks')">Open Taskboard</button>
+                    <button type="button" class="btn btn-success btn-sm" onclick="loadUIElement('display' ,'views/taskboard' , 'All Tasks')">Open Taskboard</button>
                 </div>
                 <div class="row">
                     <b>OR</b>
@@ -63,14 +53,14 @@
                 <div class="row">
                     <div class="col-4 p-0 m-1">
                         <label for="adm-Tsk-Owner">Change Assigner of all tasks to</label>
-                        <select class="form-control" id="adm-UsrAsi-Source"></select>
+                        <select class="form-control" id="adm-accDel-TaskAssigner"></select>
                     </div>
                     <div class="col-4 p-0 m-1">
                         <label for="adm-Tsk-Owner">Change Owner of all tasks to</label>
-                        <select class="form-control" id="adm-UsrAsi-Source"></select>
+                        <select class="form-control" id="adm-accDel-TaskOwner"></select>
                     </div>
                     <div class="col-4 p-0 m-1">
-                        <button type="button" class="btn btn-primary btn-sm">Update Assignment</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="operationTrigger('admin_accDeleteUserAssign')">Update Assignment</button>
                     </div>
                 </div>
             </div>

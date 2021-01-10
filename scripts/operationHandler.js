@@ -185,7 +185,7 @@ async function operationSwitch(params, values) {
         case "admin_getUserAssignmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getUsersWithSmallRole(res["STR_USERID"], res["STR_ROLEID"]);
+                let data = await admin.getUsersWithSmallRoleFromSameProject(res["STR_USERID"], res["STR_ROLEID"]);
                 let allProjectData = await admin.getAllProjects();
                 advl.loadUserAssignmentDropdown(data, allProjectData);
                 loadMask(0);
@@ -195,18 +195,18 @@ async function operationSwitch(params, values) {
         case "admin_removeUserAssignmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getUsersWithSmallRole(res["STR_USERID"], res["STR_ROLEID"]);
+                let data = await admin.getUsersWithSmallRoleFromSameProject(res["STR_USERID"], res["STR_ROLEID"]);
                 let allProjectData = await admin.getAllProjects()
                 advl.loadUserAssignmentDropdown(data, allProjectData)
                 loadMask(0);
                 break;
             }
-        
+
         case "admin_getProjectListToRemoveUserAssignment":
             {
                 loadMask(1, 'getting project list for user');
                 let userId = document.getElementById('adm-UsrDeAsi-Source').value;
-                let data = await admin.getProjectListForUserDeAssignment(userId , res["STR_USERID"]);
+                let data = await admin.getProjectListForUserDeAssignment(userId, res["STR_USERID"]);
                 console.log(data);
                 advl.loadUserAssignmentProjDropdown(data)
                 loadMask(0);
@@ -250,7 +250,7 @@ async function operationSwitch(params, values) {
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
                 let priorityData = await admin.getPriorityListForProject(projectId);
-                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId , res["STR_USERID"], res["STR_ROLEID"]);
+                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId, res["STR_USERID"], res["STR_ROLEID"]);
                 advl.loadTaskModuleDropdown(moduleData);
                 advl.loadTaskTypeDropdown(typeData);
                 advl.loadTaskPriorityDropdown(priorityData);
@@ -288,11 +288,11 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'adding Role to system');
                 let roleName = document.getElementById('adm-Role-RoleName').value;
                 let roleOrder = document.getElementById('adm-Role-RoleOrder').value;
-                await admin.createNewRole(roleName , roleOrder);
+                await admin.createNewRole(roleName, roleOrder);
                 loadMask(0);
                 break;
             }
-        
+
         case "admin_getRoleList":
             {
                 loadMask(1, 'adding Role to system');
@@ -305,7 +305,7 @@ async function operationSwitch(params, values) {
         case "admin_roleAssigmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getUsersWithSmallRole(res["STR_USERID"], res["STR_ROLEID"]);
+                let data = await admin.getUsersWithSmallRoleFromSameProject(res["STR_USERID"], res["STR_ROLEID"]);
                 advl.loadRoleAssignmentUserDropdown(data)
                 loadMask(0);
                 break;
@@ -315,8 +315,8 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'getting role list for user');
                 let userId = document.getElementById('adm-Rleassign-User').value;
-                let data = await admin.getRoleIdForUser(userId);                
-                let roleData = await admin.getValidRoles(data[0] , res["STR_ROLEID"]);
+                let data = await admin.getRoleIdForUser(userId);
+                let roleData = await admin.getValidRoles(data[0], res["STR_ROLEID"]);
                 advl.loadRoleAssignmentRoleDropdown(roleData)
                 loadMask(0);
                 break;
@@ -327,14 +327,80 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'updating role asssignment for user');
                 let userId = document.getElementById('adm-Rleassign-User').value;
                 let roleId = document.getElementById('adm-Rleassign-Role').value;
-                await admin.updateRoleAssignment(userId , roleId);
+                await admin.updateRoleAssignment(userId, roleId);
                 loadMask(0);
                 break;
             }
+
+        case "admin_getAcountDeleteData":
+            {
+                loadMask(1, "checking assigments and task status")
+                let projectData = await admin.getProjectListForUser(res["STR_USERID"]);
+                let userData = [];
+                if (projectData.length !== 0) 
+                {
+                    userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID)
+                    advl.loadProjectUserDeleteDropdown(projectData, userData);
+                }
+                let taskAssignerData = await taskm.getTaskByAssigner(res["STR_USERID"])
+                let taskOwnerData = await taskm.getTaskByOwner(res["STR_USERID"])
+                if((taskAssignerData.length !== 0) && (taskOwnerData !==  0))
+                {
+                    if(userData == [])
+                    {
+                        userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID)
+                    }
+                    advl.loadTaskUserDeleteDropdown(userData);
+                }
+                loadMask(0);
+                break;
+            }
+
+        case "admin_accDeleteProjectAssign":
+            {
+                loadMask(1 , "updating project and user mapping");
+                let projectId = document.getElementById('adm-accDel-Project').value;
+                let userId = document.getElementById('adm-accDel-ProjectUser').value;
+                await admin.updateUserProjectMapforDeleteOperation(projectId , userId , res["STR_USERID"]);
+                loadMask(0);
+                break;
+            }
+
+        case "admin_accDeleteUserAssign":
+            {
+                loadMask(1 , "update task assignments mapping");
+                let userData = await admin.getUsersWithEqualRole(res.STR_USERID , res.STR_ROLEID);
+                let userMap = admin.generateUserMap(userData);
+                let newAssignerId = document.getElementById('adm-accDel-TaskAssigner').value;
+                let newOwnerId = document.getElementById('adm-accDel-TaskOwner').value;
+                
+                if(newAssignerId !== 'select')
+                {
+                    let data = {};
+                    data["Assigner"] = {}
+                    data["Assigner"]["OldAssigner"] = res.STR_USERNAME
+                    data["Assigner"]["OldAssignerId"] = res.STR_USERID
+                    data["Assigner"]["NewAssigner"] = userMap[newAssignerId]
+                    data["Assigner"]["NewAssignerId"] = newAssignerId
+                    await taskm.updateTaskFieldsForAccountDelete(data);
+                }
+                if(newOwnerId !== 'select')
+                {
+                    let data = {};
+                    data["Owner"] = {}
+                    data["Owner"]["OldOwner"] = userMap[res.STR_USERID]
+                    data["Owner"]["OldOwnerId"] = res.STR_USERID
+                    data["Owner"]["NewOwner"] = userMap[newOwnerId]
+                    data["Owner"]["NewOwnerId"] = newOwnerId
+                    await taskm.updateTaskFieldsForAccountDelete(data);
+                }
+                loadMask(0);
+                break;
+            }
+
         //---------------------------------------------------------------------
         // TASKBOARD OPERATIONS
         //---------------------------------------------------------------------    
-
         case "tsb_NextTaskWorkflowState":
             {
                 loadMask(1, "performing operation");
@@ -361,7 +427,6 @@ async function operationSwitch(params, values) {
 
         case "tsb_OpenTaskDetails":
             {
-                //let arrTaskIds = values;
                 openTaskDetails(values);
                 break;
             }

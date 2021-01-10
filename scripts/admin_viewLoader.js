@@ -47,6 +47,7 @@ module.exports = class Admin_ViewLoader
             });   
         }
     }   
+
     loadAssetTypeListData(data)
     {
         let tableData = util.convertArrayForDataTable(data);
@@ -71,7 +72,8 @@ module.exports = class Admin_ViewLoader
                 paging:false
             });
         }
-    }   
+    } 
+
     loadAssetPriorityListData(data)
     {
         let tableData = util.convertArrayForDataTable(data);
@@ -197,7 +199,6 @@ module.exports = class Admin_ViewLoader
         util.addOptionsInSelectMenu(sourceElement , updatedData);
     }
 
-
     loadAssetProjectDropdown(data)
     {
         let updatedData = util.createSelectMenuDataObject(data , "ProjectName" , "ProjectId");
@@ -235,5 +236,36 @@ module.exports = class Admin_ViewLoader
         let opt = new Option("select");
         sourceElement.add(opt , undefined);
         util.addOptionsInSelectMenu(sourceElement , updatedData);
+    }
+
+    loadProjectUserDeleteDropdown(projectData, userData)
+    {
+        let prjData = util.createSelectMenuDataObject(projectData , "ProjectName" , "ProjectId");
+        let usrData = util.createSelectMenuDataObject(userData , "Name" , "UserId");
+        let projectElement = document.getElementById("adm-accDel-Project");
+        let userElement = document.getElementById("adm-accDel-ProjectUser");
+        util.removeOptionsFromSelectMenu(projectElement);
+        util.removeOptionsFromSelectMenu(userElement);
+        let opt = new Option("select");
+        let opt2 = new Option("select");
+        projectElement.add(opt , undefined);
+        userElement.add(opt2 , undefined);
+        util.addOptionsInSelectMenu(projectElement , prjData);
+        util.addOptionsInSelectMenu(userElement , usrData);
+    }
+
+    loadTaskUserDeleteDropdown(userData)
+    {
+        let usrData = util.createSelectMenuDataObject(userData , "Name" , "UserId");
+        let userElement = document.getElementById("adm-accDel-TaskAssigner");
+        let userElement2 = document.getElementById("adm-accDel-TaskOwner");
+        util.removeOptionsFromSelectMenu(userElement);
+        util.removeOptionsFromSelectMenu(userElement2);
+        let opt = new Option("select");
+        let opt2 = new Option("select");
+        userElement.add(opt , undefined);
+        userElement2.add(opt2 , undefined);
+        util.addOptionsInSelectMenu(userElement , usrData);
+        util.addOptionsInSelectMenu(userElement2 , usrData);
     }
 }

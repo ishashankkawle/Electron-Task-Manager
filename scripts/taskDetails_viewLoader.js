@@ -257,7 +257,6 @@ module.exports = class TaskDetails_ViewLoader {
                 console.log(fieldsObj)
                 for (var field in fieldsObj) 
                 {
-                    console.log(field)
                     if (fieldsObj.hasOwnProperty(field)) 
                     {
                         if(field == "Project")
@@ -266,7 +265,6 @@ module.exports = class TaskDetails_ViewLoader {
                         }
                         if(field == "Module")
                         {
-                            console.log(fieldsObj[field])
                             elm = this.getFieldListNode(dataItem , "Module" , "OldModule" , "NewModule")
                         }
                         if(field == "Type")
@@ -277,9 +275,13 @@ module.exports = class TaskDetails_ViewLoader {
                         {
                             elm = this.getFieldListNode(dataItem , "Priority" , "OldPriority" , "NewPriority")
                         }
-                        if(field == "OwnerName")
+                        if(field == "Owner")
                         {
-                            elm = this.getFieldListNode(dataItem , "OwnerName" , "OldOwner" , "NewOwner")
+                            elm = this.getFieldListNode(dataItem , "Owner" , "OldOwner" , "NewOwner")
+                        }
+                        if(field == "Assigner")
+                        {
+                            elm = this.getFieldListNode(dataItem , "Assigner" , "OldAssigner" , "NewAssigner")
                         }
                         list.appendChild(elm)
                     }
