@@ -32,6 +32,20 @@ module.exports = {
     "type_master": "TypeId",
     "priority_master": "PriorityId",
   },
+  "POPUP_ICON_MAP":{
+    "icon": {
+      "alert":'error_outline',
+      "success":'check_circle_outline',
+      "warning":'warning',
+      "info":'info'
+    },
+    "background-color":{
+      "alert":'#f8d7da',
+      "success":'#77e65d',
+      "warning":'#fff3cd',
+      "info":'#d1ecf1'
+    }
+  },
   "TASKDATA_TABLE": {},
   "TASKVERIFICATION_SLFCOMMIT_TABLE": {},
   "TASKVERIFICATION_SLFDELETE_TABLE": {},

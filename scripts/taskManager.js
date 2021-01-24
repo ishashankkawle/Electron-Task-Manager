@@ -44,13 +44,25 @@ module.exports = class taskManager {
         let completeCondition = " \"TaskStatus\"  = \'Complete\' AND \"TaskOwner\" = \'" + res["STR_USERID"] + "\'";
         let activeCount = await dbOps.getData("View_TaskMaster", "COUNT(*)", activeCondition);
         let completeCount = await dbOps.getData("View_TaskMaster", "COUNT(*)", completeCondition);
-        result["total"] = totalcount["rows"][0]["count"];
-        result["active"] = activeCount["rows"][0]["count"];
-        result["complete"] = completeCount["rows"][0]["count"];
+        if(totalcount["rows"] != undefined)
+        {
+            result["total"] = totalcount["rows"][0]["count"];
+        }
+        if(activeCount["rows"] != undefined)
+        {
+            result["active"] = activeCount["rows"][0]["count"];
+        }
+        if(completeCount["rows"] != undefined)
+        {
+            result["complete"] = completeCount["rows"][0]["count"];
+        }
         let opt = "GROUP BY \"Module\"";
         let arrColms = [" \"Module\" ", "count(0)"];
         let moduleFragmentationData = await dbOps.getData("View_TaskMaster", arrColms, condition, false, opt);
-        result["ModuleData"] = moduleFragmentationData["rows"];
+        if(moduleFragmentationData["rows"] != undefined)
+        {
+            result["ModuleData"] = moduleFragmentationData["rows"];
+        }
         return result;
     }
 

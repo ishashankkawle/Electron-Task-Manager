@@ -7,6 +7,10 @@ module.exports = class TaskVerification_ViewLoader {
   loadSelfCommitsVerificationData(tabledata) {
     let arrSelfCommitData = []
     let arrFields = ['TaskId', 'Title', 'Module']
+    if (tabledata == undefined) {
+      popupNotification("alert", "ERROR : No data received");
+      return;
+    }
 
     for (let outerIndex = 0; outerIndex < tabledata.length; outerIndex++) {
       let element = tabledata[outerIndex]
@@ -40,7 +44,7 @@ module.exports = class TaskVerification_ViewLoader {
           data: null,
           defaultContent:
             '<button id=\'tskv-ver-cmpl-btn\' class="btn btn-outline-success btn-sm btn-circle btn-circle-sm"><span class="material-icons">check_circle</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button><button id=\'tskv-selfcommit-task-open-btn\' class="btn btn-outline-primary btn-sm btn-circle btn-circle-sm"><span class="material-icons md-18">launch</span></button>',
-            //'<button id=\'tskv-ver-cmpl-btn\' class="btn btn-outline-success btn-sm btn-circle btn-circle-sm"><span class="material-icons">check_circle</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
+          //'<button id=\'tskv-ver-cmpl-btn\' class="btn btn-outline-success btn-sm btn-circle btn-circle-sm"><span class="material-icons">check_circle</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
         },
       ],
       select: {
@@ -65,13 +69,17 @@ module.exports = class TaskVerification_ViewLoader {
     $('#tskv-selfcommits-table tbody').on('click', '#tskv-selfcommit-task-open-btn', function () {
       var data = res['TASKVERIFICATION_SLFCOMMIT_TABLE'].row($(this).parents('tr')).data()
       console.log(data)
-      operationTrigger('tsb_OpenTaskDetails' , data[1])
+      operationTrigger('tsb_OpenTaskDetails', data[1])
     })
   }
 
   loadSelfDeletesVerificationData(tabledata) {
     let arrSelfDeleteData = []
     let arrFields = ['TaskId', 'Title', 'Module']
+
+    if (tabledata == undefined) {
+      return 0;
+    }
 
     for (let outerIndex = 0; outerIndex < tabledata.length; outerIndex++) {
       let element = tabledata[outerIndex]
@@ -106,7 +114,7 @@ module.exports = class TaskVerification_ViewLoader {
           data: null,
           defaultContent:
             '<button id=\'tskv-ver-del-btn\' class="btn btn-outline-warning btn-sm btn-circle btn-circle-sm"><span class="material-icons">delete</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button><button id=\'tskv-selfdelete-task-open-btn\' class="btn btn-outline-primary btn-sm btn-circle btn-circle-sm"><span class="material-icons md-18">launch</span></button>',
-            //'<button id=\'tskv-ver-del-btn\' class="btn btn-outline-warning btn-sm btn-circle btn-circle-sm"><span class="material-icons">delete</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
+          //'<button id=\'tskv-ver-del-btn\' class="btn btn-outline-warning btn-sm btn-circle btn-circle-sm"><span class="material-icons">delete</span></button><button id=\'tskv-ver-rej-btn\' class="btn btn-outline-danger btn-sm btn-circle btn-circle-sm"><span class="material-icons">restore</span></button>',
         },
       ],
       select: {
@@ -131,11 +139,16 @@ module.exports = class TaskVerification_ViewLoader {
 
     $('#tskv-selfdeletes-table tbody').on('click', '#tskv-selfdelete-task-open-btn', function () {
       var data = res['TASKVERIFICATION_SLFDELETE_TABLE'].row($(this).parents('tr')).data()
-      operationTrigger('tsb_OpenTaskDetails' , data[1])
+      operationTrigger('tsb_OpenTaskDetails', data[1])
     })
   }
 
   loadAssignmentSummaryData(data) {
+    if (data == undefined) {
+      popupNotification("alert", "ERROR : No data received");
+      return;
+    }
+
     let parentElement = document.getElementById('tskv-assign-summary-section')
     let newValue =
       parentElement.children[0].children[0].children[0].children[1].children[0]
@@ -187,6 +200,9 @@ module.exports = class TaskVerification_ViewLoader {
   }
 
   loadResourceUtilizationData(data) {
+    if (data == undefined) {
+      return 0;
+    }
     let tabledata = util.convertArrayForDataTable(data)
     console.log(tabledata)
     $('#tskv-resource-utilization-table').DataTable({
@@ -200,6 +216,10 @@ module.exports = class TaskVerification_ViewLoader {
   }
 
   loaTaskdAssignmentData(data) {
+    if (data == undefined) {
+      popupNotification("alert" , "ERROR : No data received");
+      return 0;
+    }
     let tabledata = util.convertArrayForDataTable(data)
     $('#tskv-assign-task-table').DataTable({
       data: tabledata,

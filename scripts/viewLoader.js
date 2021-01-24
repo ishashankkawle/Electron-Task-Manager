@@ -1,9 +1,31 @@
 const { ipcRenderer } = require('electron')
+let res = require('././shared/resources');
 let isDark = false
 
-function loadLandingPage() {
-  toggleDisplayElement('main-nav')
-  loadUIElement('display', 'views/login', 'Login')
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+} 
+async function popupNotification(type , message)
+{
+  console.log("INSIDE POPUP")
+  elementId = 'main-popup'
+  elementIcoId = 'main-popup-ico'
+  elementMsgId = 'main-popup-msg'
+
+  document.getElementById(elementIcoId).innerText = res["POPUP_ICON_MAP"]["icon"][type]
+  document.getElementById(elementId).style.background = res["POPUP_ICON_MAP"]["background-color"][type]
+  document.getElementById(elementMsgId).innerText = message;
+  toggleDisplayElementOn(elementId);
+  await sleep(2000);
+  toggleDisplayElementOff(elementId);
+}
+
+
+
+async function loadLandingPage() 
+{
+  await loadUIElement('app-display', 'views/login');
 }
 
 function loadTaskDetailsPage(callback) {
@@ -14,9 +36,9 @@ function loadTaskDetailsPage(callback) {
   });
 }
 
-function validateLogin() {
-  toggleDisplayElement('main-nav')
-  loadUIElement('display', 'views/overview', 'Overview')
+function validateLogin() 
+{
+  loadUIElement('app-display', 'views/mainDisplay', 'Overview')
 }
 
 function closeWindow() {
@@ -45,13 +67,18 @@ function toggleTheme() {
   }
 }
 
-async function loadUIElement(locationId, screenName, path) {
+async function loadUIElement(locationId, screenName, path) 
+{
   let responseData = await fetch(screenName + '.html')
   if (responseData.status === 200) {
-    let data = await responseData.text()
+    let data = await responseData.text();
     document.getElementById(locationId).innerHTML = data
   }
 
+  if (screenName == 'views/mainDisplay') {
+    loadUIElement('display', 'views/overview', 'Overview')
+  }
+  
   if (screenName == 'views/overview') {
     operationTrigger('base_getAllOverviewData')
   }
@@ -125,7 +152,7 @@ function toggleDisplayElement(elementId) {
 }
 
 function toggleDisplayElementOn(elementId) {
-  document.getElementById(elementId).style.display = 'flex'
+  document.getElementById(elementId).style.display = 'block'
 }
 
 function toggleDisplayElementOff(elementId) {

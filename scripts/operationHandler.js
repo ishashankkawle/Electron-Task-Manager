@@ -6,7 +6,7 @@ let Ove_ViewLdr = require('././scripts/Overview_ViewLoader');
 let AllTask_ViewLdr = require('././scripts/AllTask_ViewLoader');
 let Admin_ViewLdr = require('././scripts/Admin_ViewLoader');
 let TaskVerification_ViewLdr = require('././scripts/TaskVerification_ViewLoader');
-let res = require('././shared/resources');
+//let res = require('././shared/resources');
 
 loadMask(1, "initializing");
 
@@ -37,12 +37,13 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, "fetching data");
                 let data = await taskm.getAllTaskData();
+                console.log(data)
                 let summaryData = await taskm.getTaskSummaryData();
+                loadMask(1, "populating ui view");
                 let element_list = document.getElementById("ovr-tsk-list");
                 let summarySec = document.getElementById("summary-section");
                 let perfChart = document.getElementById("performance-chart");
                 let modOccupChart = document.getElementById("mod-occup-chart");
-                loadMask(1, "populating ui view");
                 ovl.parseTaskSectionObject(data, element_list);
                 ovl.parseSummarySectionObject(summaryData, summarySec, perfChart, modOccupChart);
                 loadMask(0);
@@ -337,17 +338,14 @@ async function operationSwitch(params, values) {
                 loadMask(1, "checking assigments and task status")
                 let projectData = await admin.getProjectListForUser(res["STR_USERID"]);
                 let userData = [];
-                if (projectData.length !== 0) 
-                {
+                if (projectData != undefined && projectData.length !== 0) {
                     userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID)
                     advl.loadProjectUserDeleteDropdown(projectData, userData);
                 }
                 let taskAssignerData = await taskm.getTaskByAssigner(res["STR_USERID"])
                 let taskOwnerData = await taskm.getTaskByOwner(res["STR_USERID"])
-                if((taskAssignerData.length !== 0) && (taskOwnerData !==  0))
-                {
-                    if(userData == [])
-                    {
+                if ((taskAssignerData !== undefined) && (taskOwnerData != undefined) && (taskAssignerData.length !== 0) && (taskOwnerData !== 0)) {
+                    if (userData == []) {
                         userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID)
                     }
                     advl.loadTaskUserDeleteDropdown(userData);
@@ -358,24 +356,23 @@ async function operationSwitch(params, values) {
 
         case "admin_accDeleteProjectAssign":
             {
-                loadMask(1 , "updating project and user mapping");
+                loadMask(1, "updating project and user mapping");
                 let projectId = document.getElementById('adm-accDel-Project').value;
                 let userId = document.getElementById('adm-accDel-ProjectUser').value;
-                await admin.updateUserProjectMapforDeleteOperation(projectId , userId , res["STR_USERID"]);
+                await admin.updateUserProjectMapforDeleteOperation(projectId, userId, res["STR_USERID"]);
                 loadMask(0);
                 break;
             }
 
         case "admin_accDeleteUserAssign":
             {
-                loadMask(1 , "update task assignments mapping");
-                let userData = await admin.getUsersWithEqualRole(res.STR_USERID , res.STR_ROLEID);
+                loadMask(1, "update task assignments mapping");
+                let userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID);
                 let userMap = admin.generateUserMap(userData);
                 let newAssignerId = document.getElementById('adm-accDel-TaskAssigner').value;
                 let newOwnerId = document.getElementById('adm-accDel-TaskOwner').value;
-                
-                if(newAssignerId !== 'select')
-                {
+
+                if (newAssignerId !== 'select') {
                     let data = {};
                     data["Assigner"] = {}
                     data["Assigner"]["OldAssigner"] = res.STR_USERNAME
@@ -384,8 +381,7 @@ async function operationSwitch(params, values) {
                     data["Assigner"]["NewAssignerId"] = newAssignerId
                     await taskm.updateTaskFieldsForAccountDelete(data);
                 }
-                if(newOwnerId !== 'select')
-                {
+                if (newOwnerId !== 'select') {
                     let data = {};
                     data["Owner"] = {}
                     data["Owner"]["OldOwner"] = userMap[res.STR_USERID]

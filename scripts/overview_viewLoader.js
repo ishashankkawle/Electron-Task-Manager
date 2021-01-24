@@ -61,11 +61,16 @@ module.exports = class Overview_ViewLoader {
         }
       }
     } else {
-      toggleDisplayElement('task-list')
+      //toggleDisplayElement('task-list')
     }
   }
 
   async parseSummarySectionObject(data, root_element, perf_chart, mod_occup_chart) {
+    if(Object.keys(data).length === 0)
+    {
+      popupNotification("alert" , "ERROR : No data received");
+      return;
+    }
     let activeTile = document.getElementById('overview_active')
     let completeTile = document.getElementById('overview_complete')
     let activeProgressBarValue = document.getElementById('overview_active_percentage')
@@ -74,19 +79,27 @@ module.exports = class Overview_ViewLoader {
     let totaTaskCount = 0
     let percActive = 0
     let perComplete = 0
+    if(data['active'] == undefined || data['complete'] == undefined)
+    {
+      data['active'] = 0;
+      data['complete'] = 0;
+    }
 
-    if (data['total'] != 0) {
+    if (data['total'] != 0 && data['total'] != undefined) {
       totaTaskCount = Math.round(parseInt(data['total']))
     }
-    if (data['active'] != 0) {
+    if (data['active'] != 0 && data['active'] != undefined) {
       percActive = Math.round((parseInt(data['active']) * 100) / totaTaskCount)
     }
-    if (data['complete'] != 0) {
+    if (data['complete'] != 0 && data['complete'] != undefined) {
       perComplete = Math.round((parseInt(data['complete']) * 100) / totaTaskCount)
     }
 
-    let moduleData = data['ModuleData']
-    console.log(data)
+    let moduleData = {}
+    if(data['ModuleData'] != undefined)
+    {
+      moduleData = data['ModuleData']
+    }
     let moduleNames = []
     let moduleCount = []
     let colorArray = []

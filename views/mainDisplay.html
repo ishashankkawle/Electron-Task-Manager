@@ -1,0 +1,60 @@
+<div id="main-popup" style="color: black; z-index:2; padding: 0.5%; margin: 1%; position: absolute; bottom: 1px; left: 1px; right: 1px;display: none;">
+    <span class="material-icons mr-2 float-left" style="font-size: 18px;" id="main-popup-ico"></span>
+    <p><small><strong class="mr-auto align-middle float-left" id="main-popup-msg"></strong></small></p>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light pb-0 border-bottom box-sh" id="main-nav"
+    style="background: var(--bg2); z-index: 1;">
+    <a class="navbar-brand" href="#" style="color: var(--accent)">
+        <div class="d-flex" style="color: var(--text)"><span class="material-icons">home</span><span
+                class="material-icons">chevron_right</span>
+            <h6 class="path-breadcrum" id="path-name"></h6>
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" onclick="loadUIElement('display' , 'views/overview', 'Overview')">DASHBOARD <span
+                        class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="loadUIElement('display' ,'views/taskboard' , 'All Tasks')">TASK</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"
+                    onclick="loadUIElement('display' ,'views/taskVerification' , 'Assignment and Task Verifications')">ASSIGNMENT</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="loadUIElement('display' ,'views/about' , 'About')">ABOUT</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="loadUIElement('display' ,'views/admin' , 'Admin')">SETTINGS</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="toggleTheme()"><span id="theme-icon" class="material-icons"
+                        style="font-size: 18px; vertical-align: bottom; font-weight: bold">brightness_2</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="closeWindow()"><span class="material-icons text-danger"
+                        style="font-size: 18px; vertical-align: bottom; font-weight: bold">power_settings_new</span></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!--PROGRESS BAR -->
+<div class="flare" id="loader-box">
+    <div class="wrapper"></div>
+    <div class="loadbox">
+        <h6 style="margin: 01px">Loading ...</h6>
+        <hr style="border: 1px solid #ff005e; margin-bottom: 0.5px" />
+    </div>
+</div>
+
+<!-- SCREEN -->
+
+<div id="display" class="grid main-display"></div>

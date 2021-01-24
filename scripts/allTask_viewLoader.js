@@ -1,9 +1,11 @@
 let res = require('../shared/resources')
 
-module.exports = class AllTasks_ViewLoader 
-{
-  parseSummaryTaskData(data) 
-  {
+module.exports = class AllTasks_ViewLoader {
+  parseSummaryTaskData(data) {
+    if (data == undefined) {
+      popupNotification("alert" , "ERROR : No data received")
+      return;
+    }
     let actCount = document.getElementById('taskboard_new')
     let cpmCount = document.getElementById('taskboard_complete')
     let slfCmplCount = document.getElementById('taskboard_self_commit')
@@ -17,8 +19,7 @@ module.exports = class AllTasks_ViewLoader
 
     for (let index = 0; index < data.length; index++) {
       const element = data[index]
-      if (element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW'] || element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS']) 
-      {
+      if (element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW'] || element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS']) {
         activeCount++
       }
       if (element['TaskStatus'] == res['WORKFLOW']['STR_WF_COMPLETE']) {
@@ -38,8 +39,10 @@ module.exports = class AllTasks_ViewLoader
     slfDelCount.innerHTML = selfDelCount
   }
 
-  loadDataOnTaskTable(moduleData) 
-  {
+  loadDataOnTaskTable(moduleData) {
+    if (moduleData == undefined) {
+      return 0;
+    }
     let arrDataset = []
     let arrFields = [
       'AssignerName',
@@ -102,7 +105,7 @@ module.exports = class AllTasks_ViewLoader
 
     $('#task-board-table tbody').on('click', '#all-tsk-opn-tsk-btn', function () {
       var data = res['TASKDATA_TABLE'].row($(this).parents('tr')).data()
-      operationTrigger('tsb_OpenTaskDetails' , data[7])
+      operationTrigger('tsb_OpenTaskDetails', data[7])
     })
   }
 }

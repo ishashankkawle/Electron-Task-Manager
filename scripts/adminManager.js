@@ -287,6 +287,10 @@ module.exports = class adminManager {
         let conditon = "\"UserId\" = \'" + userId + "\'"
         let data = await dbOps.getData("user_project_map", columns, conditon)
         data = data["rows"];
+        if(data == undefined)
+        {
+            return 0;
+        }
         let output = [];
         for (let index = 0; index < data.length; index++) {
             output.push(data[index]["ProjectId"]);
