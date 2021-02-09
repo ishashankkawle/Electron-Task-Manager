@@ -1,13 +1,14 @@
 const { ipcRenderer } = require('electron');
-let res = require('././shared/resources');
+let res = require('../shared/resources');
+
 let isDark = false
 
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-async function popupNotification(type, message, ms) {
+async function popupNotification(type, message) {
+  console.log("INSIDE POPUP")
   elementId = 'main-popup'
   elementIcoId = 'main-popup-ico'
   elementMsgId = 'main-popup-msg'
@@ -16,17 +17,8 @@ async function popupNotification(type, message, ms) {
   document.getElementById(elementId).style.background = res["POPUP_NOTIFICATION_MAP"]["background-color"][type]
   document.getElementById(elementMsgId).innerText = message;
   toggleDisplayElementOn(elementId);
-  if (ms == undefined) {
-    await sleep(2000);
-  }
-  else {
-    await sleep(ms);
-  }
+  await sleep(2000);
   toggleDisplayElementOff(elementId);
-}
-
-async function loadLandingPage() {
-  await loadUIElement('app-display', 'views/login');
 }
 
 function loadTaskDetailsPage(callback) {
@@ -37,9 +29,7 @@ function loadTaskDetailsPage(callback) {
   });
 }
 
-function validateLogin() {
-  loadUIElement('app-display', 'views/mainDisplay', 'Overview')
-}
+
 
 function closeWindow() {
   let al = confirm('Do you wish to stop the application ?')
@@ -180,6 +170,3 @@ function loadMask(status, secondaryText) {
   }
 }
 
-function openTaskDetails(data) {
-  ipcRenderer.send('open-task', data)
-}

@@ -1,6 +1,5 @@
 loadMask(1, "loading modules");
 
-let res = require('../shared/resources');
 let TaskM = require('../scripts/taskManager');
 let Admin = require('../scripts/adminManager');
 let TaskDetails_ViewLdr = require('../scripts/taskDetails_viewLoader');

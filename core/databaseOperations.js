@@ -47,7 +47,7 @@ module.exports = class dbOps {
 
         console.log("QUERY : " + query);
         let result = {};
-        await this.executeQuery(query, client).then((response) => { result = response; }).catch(() => { result["rows"] = undefined; });
+        await this.executeQuery(query, client).then((response) => { result = response; result.operationStatus = "success" }).catch(() => { result.operationStatus = "failed" });
         return result;
     }
 
@@ -62,6 +62,7 @@ module.exports = class dbOps {
             let collection = db.collection(collectionName);
             let result = await collection.insertOne(data);
             console.log(result);
+            return result;
         }
         finally {
             client.close();
@@ -92,7 +93,7 @@ module.exports = class dbOps {
 
         console.log("QUERY : " + query);
         let result = {};
-        await this.executeQuery(query, client).then((response) => { result = response; }).catch(() => { result["rows"] = undefined; });
+        await this.executeQuery(query, client).then((response) => { result = response; result.operationStatus = "success" }).catch(() => { result.operationStatus = "failed" });
         console.log(result);
         return result;
     }
@@ -102,9 +103,9 @@ module.exports = class dbOps {
 
         client.connect();
         //await client.query(query).then((result) => { response = result; }).catch(() => { response = undefined; });
-        response  = await client.query(query);
+        response = await client.query(query);
         client.end();
-       
+
         return response
     }
 
@@ -117,7 +118,7 @@ module.exports = class dbOps {
 
         console.log("QUERY : " + query);
         let result = {};
-        await this.executeQuery(query, client).then((response) => { result = response; }).catch(() => { result["rows"] = undefined; });
+        await this.executeQuery(query, client).then((response) => { result = response; result.operationStatus = "success" }).catch(() => { result.operationStatus = "failed" });
         console.log(result);
         return result;
     }
@@ -143,7 +144,7 @@ module.exports = class dbOps {
         }
         console.log("QUERY : " + query);
         let result = {};
-        await this.executeQuery(query, client).then((response) => { result = response; }).catch(() => { result["rows"] = undefined; });
+        await this.executeQuery(query, client).then((response) => { result = response; result.operationStatus = "success" }).catch(() => { result.operationStatus = "failed"; });
         console.log(result);
         return result;
     }
@@ -180,7 +181,7 @@ module.exports = class dbOps {
 
         console.log("QUERY : " + query);
         let result = {};
-        await this.executeQuery(query, client).then((response) => { result = response; }).catch(() => { result["rows"] = undefined; });
+        await this.executeQuery(query, client).then((response) => { result = response; result.operationStatus = "success" }).catch(() => { result.operationStatus = "failed"; });
         return result;
     }
 }

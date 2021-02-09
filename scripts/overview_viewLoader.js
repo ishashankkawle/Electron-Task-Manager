@@ -1,5 +1,4 @@
 let Util = require('../core/util')
-let conf = require('../scripts/config')
 const res = require('../shared/resources')
 
 const util = new Util()

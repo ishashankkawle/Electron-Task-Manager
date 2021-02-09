@@ -8,40 +8,47 @@ const util = new Util();
 module.exports = class adminManager {
 
     async createTask() {
-            let data = [];
-            const dbOps = new dbOperations();
-            data.push("nextval('master_db_id_sequence')");
-            data.push(document.getElementById('adm-Tsk-Project').value);
-            data.push(document.getElementById('adm-Tsk-Module').value);
-            data.push(document.getElementById('adm-Tsk-Title').value);
-            data.push(document.getElementById('adm-Tsk-Desc').value);
-            data.push(document.getElementById('adm-Tsk-ETA').value);
-            data.push(document.getElementById('adm-Tsk-Owner').value);
-            data.push(res["STR_USERID"]);
-            data.push(res["WORKFLOW"]["STR_WF_NEW"]);
-            data.push(document.getElementById('adm-Tsk-Type').value);
-            data.push(document.getElementById('adm-Tsk-Priority').value);
-            data.push(util.getCurrentDateString());
+        let data = [];
+        const dbOps = new dbOperations();
+        data.push("nextval('master_db_id_sequence')");
+        data.push(document.getElementById('adm-Tsk-Project').value);
+        data.push(document.getElementById('adm-Tsk-Module').value);
+        data.push(document.getElementById('adm-Tsk-Title').value);
+        data.push(document.getElementById('adm-Tsk-Desc').value);
+        data.push(document.getElementById('adm-Tsk-ETA').value);
+        data.push(document.getElementById('adm-Tsk-Owner').value);
+        data.push(res["STR_USERID"]);
+        data.push(res["WORKFLOW"]["STR_WF_NEW"]);
+        data.push(document.getElementById('adm-Tsk-Type').value);
+        data.push(document.getElementById('adm-Tsk-Priority').value);
+        data.push(util.getCurrentDateString());
 
 
-            let keys = ["TaskId", "ProjectId", "Module", "Title", "Description", "DateTerminated", "Owner", "Assigner", "TaskStatus", "Type", "Priority", "DateCreated"];
+        let keys = ["TaskId", "ProjectId", "Module", "Title", "Description", "DateTerminated", "Owner", "Assigner", "TaskStatus", "Type", "Priority", "DateCreated"];
 
-            let keyString = util.generateCustomArrayString("\"", keys);
-            let arrColsToIgore = [0];
-            let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
+        let keyString = util.generateCustomArrayString("\"", keys);
+        let arrColsToIgore = [0];
+        let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
 
-            let result = await this.addObjectToDatabase("Task_master", keyString, dataString, dbOps);
-            let obj = util.generateJSONObject(keys, data);
-            obj["TaskId"] = result["rows"][0]["TaskId"];
-            obj["Activity"] = [];
-            let mongoRes = dbOps.addBlobData("TSSTaskHistory", "TSSTaskHistoryCollection", obj);
-            console.log(mongoRes);
+        let result = await this.addObjectToDatabase("Task_master", keyString, dataString, dbOps);
+        console.log(result);
+        if (result.operationStatus == "failed") {
+            return result;
+        }
+        let obj = util.generateJSONObject(keys, data);
+        obj["TaskId"] = result["rows"][0]["TaskId"];
+        obj["Activity"] = [];
+        dbOps.addBlobData("TSSTaskHistory", "TSSTaskHistoryCollection", obj).then(() => { result.operationStatus = "success" }).catch(() => { result.operationStatus = "partial" });
+        return result;
     }
 
     async getAllProjects() {
         let columns = ["\"ProjectId\"", "\"ProjectName\""];
         const dbOps = new dbOperations();
         let data = await dbOps.getData("Project_Master", columns)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"];
     }
 
@@ -52,12 +59,14 @@ module.exports = class adminManager {
         console.log("INSIDE USER CREATION")
         let data = [];
         const dbOps = new dbOperations();
+        let email = document.getElementById('adm-Usr-Email').value;
+        let projectId = document.getElementById('adm-Usr-Project').value;
         data.push("nextval('master_db_id_sequence')");
         data.push(document.getElementById('adm-Usr-Name').value);
         data.push(document.getElementById('adm-Usr-Contact').value);
         data.push(document.getElementById('adm-Usr-DOB').value);
-        data.push(document.getElementById('adm-Usr-Email').value);
-        data.push(document.getElementById('adm-Usr-Email').value);
+        data.push(email);
+        data.push(email);
         data.push(document.getElementById('adm-Usr-Password').value);
         data.push("0");
         data.push(util.getCurrentDateString());
@@ -81,7 +90,15 @@ module.exports = class adminManager {
         let arrColsToIgore = [0, 5, 6];
         let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
         let result = await this.addObjectToDatabase("User_master", keyString, dataString, dbOps);
-        console.log(result);
+        if (result.operationStatus == "failed") {
+            return result;
+        }
+        let userId = await this.getUserId(email);
+        let result2 = await this.createUserProjectMap(userId, projectId)
+        if (result2.operationStatus == "failed") {
+            result2.operationStatus = "partial";
+        }
+        return result2;
     }
 
     async getUserId(email) {
@@ -89,36 +106,19 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"Email\" = \'" + email + "\'"
         let data = await dbOps.getData("User_master", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"][0]["UserId"];
     }
-
-    // async createUserAssignerMap(userId, assignerId) {
-    //     let data = [];
-    //     const dbOps = new dbOperations();
-    //     data.push(userId);
-    //     data.push(assignerId);
-    //     let keys = ["UserId", "ReportingUserId"];
-    //     let keyString = util.generateCustomArrayString("\"", keys);
-    //     let dataString = util.generateCustomArrayString("\'", data);
-    //     let result = dbOps.addData("user_user_map", keyString, dataString);
-    //     console.log(result);
-    // }
-
-    // async updateUserAssignerMap(userId, targetUerId) {
-    //     const dbOps = new dbOperations();
-    //     let arrColumns = ["\"ReportingUserId\""];
-    //     let arrData = [targetUerId];
-    //     let conditon = "\"UserId\" = '" + userId + "'";
-    //     let result = dbOps.updateData("user_user_map", arrColumns, arrData, conditon);
-    //     console.log(result);
-    // }
 
     async createUserProjectMap(userId, projectId) {
         let columns = ["\"UserId\"", "\"ProjectId\""];
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = '" + userId + "' AND \"ProjectId\" = '" + projectId + "'";
         let dataCount = await dbOps.getData("user_project_map", columns, conditon)
-        if (dataCount["rowCount"] == 0) {
+        let result = { "operationStatus": "failed" };
+        if (dataCount.operationStatus == "success" && dataCount["rowCount"] == 0) {
             let data = [];
             const dbOps = new dbOperations();
             data.push(userId);
@@ -126,8 +126,9 @@ module.exports = class adminManager {
             let keys = ["UserId", "ProjectId"];
             let keyString = util.generateCustomArrayString("\"", keys);
             let dataString = util.generateCustomArrayString("\'", data);
-            let result = dbOps.addData("user_project_map", keyString, dataString);
+            result = dbOps.addData("user_project_map", keyString, dataString);
         }
+        return result;
     }
 
     async updateUserProjectMap(userId, projectId, currentProjectId) {
@@ -139,8 +140,7 @@ module.exports = class adminManager {
         console.log(result);
     }
 
-    async updateUserProjectMapforDeleteOperation(projectId , userId , currentUsserId)
-    {
+    async updateUserProjectMapforDeleteOperation(projectId, userId, currentUsserId) {
         const dbOps = new dbOperations();
         let arrColumns = ["\"UserId\""];
         let arrData = [userId];
@@ -152,7 +152,7 @@ module.exports = class adminManager {
     //-----------------------------------------------------------
     // ASSETS OPERATIONS
     //-----------------------------------------------------------
-    async createModule(moduleName) {
+    async createModule(moduleName, projectId) {
         let data = [];
         const dbOps = new dbOperations();
         data.push("nextval('master_db_id_sequence')");
@@ -162,8 +162,17 @@ module.exports = class adminManager {
         let arrColsToIgore = [0];
         let keyString = util.generateCustomArrayString("\"", keys);
         let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
-        var result = await this.addObjectToDatabase("Module_master", keyString, dataString, dbOps);
-        console.log(result);
+        let result = await this.addObjectToDatabase("Module_master", keyString, dataString, dbOps);
+        if (result.operationStatus == "failed") {
+            return result;
+        }
+
+        let moduleId = await this.getModuleId(moduleName);
+        let result2 = await this.createModuleProjectMap(moduleId, projectId);
+        if (result2.operationStatus == "failed") {
+            result2.operationStatus = "partial";
+        }
+        return result2;
 
     }
 
@@ -172,6 +181,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"Module\" = \'" + moduleName + "\'"
         let data = await dbOps.getData("Module_master", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"][0]["ModuleId"];
     }
 
@@ -184,10 +196,10 @@ module.exports = class adminManager {
         let keyString = util.generateCustomArrayString("\"", keys);
         let dataString = util.generateCustomArrayString("\'", data);
         let result = dbOps.addData("module_project_map", keyString, dataString);
-        console.log(result);
+        return result;
     }
 
-    async createType(typeName) {
+    async createType(typeName, projectId) {
         let data = [];
         const dbOps = new dbOperations();
         data.push("nextval('master_db_id_sequence')");
@@ -198,7 +210,16 @@ module.exports = class adminManager {
         let keyString = util.generateCustomArrayString("\"", keys);
         let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
         var result = await this.addObjectToDatabase("Type_master", keyString, dataString, dbOps);
-        console.log(result);
+        if (result.operationStatus == "failed") {
+            return result;
+        }
+
+        let typeId = await this.getTypeId(typeName);
+        let result2 = await this.createTypeProjectMap(typeId, projectId);
+        if (result2.operationStatus == "failed") {
+            result2.operationStatus = "partial";
+        }
+        return result2;
     }
 
     async getTypeId(typeName) {
@@ -206,6 +227,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"Type\" = \'" + typeName + "\'"
         let data = await dbOps.getData("Type_master", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"][0]["TypeId"];
     }
 
@@ -218,10 +242,10 @@ module.exports = class adminManager {
         let keyString = util.generateCustomArrayString("\"", keys);
         let dataString = util.generateCustomArrayString("\'", data);
         let result = dbOps.addData("type_project_map", keyString, dataString);
-        console.log(result);
+        return result;
     }
 
-    async createPriority(priorityName) {
+    async createPriority(priorityName, projectId) {
         let data = [];
         const dbOps = new dbOperations();
         data.push("nextval('master_db_id_sequence')");
@@ -232,7 +256,16 @@ module.exports = class adminManager {
         let keyString = util.generateCustomArrayString("\"", keys);
         let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
         var result = await this.addObjectToDatabase("Priority_master", keyString, dataString, dbOps);
-        console.log(result);
+        if (result.operationStatus == "failed") {
+            return result;
+        }
+
+        let priorityId = await this.getPriorityId(priorityName);
+        let result2 = await this.createPriorityProjectMap(priorityId, projectId);
+        if (result2.operationStatus == "failed") {
+            result2.operationStatus = "partial";
+        }
+        return result2;
     }
 
     async getPriorityId(priorityName) {
@@ -240,6 +273,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"Priority\" = \'" + priorityName + "\'"
         let data = await dbOps.getData("Priority_master", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"][0]["PriorityId"];
     }
 
@@ -252,25 +288,33 @@ module.exports = class adminManager {
         let keyString = util.generateCustomArrayString("\"", keys);
         let dataString = util.generateCustomArrayString("\'", data);
         let result = dbOps.addData("priority_project_map", keyString, dataString);
-        console.log(result);
+        return result;
     }
 
     //-----------------------------------------------------------
     // PROJECT CREATION OPERATIONS
     //-----------------------------------------------------------
-    async createProject() {
+    async createProject(title, userId) {
         let data = [];
         const dbOps = new dbOperations();
         data.push("nextval('master_db_id_sequence')");
-        data.push(document.getElementById('adm-Proj-Title').value);
+        data.push(title);
         data.push(util.getCurrentDateString());
         let keys = ["ProjectId", "ProjectName", "DateCreated"];
         let keyString = util.generateCustomArrayString("\"", keys);
         let arrColumnsToIgnore = [];
         arrColumnsToIgnore.push(0);
         let dataString = util.generateCustomArrayString("\'", data, arrColumnsToIgnore);
-        var result = await this.addObjectToDatabase("Project_master", keyString, dataString, dbOps);
-        console.log(result);
+        let result = await this.addObjectToDatabase("Project_master", keyString, dataString, dbOps);
+        if (result.operationStatus == "failed") {
+            return result;
+        }
+        let projectId = await this.getProjectIdFromProjectName(title);
+        let result2 = await this.createUserProjectMap(userId, projectId);
+        if (result2.operationStatus == "failed") {
+            result2.operationStatus = "partial";
+        }
+        return result2;
     }
 
     async getProjectIdFromProjectName(ProjectName) {
@@ -278,6 +322,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"ProjectName\" = \'" + ProjectName + "\'"
         let data = await dbOps.getData("Project_Master", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"][0]["ProjectId"];
     }
 
@@ -286,11 +333,10 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = \'" + userId + "\'"
         let data = await dbOps.getData("user_project_map", columns, conditon)
-        data = data["rows"];
-        if(data == undefined)
-        {
-            return 0;
+        if (data.operationStatus == "failed") {
+            return undefined;
         }
+        data = data["rows"];
         let output = [];
         for (let index = 0; index < data.length; index++) {
             output.push(data[index]["ProjectId"]);
@@ -303,7 +349,11 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = \'" + userId + "\'"
         let data = await dbOps.getData("View_ProjectList", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
+
     }
 
     async getRoleIdForUser(userId) {
@@ -311,6 +361,10 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = " \"UserId\" = '" + userId + "'";
         let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true);
+        if (data.operationStatus == "failed") {
+            consle.log("operation status = failed")
+            return undefined;
+        }
         data = data["rows"];
         let output = [];
         for (let index = 0; index < data.length; index++) {
@@ -324,6 +378,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = " \"SecurityLevel\" > '" + upgraderRoleId + "' AND \"SecurityLevel\" < '" + userRoleId + "'";
         let data = await dbOps.getData("Role_Master", columns, conditon, true);
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"];
     }
 
@@ -332,6 +389,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = \'" + userId + "\'"
         let data = await dbOps.getData("View_UserProjectMap", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
@@ -340,6 +400,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"SecurityLevel\" > \'" + roleId + "\'"
         let data = await dbOps.getData("Role_Master", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
@@ -350,34 +413,55 @@ module.exports = class adminManager {
         let condition;
         let option = "JOIN (SELECT \"ProjectId\" , \"ProjectName\" FROM VIEW_USERPROJECTMAP WHERE \"UserId\" = '" + assignerUserId + "')vupm1 ON (vupm.\"ProjectId\"::TEXT = vupm1.\"ProjectId\")"
         let data = await dbOps.getData(source, columns, condition, false, option)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
     async removeUserProjectMap(userId, projectId) {
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = \'" + userId + "\' AND \"ProjectId\" = '" + projectId + "'"
-        let data = await dbOps.deleteData("User_Project_Map", conditon)
-        return data["rows"]
+        let result = await dbOps.deleteData("User_Project_Map", conditon)
+        return result;
     }
 
     async getUsersWithSmallRoleFromSameProject(userId, roleId) {
         let projectId = await this.getProjectIdFromUser(userId);
-        let projectIdString = util.generateCustomArrayString("\'", projectId);
-        let columns = ["\"UserId\"", "\"Name\""];
-        const dbOps = new dbOperations();
-        let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" > \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
-        let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
-        return data["rows"]
+        let data = {};
+        if (projectId !== undefined) {
+            let projectIdString = util.generateCustomArrayString("\'", projectId);
+            let columns = ["\"UserId\"", "\"Name\""];
+            const dbOps = new dbOperations();
+            let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" > \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
+            data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
+            if (data.operationStatus == "failed") {
+                return undefined;
+            }
+            return data["rows"]
+        }
+        else {
+            return undefined;
+        }
     }
 
     async getUsersWithSmallOrEqualRoleFromSameProject(userId, roleId) {
         let projectId = await this.getProjectIdFromUser(userId);
-        let projectIdString = util.generateCustomArrayString("\'", projectId);
-        let columns = ["\"UserId\"", "\"Name\""];
-        const dbOps = new dbOperations();
-        let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" >= \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
-        let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
-        return data["rows"]
+        let data = {};
+        if (projectId !== undefined) {
+            let projectIdString = util.generateCustomArrayString("\'", projectId);
+            let columns = ["\"UserId\"", "\"Name\""];
+            const dbOps = new dbOperations();
+            let conditon = "\"ProjectId\" IN (" + projectIdString + ") AND \"RoleId\" >= \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
+            data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
+            if (data.operationStatus == "failed") {
+                return undefined;
+            }
+            return data["rows"]
+        }
+        else {
+            return undefined;
+        }
     }
 
     async getUsersWithEqualRole(userId, roleId) {
@@ -385,6 +469,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"RoleId\" = \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
         let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
@@ -393,6 +480,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"ProjectId\" = '" + projectId + "' AND \"RoleId\" >= \'" + roleId + "\' AND \"UserId\" <> '" + userId + "'"
         let data = await dbOps.getData("View_UserProjectMap", columns, conditon, true)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
@@ -401,6 +491,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"ProjectId\" = \'" + projectId + "\'"
         let data = await dbOps.getData("View_moduleProjectMap", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
@@ -409,6 +502,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"ProjectId\" = \'" + projectId + "\'"
         let data = await dbOps.getData("View_TypeProjectMap", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
@@ -417,6 +513,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let conditon = "\"ProjectId\" = \'" + projectId + "\'"
         let data = await dbOps.getData("View_PriorityProjectMap", columns, conditon)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"]
     }
 
@@ -431,7 +530,7 @@ module.exports = class adminManager {
         let keyString = util.generateCustomArrayString("\"", keys);
         let dataString = util.generateCustomArrayString("\'", data, arrColsToIgore);
         var result = await this.addObjectToDatabase("Role_Master", keyString, dataString, dbOps);
-        console.log(result);
+        return result;
     }
 
     async getRoleData() {
@@ -439,6 +538,9 @@ module.exports = class adminManager {
         const dbOps = new dbOperations();
         let option = "Order By \"SecurityLevel\" ASC";
         let data = await dbOps.getData("Role_Master", columns, "", false, option)
+        if (data.operationStatus == "failed") {
+            return undefined;
+        }
         return data["rows"];
     }
 
@@ -447,16 +549,14 @@ module.exports = class adminManager {
         let arrColumns = ["\"RoleId\""];
         let arrData = [roleId];
         let conditon = "\"UserId\" = '" + userId + "'";
-        let result = dbOps.updateData("user_master", arrColumns, arrData, conditon);
-        console.log(result);
+        let result = await dbOps.updateData("user_master", arrColumns, arrData, conditon);
+        return result;
     }
 
-    generateUserMap(userData)
-    {
+    generateUserMap(userData) {
         let output = {}
-        for (let index = 0; index < userData.length; index++) 
-        {
-           output[userData[index]["UserId"]] = userData[index]["Name"]
+        for (let index = 0; index < userData.length; index++) {
+            output[userData[index]["UserId"]] = userData[index]["Name"]
         }
         return output;
     }

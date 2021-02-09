@@ -6,6 +6,7 @@ let Ove_ViewLdr = require('././scripts/Overview_ViewLoader');
 let AllTask_ViewLdr = require('././scripts/AllTask_ViewLoader');
 let Admin_ViewLdr = require('././scripts/Admin_ViewLoader');
 let TaskVerification_ViewLdr = require('././scripts/TaskVerification_ViewLoader');
+const { ResumeToken } = require('mongodb');
 //let res = require('././shared/resources');
 
 loadMask(1, "initializing");
@@ -98,23 +99,35 @@ async function operationSwitch(params, values) {
         case "admin_createProject":
             {
                 loadMask(1, 'creatig new project');
-                await admin.createProject(params);
                 let title = document.getElementById('adm-Proj-Title').value;
-                let projectId = await admin.getProjectIdFromProjectName(title)
-                admin.createUserProjectMap(res["STR_USERID"], projectId)
+                let result = await admin.createProject(title, res["STR_USERID"]);
                 loadMask(0);
+                if (result.operationStatus == "failed") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to create project");
+                }
+                if (result.operationStatus == "partial") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.WARNING, "WARNING: Failed to assign project to the user");
+                }
+                if (result.operationStatus == "success") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: Project created succssfully");
+                }
                 break;
             }
 
         case "admin_createUser":
             {
                 loadMask(1, 'creatig new user');
-                await admin.createUser(params);
-                let email = document.getElementById('adm-Usr-Email').value;
-                let projectId = document.getElementById('adm-Usr-Project').value;
-                let userId = await admin.getUserId(email);
-                admin.createUserProjectMap(userId, projectId)
+                let result = await admin.createUser(params);
                 loadMask(0);
+                if (result.operationStatus == "failed") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to create user");
+                }
+                if (result.operationStatus == "partial") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.WARNING, "WARNING: Failed to assign project to the user");
+                }
+                if (result.operationStatus == "success") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: User created succssfully");
+                }
                 break;
             }
 
@@ -123,8 +136,14 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'updating user mappings');
                 let userToTransfer = document.getElementById('adm-UsrAsi-Source').value;
                 let projectId = document.getElementById('adm-UsrAsi-Target').value;
-                await admin.createUserProjectMap(userToTransfer, projectId);
+                let result = await admin.createUserProjectMap(userToTransfer, projectId);
                 loadMask(0);
+                if (result.operationStatus == "failed") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to create User - Project link");
+                }
+                if (result.operationStatus == "success") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: User - Project link created succssfully");
+                }
                 break;
             }
 
@@ -133,16 +152,31 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'removing user mappings');
                 let userToTransfer = document.getElementById('adm-UsrDeAsi-Source').value;
                 let projectId = document.getElementById('adm-UsrDeAsi-Target').value;
-                await admin.removeUserProjectMap(userToTransfer, projectId);
+                let result = await admin.removeUserProjectMap(userToTransfer, projectId);
                 loadMask(0);
+                if (result.operationStatus == "failed") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to remove User - Project link");
+                }
+                if (result.operationStatus == "success") {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: User - Project link removed succssfully");
+                }
                 break;
             }
 
         case "admin_createTask":
             {
                 loadMask(1, 'creatig new task');
-                await admin.createTask(params);
+                let result = await admin.createTask(params);
                 loadMask(0);
+                if (result.operationStatus == "success") {
+                    popupNotification(res["POPUP_NOTIFICATION_MAP"]["type"]["SUCCESS"], "SUCCESS: Task created successfully")
+                }
+                else if (result.operationStatus == "partial") {
+                    popupNotification(res["POPUP_NOTIFICATION_MAP"]["type"]["WARNING"], "WARNING: Task created partially. Please delete this task and tye to re-create the same task")
+                }
+                else {
+                    popupNotification(res["POPUP_NOTIFICATION_MAP"]["type"]["ERROR"], "ERROR: There was some error in creating task. Please check your network connection and try again")
+                }
                 break;
             }
 
@@ -152,25 +186,28 @@ async function operationSwitch(params, values) {
                 let projectId = document.getElementById("adm-Ast-Project").value;
                 let category = document.getElementById("adm-Ast-Category").value;
                 let categoryName = document.getElementById("adm-Ast-CatName").value;
+                let result = {};
                 switch (category) {
                     case "Module":
-                        console.log("IN MODULE SWITCH")
-                        await admin.createModule(categoryName);
-                        let moduleId = await admin.getModuleId(categoryName);
-                        admin.createModuleProjectMap(moduleId, projectId);
+                        result = await admin.createModule(categoryName, projectId);
                         break;
                     case "Type":
-                        await admin.createType(categoryName);
-                        let typeId = await admin.getTypeId(categoryName);
-                        admin.createTypeProjectMap(typeId, projectId);
+                        result = await admin.createType(categoryName, projectId);
                         break;
                     case "Priority":
-                        await admin.createPriority(categoryName);
-                        let priorityId = await admin.getPriorityId(categoryName);
-                        admin.createPriorityProjectMap(priorityId, projectId);
+                        result = await admin.createPriority(categoryName, projectId);
                         break;
                 }
                 loadMask(0);
+                if (result.operationStatus == "success") {
+                    popupNotification(res["POPUP_NOTIFICATION_MAP"]["type"]["SUCCESS"], "SUCCESS: " + category + " created successfully")
+                }
+                else if (result.operationStatus == "partial") {
+                    popupNotification(res["POPUP_NOTIFICATION_MAP"]["type"]["WARNING"], "WARNING: " + category + " created partially. Please delete this  " + category + "  and tye to re-create.")
+                }
+                else {
+                    popupNotification(res["POPUP_NOTIFICATION_MAP"]["type"]["ERROR"], "ERROR: There was some error in creating  " + category + " . Please check your network connection and try again")
+                }
                 break;
             }
 
@@ -178,8 +215,14 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'getting project data');
                 let data = await admin.getProjectListData(res["STR_USERID"]);
-                advl.loadProjectListData(data);
-                loadMask(0);
+                if (data !== undefined && data.operationStatus == "success") {
+                    advl.loadProjectListData(data);
+                    loadMask(0);
+                }
+                else {
+                    loadMask(0);
+                    popupNotification(res["POPUP_NOTIFICATION_MAP"]["type"]["ERROR"], "ERROR : No data received")
+                }
                 break;
             }
 
@@ -289,8 +332,16 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'adding Role to system');
                 let roleName = document.getElementById('adm-Role-RoleName').value;
                 let roleOrder = document.getElementById('adm-Role-RoleOrder').value;
-                await admin.createNewRole(roleName, roleOrder);
+                let result = await admin.createNewRole(roleName, roleOrder);
                 loadMask(0);
+                if(result.operationStatus == "failed")
+                {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to create role");
+                }
+                if(result.operationStatus == "success")
+                {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: Role created succssfully");
+                }
                 break;
             }
 
@@ -328,8 +379,16 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'updating role asssignment for user');
                 let userId = document.getElementById('adm-Rleassign-User').value;
                 let roleId = document.getElementById('adm-Rleassign-Role').value;
-                await admin.updateRoleAssignment(userId, roleId);
+                let result = await admin.updateRoleAssignment(userId, roleId);
                 loadMask(0);
+                if(result.operationStatus == "failed")
+                {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to update role");
+                }
+                if(result.operationStatus == "success")
+                {
+                    popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: Role updated succssfully");
+                }
                 break;
             }
 

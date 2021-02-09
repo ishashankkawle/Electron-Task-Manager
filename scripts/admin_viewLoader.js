@@ -4,13 +4,8 @@ const util = new Util();
 
 module.exports = class Admin_ViewLoader {
     loadProjectListData(data) {
-        if (data == undefined) {
-            popupNotification("alert" , "ERROR : No data received")
-            return;
-        }
 
         let tableData = util.convertArrayForDataTable(data);
-
         $('#admin-project-table').DataTable({
             data: tableData,
             columns: [
@@ -98,9 +93,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadRoleData(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let tableData = util.convertArrayForDataTable(data);
@@ -119,9 +113,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadUserAssignmentDropdown(sourceData, destinationData) {
-        if(sourceData == undefined || destinationData == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (sourceData == undefined || destinationData == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedSourceData = util.createSelectMenuDataObject(sourceData, "Name", "UserId");
@@ -141,9 +134,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadUserRoleDropdown(roleData) {
-        if(roleData == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (roleData == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedSourceData = util.createSelectMenuDataObject(roleData, "RoleName", "SecurityLevel");
@@ -154,9 +146,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadUserAssignmentProjDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedDestinaionData = util.createSelectMenuDataObject(data, "ProjectName", "ProjectId");
@@ -167,9 +158,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadRoleAssignmentUserDropdown(userData) {
-        if(userData == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (userData == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let SourceData = util.createSelectMenuDataObject(userData, "Name", "UserId");
@@ -180,9 +170,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadRoleAssignmentRoleDropdown(roleData) {
-        if(roleData == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (roleData == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let SourceData = util.createSelectMenuDataObject(roleData, "RoleName", "SecurityLevel");
@@ -194,9 +183,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadTaskProjectDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedData = util.createSelectMenuDataObject(data, "ProjectName", "ProjectId");
@@ -207,9 +195,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadTaskUserDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedData = util.createSelectMenuDataObject(data, "Name", "UserId");
@@ -221,9 +208,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadUserProjectDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedData = util.createSelectMenuDataObject(data, "ProjectName", "ProjectId");
@@ -232,9 +218,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadAssetProjectDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedData = util.createSelectMenuDataObject(data, "ProjectName", "ProjectId");
@@ -245,9 +230,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadTaskModuleDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedData = util.createSelectMenuDataObject(data, "Module", "Module");
@@ -259,9 +243,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadTaskTypeDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedData = util.createSelectMenuDataObject(data, "Type", "Type");
@@ -273,9 +256,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadTaskPriorityDropdown(data) {
-        if(data == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (data == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let updatedData = util.createSelectMenuDataObject(data, "Priority", "Priority");
@@ -287,9 +269,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadProjectUserDeleteDropdown(projectData, userData) {
-        if(projectData == undefined || userData == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (projectData == undefined || userData == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let prjData = util.createSelectMenuDataObject(projectData, "ProjectName", "ProjectId");
@@ -307,9 +288,8 @@ module.exports = class Admin_ViewLoader {
     }
 
     loadTaskUserDeleteDropdown(userData) {
-        if(userData == undefined)
-        {
-            popupNotification("alert" , "ERROR : No data received")
+        if (userData == undefined) {
+            popupNotification("alert", "ERROR : No data received")
             return;
         }
         let usrData = util.createSelectMenuDataObject(userData, "Name", "UserId");

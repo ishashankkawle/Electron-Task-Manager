@@ -8,21 +8,21 @@ module.exports = {
   "STR_DESCRIPTION": "Description",
   "STR_IOB": "Issue or Bugs",
   //-------------------------------------------------------------------------
-  "STR_USERID": "250",
-  "STR_USERNAME": "Mandar",
-  "STR_ROLEID": "5",
+  // "STR_USERID": "250",
+  // "STR_USERNAME": "Mandar",
+  // "STR_ROLEID": "5",
 
-  // "STR_USERID": "240",
-  // "STR_USERNAME": "Shashank",
-  // "STR_ROLEID": "0",
+  "STR_USERID": "240",
+  "STR_USERNAME": "Shashank",
+  "STR_ROLEID": "0",
 
   // "STR_USERID": "311",
   // "STR_USERNAME": "TEST User 1",
   // "STR_ROLEID": "0",
   //-------------------------------------------------------------------------
-  
-  "STR_BLOBDBNAME" : "TSSTaskHistory",
-  "STR_BLOBDBCOLLECTIONAME" : "TSSTaskHistoryCollection",
+
+  "STR_BLOBDBNAME": "TSSTaskHistory",
+  "STR_BLOBDBCOLLECTIONAME": "TSSTaskHistoryCollection",
 
   "ID_COLUMN_CONFIG": {
     "project_master": "ProjectId",
@@ -32,18 +32,23 @@ module.exports = {
     "type_master": "TypeId",
     "priority_master": "PriorityId",
   },
-  "POPUP_ICON_MAP":{
-    "icon": {
-      "alert":'error_outline',
-      "success":'check_circle_outline',
-      "warning":'warning',
-      "info":'info'
+  "POPUP_NOTIFICATION_MAP": {
+    "type": {
+      "ERROR": "alert",
+      "PARTIAL": "warning",
+      "SUCCESS": "success"
     },
-    "background-color":{
-      "alert":'#f8d7da',
-      "success":'#77e65d',
-      "warning":'#fff3cd',
-      "info":'#d1ecf1'
+    "icon": {
+      "alert": 'error',
+      "success": 'check_circle_outline',
+      "warning": 'warning',
+      "info": 'info'
+    },
+    "background-color": {
+      "alert": '#f8d7da',
+      "success": '#77e65d',
+      "warning": '#fff3cd',
+      "info": '#d1ecf1'
     }
   },
   "TASKDATA_TABLE": {},
@@ -60,7 +65,7 @@ module.exports = {
     "STR_WF_DELETE": "Delete",
   },
   "PostgresConnection": "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs",
-  "MongoClusterConnection":"mongodb+srv://ets_admin:SmX9qhyXD0qlUhkF@tsstaskcluster.8gnng.mongodb.net/test"
+  "MongoClusterConnection": "mongodb+srv://ets_admin:SmX9qhyXD0qlUhkF@tsstaskcluster.8gnng.mongodb.net/test"
 
 };
 
