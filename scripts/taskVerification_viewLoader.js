@@ -55,20 +55,17 @@ module.exports = class TaskVerification_ViewLoader {
     })
 
     $('#tskv-selfcommits-table tbody').on('click', '#tskv-ver-cmpl-btn', function () {
-      console.log('COMPLETE')
       var data = res['TASKVERIFICATION_SLFCOMMIT_TABLE'].row($(this).parents('tr')).data()
       operationTrigger('tskv_MarkTaskAsComplete', data)
     })
 
     $('#tskv-selfcommits-table tbody').on('click', '#tskv-ver-rej-btn', function () {
-      console.log('REJECT')
       var data = res['TASKVERIFICATION_SLFCOMMIT_TABLE'].row($(this).parents('tr')).data()
       operationTrigger('tskv_MarkTaskAsRevert', data)
     })
 
     $('#tskv-selfcommits-table tbody').on('click', '#tskv-selfcommit-task-open-btn', function () {
       var data = res['TASKVERIFICATION_SLFCOMMIT_TABLE'].row($(this).parents('tr')).data()
-      console.log(data)
       operationTrigger('tsb_OpenTaskDetails', data[1])
     })
   }
@@ -126,13 +123,11 @@ module.exports = class TaskVerification_ViewLoader {
 
 
     $('#tskv-selfdeletes-table tbody').on('click', '#tskv-ver-del-btn', function () {
-      console.log('COMPLETE')
       var data = res['TASKVERIFICATION_SLFDELETE_TABLE'].row($(this).parents('tr')).data()
       operationTrigger('tskv_MarkTaskAsDelete', data)
     })
 
     $('#tskv-selfdeletes-table tbody').on('click', '#tskv-ver-rej-btn', function () {
-      console.log('REJECT')
       var data = res['TASKVERIFICATION_SLFDELETE_TABLE'].row($(this).parents('tr')).data()
       operationTrigger('tskv_MarkTaskAsRevert', data)
     })
@@ -204,7 +199,6 @@ module.exports = class TaskVerification_ViewLoader {
       return 0;
     }
     let tabledata = util.convertArrayForDataTable(data)
-    console.log(tabledata)
     $('#tskv-resource-utilization-table').DataTable({
       data: tabledata,
       columns: [{ title: 'Name' }, { title: 'Total' }],
@@ -224,10 +218,10 @@ module.exports = class TaskVerification_ViewLoader {
     $('#tskv-assign-task-table').DataTable({
       data: tabledata,
       columns: [
-        { title: 'Title' },
-        { title: 'End Date' },
         { title: 'Status' },
         { title: 'Assigned to' },
+        { title: 'Title' },
+        { title: 'End Date' },
       ],
       pageLength: 5,
       lengthChange: false,

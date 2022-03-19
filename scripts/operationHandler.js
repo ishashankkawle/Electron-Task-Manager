@@ -7,7 +7,7 @@ let AllTask_ViewLdr = require('././scripts/AllTask_ViewLoader');
 let Admin_ViewLdr = require('././scripts/Admin_ViewLoader');
 let TaskVerification_ViewLdr = require('././scripts/TaskVerification_ViewLoader');
 const { ResumeToken } = require('mongodb');
-//let res = require('././shared/resources');
+
 
 loadMask(1, "initializing");
 
@@ -37,9 +37,8 @@ async function operationSwitch(params, values) {
         case "base_getAllOverviewData":
             {
                 loadMask(1, "fetching data");
-                let data = await taskm.getAllTaskData();
-                console.log(data)
-                let summaryData = await taskm.getTaskSummaryData();
+                let data = await taskm.getTasksForUser();
+                let summaryData = await taskm.getTaskSummaryData(false);
                 loadMask(1, "populating ui view");
                 let element_list = document.getElementById("ovr-tsk-list");
                 let summarySec = document.getElementById("summary-section");
@@ -54,7 +53,7 @@ async function operationSwitch(params, values) {
         case "base_getAllTaskData":
             {
                 loadMask(1, "fetching data");
-                let all_data = await taskm.getAllTaskData();
+                let all_data = await taskm.getTasksForUser();
                 let allTaskNewTile = document.getElementById("all-tsk-summ-new")
                 let allTaskCompleteTile = document.getElementById("all-tsk-summ-cmpl")
                 let allTaskTotalTile = document.getElementById("all-tsk-summ-tot")
@@ -82,9 +81,9 @@ async function operationSwitch(params, values) {
         case "base_getAllAssignmentData":
             {
                 loadMask(1, "fetching assignment data");
-                let summaryData = await taskm.getTaskVerificationAssignmentSummary();
-                let rscData = await taskm.getTaskVerificationRSCUtilzationData();
-                let assignmentData = await taskm.getTaskVerificationAssignementData();
+                let summaryData = await taskm.getTaskSummaryData(true);
+                let rscData = await taskm.getRSCUtilzationData(res["STR_USERID"], true);
+                let assignmentData = await taskm.getRSCUtilzationData(res["STR_USERID"], false);
                 loadMask(1, "populating ui view");
                 tskv.loadAssignmentSummaryData(summaryData);
                 tskv.loadResourceUtilizationData(rscData);
@@ -214,7 +213,7 @@ async function operationSwitch(params, values) {
         case "admin_getAllProjectData":
             {
                 loadMask(1, 'getting project data');
-                let data = await admin.getProjectListData(res["STR_USERID"]);
+                let data = await admin.getProjectListForUser(res["STR_USERID"]);
                 if (data !== undefined && data.operationStatus == "success") {
                     advl.loadProjectListData(data);
                     loadMask(0);
@@ -229,19 +228,9 @@ async function operationSwitch(params, values) {
         case "admin_getUserAssignmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getUsersWithSmallRoleFromSameProject(res["STR_USERID"], res["STR_ROLEID"]);
+                let data = await admin.getUserDetailsByFilter(res["STR_USERID"], "", "small" , "same");
                 let allProjectData = await admin.getAllProjects();
                 advl.loadUserAssignmentDropdown(data, allProjectData);
-                loadMask(0);
-                break;
-            }
-
-        case "admin_removeUserAssignmentSource":
-            {
-                loadMask(1, 'getting user assignment data');
-                let data = await admin.getUsersWithSmallRoleFromSameProject(res["STR_USERID"], res["STR_ROLEID"]);
-                let allProjectData = await admin.getAllProjects()
-                advl.loadUserAssignmentDropdown(data, allProjectData)
                 loadMask(0);
                 break;
             }
@@ -250,7 +239,7 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'getting project list for user');
                 let userId = document.getElementById('adm-UsrDeAsi-Source').value;
-                let data = await admin.getProjectListForUserDeAssignment(userId, res["STR_USERID"]);
+                let data = await admin.getProjectListForUser(res["STR_USERID"]);
                 console.log(data);
                 advl.loadUserAssignmentProjDropdown(data)
                 loadMask(0);
@@ -281,7 +270,6 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'getting project list');
                 let data = await admin.getProjectListForUser(res["STR_USERID"]);
-                console.log(data);
                 advl.loadAssetProjectDropdown(data);
                 loadMask(0);
                 break;
@@ -294,7 +282,8 @@ async function operationSwitch(params, values) {
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
                 let priorityData = await admin.getPriorityListForProject(projectId);
-                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId, res["STR_USERID"], res["STR_ROLEID"]);
+                let userData = await admin.getUserDetailsByFilter( res["STR_USERID"], projectId , "smaller_and_equal" , "same");
+                console.log(userData);
                 advl.loadTaskModuleDropdown(moduleData);
                 advl.loadTaskTypeDropdown(typeData);
                 advl.loadTaskPriorityDropdown(priorityData);
@@ -334,12 +323,10 @@ async function operationSwitch(params, values) {
                 let roleOrder = document.getElementById('adm-Role-RoleOrder').value;
                 let result = await admin.createNewRole(roleName, roleOrder);
                 loadMask(0);
-                if(result.operationStatus == "failed")
-                {
+                if (result.operationStatus == "failed") {
                     popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to create role");
                 }
-                if(result.operationStatus == "success")
-                {
+                if (result.operationStatus == "success") {
                     popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: Role created succssfully");
                 }
                 break;
@@ -357,7 +344,7 @@ async function operationSwitch(params, values) {
         case "admin_roleAssigmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getUsersWithSmallRoleFromSameProject(res["STR_USERID"], res["STR_ROLEID"]);
+                let data = await admin.getUserDetailsByFilter(res["STR_USERID"], "", "small" , "same");
                 advl.loadRoleAssignmentUserDropdown(data)
                 loadMask(0);
                 break;
@@ -381,12 +368,10 @@ async function operationSwitch(params, values) {
                 let roleId = document.getElementById('adm-Rleassign-Role').value;
                 let result = await admin.updateRoleAssignment(userId, roleId);
                 loadMask(0);
-                if(result.operationStatus == "failed")
-                {
+                if (result.operationStatus == "failed") {
                     popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to update role");
                 }
-                if(result.operationStatus == "success")
-                {
+                if (result.operationStatus == "success") {
                     popupNotification(res.POPUP_NOTIFICATION_MAP.type.SUCCESS, "SUCCESS: Role updated succssfully");
                 }
                 break;

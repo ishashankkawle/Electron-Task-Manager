@@ -64,8 +64,10 @@ module.exports = {
     "STR_WF_COMPLETE": "Complete",
     "STR_WF_DELETE": "Delete",
   },
+
+  "STR_BASEPATH": "http://localhost:8082/api",
   "PostgresConnection": "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs",
-  "MongoClusterConnection": "mongodb+srv://ets_admin:SmX9qhyXD0qlUhkF@tsstaskcluster.8gnng.mongodb.net/test"
+  "MongoClusterConnection": "mongodb+srv://ets_admin:adreno%40123@tsstaskcluster.8gnng.mongodb.net/ETMHistoryDatabase"
 
 };
 

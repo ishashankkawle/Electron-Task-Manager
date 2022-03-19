@@ -14,7 +14,7 @@ module.exports = class Overview_ViewLoader {
       toggleDisplayElement('ovr-noData-msg')
       for (let index = 0; index < 3; index++) 
       {
-        console.log(datarows)
+        //console.log(datarows)
         const data_element = datarows[index]
         if (data_element == undefined) 
         {
@@ -22,7 +22,7 @@ module.exports = class Overview_ViewLoader {
         }
         if (data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS'] || data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW']) 
         {
-          console.log(data_element)
+          //console.log(data_element)
           data_element["DateTerminated"] = '10-20-2020'
 
           let listElementHTML = [
@@ -78,43 +78,43 @@ module.exports = class Overview_ViewLoader {
     let totaTaskCount = 0
     let percActive = 0
     let perComplete = 0
-    if(data['active'] == undefined || data['complete'] == undefined)
+    if(data['activeCount'] == undefined || data['completedCount'] == undefined)
     {
-      data['active'] = 0;
-      data['complete'] = 0;
+      data['activeCount'] = 0;
+      data['completedCount'] = 0;
     }
 
-    if (data['total'] != 0 && data['total'] != undefined) {
-      totaTaskCount = Math.round(parseInt(data['total']))
+    if (data['totalCount'] != 0 && data['totalCount'] != undefined) {
+      totaTaskCount = Math.round(parseInt(data['totalCount']))
     }
-    if (data['active'] != 0 && data['active'] != undefined) {
-      percActive = Math.round((parseInt(data['active']) * 100) / totaTaskCount)
+    if (data['activeCount'] != 0 && data['activeCount'] != undefined) {
+      percActive = Math.round((parseInt(data['activeCount']) * 100) / totaTaskCount)
     }
-    if (data['complete'] != 0 && data['complete'] != undefined) {
-      perComplete = Math.round((parseInt(data['complete']) * 100) / totaTaskCount)
+    if (data['completedCount'] != 0 && data['completedCount'] != undefined) {
+      perComplete = Math.round((parseInt(data['completedCount']) * 100) / totaTaskCount)
     }
 
     let moduleData = {}
-    if(data['ModuleData'] != undefined)
+    if(data['moduleData'] != undefined)
     {
-      moduleData = data['ModuleData']
+      moduleData = data['moduleData']
     }
     let moduleNames = []
     let moduleCount = []
     let colorArray = []
-    for (let index = 0; index < moduleData.length; index++) {
-      const element = moduleData[index]
+    for (let index = 0; index < data['moduleData'].length; index++) {
+      const element = data['moduleData'][index]
       moduleNames.push(element['Module'])
       moduleCount.push(element['count'])
       colorArray.push(util.getRandomColor())
     }
     moduleData = util.convertArrayForDataTable(moduleData)
-
+    //console.log(moduleData);
     //---------------------------------------------------------------
     // SET ELEMENT DATA
     //---------------------------------------------------------------
-    activeTile.innerHTML = data['active']
-    completeTile.innerHTML = data['complete']
+    activeTile.innerHTML = data['activeCount']
+    completeTile.innerHTML = data['completedCount']
     activeProgressBarValue.innerHTML = `${percActive}%`
     completeProgressBarValue.innerHTML = `${perComplete}%`
 

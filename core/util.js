@@ -144,4 +144,18 @@ module.exports = class Util {
         }
         return finalArray;
     }
+
+    getSubArray(arrKey , arrData)
+    {
+        let arrFinal = [];
+        for (let indexData = 0; indexData < arrData.length; indexData++) {
+            let obj = arrData[indexData];
+            let currentObj = {};
+            for (let indexKey = 0; indexKey < arrKey.length; indexKey++) {
+                currentObj[arrKey[indexKey]] = obj[arrKey[indexKey]];
+            }
+            arrFinal.push(currentObj);
+        }
+        return arrFinal
+    }
 }

@@ -1,7 +1,9 @@
 let dbOperations = require('../core/databaseOperations');
+let httpOperations = require('../core/httpHandler');
 let res = require('../shared/resources');
 let Workflow = require('../core/workflowOperations');
 const Util = require('../core/util');
+const { STR_USERID } = require('../shared/resources');
 
 const util = new Util();
 
@@ -11,12 +13,10 @@ module.exports = class taskManager {
         this.wf = new Workflow();
     }
 
-    async getAllTaskData() {
-        const dbOps = new dbOperations();
-        let condition = "\"TaskOwner\" = " + "\'" + res["STR_USERID"] + "\'"
-        let columnsToFetch = "*"
-        let result = await dbOps.getData("View_TaskMaster", columnsToFetch, condition);
-        return result["rows"];
+    async getTasksForUser() {
+        const http = new httpOperations();
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task?taskFilter=TaskOwner&filterParam=" + res["STR_USERID"], http.getDefaultHeaders());
+        return result;
     }
 
     async getSingleTaskData(taskId) {
@@ -35,77 +35,28 @@ module.exports = class taskManager {
         return result;
     }
 
-    async getTaskSummaryData() {
-        const dbOps = new dbOperations();
-        let result = {};
-        let condition = " \"TaskOwner\" = \'" + res["STR_USERID"] + "\'"
-        let totalcount = await dbOps.getData("View_TaskMaster", "COUNT(*)", condition);
-        let activeCondition = " \"TaskStatus\" IN ( \'New\' , \'In_Progress\') AND \"TaskOwner\" = \'" + res["STR_USERID"] + "\'";
-        let completeCondition = " \"TaskStatus\"  = \'Complete\' AND \"TaskOwner\" = \'" + res["STR_USERID"] + "\'";
-        let activeCount = await dbOps.getData("View_TaskMaster", "COUNT(*)", activeCondition);
-        let completeCount = await dbOps.getData("View_TaskMaster", "COUNT(*)", completeCondition);
-        if(totalcount["rows"] != undefined)
-        {
-            result["total"] = totalcount["rows"][0]["count"];
-        }
-        if(activeCount["rows"] != undefined)
-        {
-            result["active"] = activeCount["rows"][0]["count"];
-        }
-        if(completeCount["rows"] != undefined)
-        {
-            result["complete"] = completeCount["rows"][0]["count"];
-        }
-        let opt = "GROUP BY \"Module\"";
-        let arrColms = [" \"Module\" ", "count(0)"];
-        let moduleFragmentationData = await dbOps.getData("View_TaskMaster", arrColms, condition, false, opt);
-        if(moduleFragmentationData["rows"] != undefined)
-        {
-            result["ModuleData"] = moduleFragmentationData["rows"];
-        }
+    async getTaskSummaryData(details) {
+        const http = new httpOperations();
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task/summary?userId=" + res["STR_USERID"] + "&details=" + details, http.getDefaultHeaders());
         return result;
     }
 
-    async getTaskVerificationAssignmentSummary() {
-        const dbOps = new dbOperations();
-        let opt = "GROUP BY \"TaskStatus\"";
-        let arrColms = [" \"TaskStatus\" ", "count(0)"];
-        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"] + "\'"
-        let summaryData = await dbOps.getData("View_TaskMaster", arrColms, condition, false, opt);
-        return summaryData["rows"];
-    }
-
-    async getTaskVerificationRSCUtilzationData() {
-        const dbOps = new dbOperations();
-        let opt = "GROUP BY \"OwnerName\"";
-        let arrColms = [" \"OwnerName\" ", "count(0)"];
-        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"] + "\'"
-        let rscData = await dbOps.getData("View_TaskMaster", arrColms, condition, false, opt);
-        return rscData["rows"];
-    }
-
-    async getTaskVerificationAssignementData() {
-        const dbOps = new dbOperations();
-        let columnsToFetch = [" \"Title\" ", " \"DateTerminated\" ", " \"TaskStatus\" ", " \"OwnerName\" "]
-        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"] + "\'"
-        let assignmentData = await dbOps.getData("View_TaskMaster", columnsToFetch, condition);
-        return assignmentData["rows"];
+    async getRSCUtilzationData(userId, summaryOption) {
+        const http = new httpOperations();
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task/rcs_util?userId=" + userId + "&summary=" + summaryOption, http.getDefaultHeaders());
+        return result;
     }
 
     async getTaskVerificationCommitData() {
-        const dbOps = new dbOperations();
-        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"] + "\' AND \"TaskStatus\" = \'" + res["WORKFLOW"]["STR_WF_SELFCOMMIT"] + "\'"
-        let arrColumns = [" \"TaskId\" ", " \"Title\" ", " \"Module\" "]
-        let result = await dbOps.getData("View_TaskMaster", arrColumns, condition);
-        return result["rows"];
+        const http = new httpOperations();
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task/verification/commit?userId=" + res["STR_USERID"], http.getDefaultHeaders());
+        return result;
     }
 
     async getTaskVerificationDeleteData() {
-        const dbOps = new dbOperations();
-        let condition = " \"TaskAssigner\" = \'" + res["STR_USERID"] + "\' AND \"TaskStatus\" = \'" + res["WORKFLOW"]["STR_WF_SELFDELETE"] + "\'"
-        let arrColumns = [" \"TaskId\" ", " \"Title\" ", " \"Module\" "]
-        let result = await dbOps.getData("View_TaskMaster", arrColumns, condition);
-        return result["rows"];
+        const http = new httpOperations();
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task/verification/delete?userId=" + res["STR_USERID"], http.getDefaultHeaders());
+        return result;
     }
 
     async updateNextTaskWorkflowState(tableObject) {
@@ -452,7 +403,7 @@ module.exports = class taskManager {
                 let activitySet = taskData["Activity"]
                 activitySet.push(obj);
                 console.log(obj)
-                let updateObject = { conditionColumn : arrValues[0] , "Activity": activitySet }
+                let updateObject = { conditionColumn: arrValues[0], "Activity": activitySet }
                 let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
                 console.log(resultBlob);
             }
