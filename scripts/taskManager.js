@@ -3,7 +3,6 @@ let httpOperations = require('../core/httpHandler');
 let res = require('../shared/resources');
 let Workflow = require('../core/workflowOperations');
 const Util = require('../core/util');
-const { STR_USERID } = require('../shared/resources');
 
 const util = new Util();
 
@@ -13,25 +12,21 @@ module.exports = class taskManager {
         this.wf = new Workflow();
     }
 
-    async getTasksForUser() {
+    async getTasksByFilter(filter, filterValue) {
         const http = new httpOperations();
-        let result = await http.httpGet(res["STR_BASEPATH"] + "/task?taskFilter=TaskOwner&filterParam=" + res["STR_USERID"], http.getDefaultHeaders());
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task?taskFilter=" + filter + "&filterParam=" + filterValue, http.getDefaultHeaders());
         return result;
     }
 
     async getSingleTaskData(taskId) {
-        const dbOps = new dbOperations();
-        //let condition = "\"TaskOwner\" = \'" + userId +"\' And \"TaskId\" = \'" + taskId + "\'"
-        let condition = "\"TaskId\" = \'" + taskId + "\'"
-        let columnsToFetch = "*"
-        let result = await dbOps.getData("View_TaskMaster", columnsToFetch, condition);
-        return result["rows"];
+        const http = new httpOperations();
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task/" + taskId + "?activity=false", http.getDefaultHeaders());
+        return result;
     }
 
     async getTaskActivityData(taskId) {
-        const dbOps = new dbOperations();
-        let query = { "TaskId": taskId }
-        let result = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
+        const http = new httpOperations()
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/task/" + taskId + "?activity=true", http.getDefaultHeaders());
         return result;
     }
 
@@ -59,168 +54,75 @@ module.exports = class taskManager {
         return result;
     }
 
-    async updateNextTaskWorkflowState(tableObject) {
-        let arrData = tableObject.rows({ selected: true }).data().toArray();
-        const dbOps = new dbOperations();
-        let arrColms = [" \"TaskStatus\" "];
-
+    async updateWorkflowToNextStateMulti(arrData) {
+        //let arrData = tableObject.rows({ selected: true }).data().toArray();
+        const http = new httpOperations();
+        let arrTaskToUpdate = [];
         for (let index = 0; index < arrData.length; index++) {
             const element = arrData[index];
-            console.log(element);
-            let taskId = element[7];
-            let wfState = await this.wf.getNextWorkflowStatus(element[8]);
-            let arrValues = ["\'" + wfState + "\'"];
-            let condition = " \"TaskId\" = " + taskId;
-            let result = await dbOps.updateData("Task_Master", arrColms, arrValues, condition)
-            console.log(result);
-
-            let query = { "TaskId": taskId }
-            let obj = this.getBlobDocWorkflowUpdateObj(element[8], wfState)
-            let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-            let activitySet = taskData["Activity"]
-            activitySet.push(obj);
-            let updateObject = { "Activity": activitySet, "TaskStatus": wfState }
-            let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-            console.log(resultBlob);
-
+            let body = {}
+            body["taskId"] = element[7];
+            body["userId"] = res["STR_USERID"];
+            body["userName"] = res["STR_USERNAME"];
+            body["currentWorkflowState"] = element[8];
+            body["newWorkflowState"] = await this.wf.getNextWorkflowStatus(element[8]);
+            arrTaskToUpdate.push(body)
         }
+        console.log(arrTaskToUpdate);
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/workflow", arrTaskToUpdate, http.getDefaultHeaders());
+        return result;
     }
 
-    async updateTaskWorkflowStateToSelfCommit(tableObject) {
-        let arrData = tableObject.rows({ selected: true }).data().toArray();
-        const dbOps = new dbOperations();
-        let arrColms = [" \"TaskStatus\" "];
+    async updateWorkflowToSpecificStateMulti(arrData, nextWorkflowState) {
+        const http = new httpOperations();
+        console.log(arrData)
+        let arrTaskToUpdate = [];
         for (let index = 0; index < arrData.length; index++) {
             const element = arrData[index];
-            let taskId = element[7];
-            let wfState = res["WORKFLOW"]["STR_WF_SELFCOMMIT"]
-            let arrValues = ["\'" + wfState + "\'"];
-            let condition = " \"TaskId\" = " + taskId;
-            let result = await dbOps.updateData("Task_Master", arrColms, arrValues, condition)
-            console.log(result);
-
-            let query = { "TaskId": taskId }
-            let obj = this.getBlobDocWorkflowUpdateObj(element[8], wfState)
-            let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-            let activitySet = taskData["Activity"]
-            activitySet.push(obj);
-            let updateObject = { "Activity": activitySet, "TaskStatus": wfState }
-            let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-            console.log(resultBlob);
+            let body = {}
+            body["taskId"] = element[7];
+            body["userId"] = res["STR_USERID"];
+            body["userName"] = res["STR_USERNAME"];
+            body["currentWorkflowState"] = element[8];
+            body["newWorkflowState"] = nextWorkflowState;
+            arrTaskToUpdate.push(body)
         }
+        console.log(arrTaskToUpdate);
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/workflow", arrTaskToUpdate, http.getDefaultHeaders());
+        return result;
     }
 
-    async updateTaskWorkflowStateToSelfDelete(tableObject) {
-        let arrData = tableObject.rows({ selected: true }).data().toArray();
-        const dbOps = new dbOperations();
-        let arrColms = [" \"TaskStatus\" "];
-        for (let index = 0; index < arrData.length; index++) {
-            const element = arrData[index];
-            let taskId = element[7];
-            let wfState = res["WORKFLOW"]["STR_WF_SELFDELETE"]
-            let arrValues = ["\'" + wfState + "\'"];
-            let condition = " \"TaskId\" = " + taskId;
-            let result = await dbOps.updateData("Task_Master", arrColms, arrValues, condition)
-            console.log(result);
-
-            let query = { "TaskId": taskId }
-            let obj = this.getBlobDocWorkflowUpdateObj(element[8], wfState)
-            let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-            let activitySet = taskData["Activity"]
-            activitySet.push(obj);
-            let updateObject = { "Activity": activitySet, "TaskStatus": wfState }
-            let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-            console.log(resultBlob);
-        }
+    async updateWorkflowToSpecificState(taskData, currentState, newState) {
+        const http = new httpOperations();
+        console.log(newState)
+        let body = {}
+        body["taskId"] = taskData[1];
+        body["userId"] = res["STR_USERID"];
+        body["userName"] = res["STR_USERNAME"];
+        body["currentWorkflowState"] = currentState;
+        body["newWorkflowState"] = newState;
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/workflow", body, http.getDefaultHeaders());
+        return result;
     }
 
-    async TSKV_updateTaskToComplete(taskData) {
-        const dbOps = new dbOperations();
-        let taskId = taskData[1];
-        let arrColms = ["TaskStatus"];
-        arrColms = util.generateCustomWrapperArray("\"", arrColms)
-        let wfState = res["WORKFLOW"]["STR_WF_COMPLETE"]
-        let arrValues = [wfState];
-        arrValues = util.generateCustomWrapperArray("\'", arrValues)
-        let condition = " \"TaskId\" = " + taskId;
-        let result = await dbOps.updateData("Task_Master", arrColms, arrValues, condition)
-        console.log(result);
-
-        let query = { "TaskId": taskId }
-        let obj = this.getBlobDocWorkflowUpdateObj(res["WORKFLOW"]["STR_WF_SELFCOMMIT"], wfState)
-        let taskBlobData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-        let activitySet = taskBlobData["Activity"]
-        activitySet.push(obj);
-        let updateObject = { "Activity": activitySet, "TaskStatus": wfState }
-        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-        console.log(resultBlob);
-    }
-
-    async TSKV_updateTaskToDelete(taskData) {
-        const dbOps = new dbOperations();
-        let taskId = taskData[1];
-        let arrColms = ["TaskStatus"];
-        arrColms = util.generateCustomWrapperArray("\"", arrColms)
-        let wfState = res["WORKFLOW"]["STR_WF_DELETE"]
-        let arrValues = [wfState];
-        arrValues = util.generateCustomWrapperArray("\'", arrValues)
-        let condition = " \"TaskId\" = " + taskId;
-        let result = await dbOps.updateData("Task_Master", arrColms, arrValues, condition)
-        console.log(result);
-
-        let query = { "TaskId": taskId }
-        let obj = this.getBlobDocWorkflowUpdateObj(res["WORKFLOW"]["STR_WF_SELFDELETE"], wfState)
-        let taskBlobData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-        let activitySet = taskBlobData["Activity"]
-        activitySet.push(obj);
-        let updateObject = { "Activity": activitySet, "TaskStatus": wfState }
-        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-        console.log(resultBlob);
-    }
-
-    async TSKV_revertTask(taskData) {
-        const dbOps = new dbOperations();
-        let taskId = taskData[1];
-        let arrColms = ["TaskStatus"];
-        arrColms = util.generateCustomWrapperArray("\"", arrColms)
-        let wfState = res["WORKFLOW"]["STR_WF_INPROGRESS"]
-        let arrValues = [wfState];
-        arrValues = util.generateCustomWrapperArray("\'", arrValues)
-        let condition = " \"TaskId\" = " + taskId;
-        let result = await dbOps.updateData("Task_Master", arrColms, arrValues, condition)
-        console.log(result);
-
-        let query = { "TaskId": taskId }
-        let taskBlobData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-        let activitySet = taskBlobData["Activity"]
-        let obj = this.getBlobDocWorkflowUpdateObj(taskBlobData["TaskStatus"], wfState)
-        activitySet.push(obj);
-        let updateObject = { "Activity": activitySet, "TaskStatus": wfState }
-        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-        console.log(resultBlob);
-    }
-
-    async TSKV_updateTaskToComplete_Multi(tableObject) {
-        let arrData = tableObject.rows({ selected: true }).data().toArray();
+    async TSKV_updateTaskToComplete_Multi(arrData) {
         for (let index = 0; index < arrData.length; index++) {
             let data = arrData[index];
-            this.TSKV_updateTaskToComplete(data);
+            this.updateWorkflowToSpecificState(data, res["WORKFLOW"]["STR_WF_SELFCOMMIT"], res["WORKFLOW"]["STR_WF_COMPLETE"]);
         }
     }
 
-    async TSKV_updateTaskToDelete_Multi(tableObject) {
-        let arrData = tableObject.rows({ selected: true }).data().toArray();
+    async TSKV_updateTaskToDelete_Multi(arrData) {
         for (let index = 0; index < arrData.length; index++) {
             let data = arrData[index];
-            this.TSKV_updateTaskToDelete(data);
+            this.updateWorkflowToSpecificState(data, res["WORKFLOW"]["STR_WF_SELFDELETE"], res["WORKFLOW"]["STR_WF_DELETE"]);
         }
     }
 
-    async TSKV_revertTask_Multi(tableObject) {
-        let arrData = tableObject.rows({ selected: true }).data().toArray();
+    async TSKV_revertTask_Multi(arrData) {
         for (let index = 0; index < arrData.length; index++) {
             let data = arrData[index];
-            this.TSKV_revertTask(data);
+            this.updateWorkflowToSpecificState(data, data[4], res["WORKFLOW"]["STR_WF_INPROGRESS"]);
         }
     }
 
@@ -232,17 +134,9 @@ module.exports = class taskManager {
     //     return result
     // }
 
-
-
-    getBlobDocUpdateObj(data) {
-        let obj = {};
-        obj["userNameBy"] = res["STR_USERNAME"]
-        obj["userId"] = res["STR_USERID"]
-        obj["dateUpdated"] = util.getCurrentDateString();
-        obj["updateType"] = "comment"
-        obj["activityData"] = data;
-        return obj;
-    }
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
+    // PENDING CHANGE
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
 
     getBlobDocWorkflowUpdateObj(oldWorkflow, newWorkflow) {
         let obj = {};
@@ -411,20 +305,7 @@ module.exports = class taskManager {
 
     }
 
-    async getTaskByAssigner(assignerId) {
-        const dbOps = new dbOperations();
-        let condition = "\"TaskAssigner\" = " + "\'" + assignerId + "\'"
-        let columnsToFetch = "*"
-        let result = await dbOps.getData("View_TaskMaster", columnsToFetch, condition);
-        return result["rows"];
-    }
-
-    async getTaskByOwner(ownerId) {
-        const dbOps = new dbOperations();
-        let condition = "\"TaskOwner\" = " + "\'" + ownerId + "\'"
-        let columnsToFetch = "*"
-        let result = await dbOps.getData("View_TaskMaster", columnsToFetch, condition);
-        return result["rows"];
-    }
-
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
+    // PENDING CHANGE
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
 }

@@ -10,16 +10,16 @@ module.exports = class adminManager {
 
     async createTask() {
         let data = {
-            "projectId" : document.getElementById('adm-Tsk-Project').value,
-            "module" : document.getElementById('adm-Tsk-Module').value,
-            "title" : document.getElementById('adm-Tsk-Title').value,
-            "description" : document.getElementById('adm-Tsk-Desc').value,
-            "dateTerminated" : document.getElementById('adm-Tsk-ETA').value,
-            "owner" : document.getElementById('adm-Tsk-Owner').value,
-            "assigner" : res["STR_USERID"],
-            "taskStatus" : res["WORKFLOW"]["STR_WF_NEW"],
-            "type" : document.getElementById('adm-Tsk-Type').value,
-            "priority" : document.getElementById('adm-Tsk-Priority').value
+            "projectId": document.getElementById('adm-Tsk-Project').value,
+            "module": document.getElementById('adm-Tsk-Module').value,
+            "title": document.getElementById('adm-Tsk-Title').value,
+            "description": document.getElementById('adm-Tsk-Desc').value,
+            "dateTerminated": document.getElementById('adm-Tsk-ETA').value,
+            "owner": document.getElementById('adm-Tsk-Owner').value,
+            "assigner": res["STR_USERID"],
+            "taskStatus": res["WORKFLOW"]["STR_WF_NEW"],
+            "type": document.getElementById('adm-Tsk-Type').value,
+            "priority": document.getElementById('adm-Tsk-Priority').value
         }
         const http = new httpOperations();
         let result = await http.httpPost(res["STR_BASEPATH"] + "/task", data, http.getDefaultHeaders());
@@ -32,7 +32,7 @@ module.exports = class adminManager {
 
     async getAllProjects() {
         const http = new httpOperations();
-        let result = await http.httpGet(res["STR_BASEPATH"] + "/project",  http.getDefaultHeaders());
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/project", http.getDefaultHeaders());
         result.operationStatus = "success"
         if (result.operationStatus == "failed") {
             return result;
@@ -40,21 +40,18 @@ module.exports = class adminManager {
         return result;
     }
 
-    //-----------------------------------------------------------
-    // USER CREATION OPERATIONS
-    //-----------------------------------------------------------
-
     async createUser() {
         let data = {
-            "name" : document.getElementById('adm-Usr-Name').value,
-            "contact" : document.getElementById('adm-Usr-Contact').value,
-            "dob" : document.getElementById('adm-Usr-DOB').value,
-            "email" : document.getElementById('adm-Usr-Email').value,
-            "username" : document.getElementById('adm-Usr-Email').value,
-            "password" : document.getElementById('adm-Usr-Password').value,
-            "roleId" : document.getElementById('adm-Usr-Role').value,
-            "projectId" : document.getElementById('adm-Usr-Project').value
+            "name": document.getElementById('adm-Usr-Name').value,
+            "contact": document.getElementById('adm-Usr-Contact').value,
+            "dob": document.getElementById('adm-Usr-DOB').value,
+            "email": document.getElementById('adm-Usr-Email').value,
+            "username": document.getElementById('adm-Usr-Email').value,
+            "password": document.getElementById('adm-Usr-Password').value,
+            "roleId": document.getElementById('adm-Usr-Role').value,
+            "projectId": document.getElementById('adm-Usr-Project').value
         }
+        console.log(data);
         const http = new httpOperations();
         let result = await http.httpPost(res["STR_BASEPATH"] + "/user", data, http.getDefaultHeaders());
         result.operationStatus = "success"
@@ -67,10 +64,10 @@ module.exports = class adminManager {
     async createUserProjectMap(userId, projectId) {
         const http = new httpOperations();
         let body = {
-            "userId" : userId,
-            "projectId" : projectId
+            "userId": userId,
+            "projectId": projectId
         }
-        let result = await http.httpPost(res["STR_BASEPATH"] + "/userprojectmap", body ,http.getDefaultHeaders());
+        let result = await http.httpPost(res["STR_BASEPATH"] + "/userprojectmap", body, http.getDefaultHeaders());
         result.operationStatus = "success"
         if (result.operationStatus == "failed") {
             return result;
@@ -79,14 +76,22 @@ module.exports = class adminManager {
     }
 
     async updateUserProjectMap(userId, projectId, currentProjectId) {
-        const dbOps = new dbOperations();
-        let arrColumns = ["\"ProjectId\""];
-        let arrData = [projectId];
-        let conditon = "\"UserId\" = '" + userId + "' AND \"ProjectId\" = '" + currentProjectId + "'";
-        let result = dbOps.updateData("user_project_map", arrColumns, arrData, conditon);
-        console.log(result);
+        const http = new httpOperations();
+        let body = {};
+        body["userId"] = userId;
+        body["oldProjectId"] = currentProjectId;
+        body["newProjectId"] = projectId;
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/userprojectmap", body, http.getDefaultHeaders());
+        result.operationStatus = "success";
+        if (result.operationStatus == "failed") {
+            return undefined;
+        }
+        return result;
     }
 
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
+    // PENDING CHANGE
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
     async updateUserProjectMapforDeleteOperation(projectId, userId, currentUsserId) {
         const dbOps = new dbOperations();
         let arrColumns = ["\"UserId\""];
@@ -95,47 +100,42 @@ module.exports = class adminManager {
         let result = dbOps.updateData("user_project_map", arrColumns, arrData, conditon);
         console.log(result);
     }
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
+    // PENDING CHANGE
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    //-----------------------------------------------------------
-    // ASSETS OPERATIONS
-    //-----------------------------------------------------------
 
     async createModule(moduleName, projectId) {
         const http = new httpOperations();
         let body = {
-            "module" : moduleName,
+            "module": moduleName,
             "projectId": projectId
         };
-        let result = await http.httpPost(res["STR_BASEPATH"] + "/module", body ,http.getDefaultHeaders());
+        let result = await http.httpPost(res["STR_BASEPATH"] + "/module", body, http.getDefaultHeaders());
         return result;
     }
-
-    //-----------------------------------------------------------
 
     async createType(typeName, projectId) {
         const http = new httpOperations();
         let body = {
-            "type" : typeName,
+            "type": typeName,
             "projectId": projectId
         };
-        let result = await http.httpPost(res["STR_BASEPATH"] + "/type", body ,http.getDefaultHeaders());
+        let result = await http.httpPost(res["STR_BASEPATH"] + "/type", body, http.getDefaultHeaders());
         result.operationStatus = "success"
         if (result.operationStatus == "failed") {
             return result;
         }
         return result;
     }
-
-
-    //-----------------------------------------------------------
 
     async createPriority(priorityName, projectId) {
         const http = new httpOperations();
         let body = {
-            "priority" : priorityName,
+            "priority": priorityName,
             "projectId": projectId
         };
-        let result = await http.httpPost(res["STR_BASEPATH"] + "/priority", body ,http.getDefaultHeaders());
+        let result = await http.httpPost(res["STR_BASEPATH"] + "/priority", body, http.getDefaultHeaders());
         result.operationStatus = "success"
         if (result.operationStatus == "failed") {
             return result;
@@ -143,14 +143,10 @@ module.exports = class adminManager {
         return result;
     }
 
-    //-----------------------------------------------------------
-    // PROJECT CREATION OPERATIONS
-    //-----------------------------------------------------------
-    async createProject(title, userId) 
-    {
+    async createProject(title, userId) {
         let data = {
-            "title" : title,
-            "userId" : userId
+            "title": title,
+            "userId": userId
         };
         const http = new httpOperations();
         let result = await http.httpPost(res["STR_BASEPATH"] + "/project", data, http.getDefaultHeaders());
@@ -210,7 +206,7 @@ module.exports = class adminManager {
 
     async getValidRoles(userRoleId, upgraderRoleId) {
         const http = new httpOperations();
-        let result = await http.httpGet(res["STR_BASEPATH"] + "/role/validlist?updaterroleid=" + upgraderRoleId  + "&userroleid=" + userRoleId, http.getDefaultHeaders());
+        let result = await http.httpGet(res["STR_BASEPATH"] + "/role/validlist?updaterroleid=" + upgraderRoleId + "&userroleid=" + userRoleId, http.getDefaultHeaders());
         result.operationStatus = "success"
         if (result.operationStatus == "failed") {
             return undefined;
@@ -228,22 +224,26 @@ module.exports = class adminManager {
         return result;
     }
 
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
+    // PENDING CHANGE
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
     async removeUserProjectMap(userId, projectId) {
         const dbOps = new dbOperations();
         let conditon = "\"UserId\" = \'" + userId + "\' AND \"ProjectId\" = '" + projectId + "'"
         let result = await dbOps.deleteData("User_Project_Map", conditon)
         return result;
     }
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
+    // PENDING CHANGE
+    // !!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    async getUserDetails(email)
-    {
+    async getUserDetails(email) {
         const http = new httpOperations();
         let result = await http.httpGet(res["STR_BASEPATH"] + "/user?email=" + email, http.getDefaultHeaders());
         return result;
     }
 
-    async getUserDetailsByFilter(userId , projectId , roleFilterValue , projectFilterValue)
-    {
+    async getUserDetailsByFilter(userId, projectId, roleFilterValue, projectFilterValue) {
         let url = res["STR_BASEPATH"] + "/user?userId=" + userId;
         if (projectId != undefined) {
             url = url + "&projectId=" + projectId;
@@ -292,8 +292,8 @@ module.exports = class adminManager {
 
     async createNewRole(roleName, roleOrder) {
         let data = {
-            "roleName" : roleName,
-            "securityLevel" : roleOrder
+            "roleName": roleName,
+            "securityLevel": roleOrder
         }
         const http = new httpOperations();
         let result = await http.httpPost(res["STR_BASEPATH"] + "/role", data, http.getDefaultHeaders());
@@ -304,8 +304,7 @@ module.exports = class adminManager {
         return result;
     }
 
-    async getRoleData() 
-    {
+    async getRoleData() {
         const http = new httpOperations();
         let result = await http.httpGet(res["STR_BASEPATH"] + "/role", http.getDefaultHeaders());
         result.operationStatus = "success";
@@ -315,12 +314,21 @@ module.exports = class adminManager {
         return result;
     }
 
-    async updateRoleAssignment(userId, roleId) {
-        const dbOps = new dbOperations();
-        let arrColumns = ["\"RoleId\""];
-        let arrData = [roleId];
-        let conditon = "\"UserId\" = '" + userId + "'";
-        let result = await dbOps.updateData("user_master", arrColumns, arrData, conditon);
+    async updateUser(userId, fieldName, fieldValue) {
+        const http = new httpOperations();
+        let body = {};
+        body["userId"] = userId;
+        body["field"] = fieldName;
+        body["fieldValue"] = fieldValue;
+        body["isSecret"] = "false";
+        if (fieldName == "Password") {
+            body["isSecret"] = "true"
+        }
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/user/" + userId, body, http.getDefaultHeaders());
+        result.operationStatus = "success";
+        if (result.operationStatus == "failed") {
+            return undefined;
+        }
         return result;
     }
 

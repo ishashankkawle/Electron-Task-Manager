@@ -28,7 +28,7 @@ module.exports = class WorkflowOperations
         {
             return res["WORKFLOW"]["STR_WF_INPROGRESS"];
         }
-        if(currentWorkflowStatus == res["WORKFLOW"]["STR_WF_DELETE"])
+        if(currentWorkflowStatus == res["WORKFLOW"]["STR_WF_SELFDELETE"])
         {
             return res["WORKFLOW"]["STR_WF_INPROGRESS"];
         }

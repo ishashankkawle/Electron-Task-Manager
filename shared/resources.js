@@ -10,15 +10,19 @@ module.exports = {
   //-------------------------------------------------------------------------
   // "STR_USERID": "250",
   // "STR_USERNAME": "Mandar",
-  // "STR_ROLEID": "5",
+  // "STR_SECURITY_LEVEL": "5",
+  // "STR_ROLENAME": "Master",
+  // "STR_ROLEID": "314",
 
-  "STR_USERID": "240",
-  "STR_USERNAME": "Shashank",
-  "STR_ROLEID": "0",
+  // "STR_USERID": "240",
+  // "STR_USERNAME": "Shashank",
+  // "STR_SECURITY_LEVEL": "0",
 
-  // "STR_USERID": "311",
-  // "STR_USERNAME": "TEST User 1",
-  // "STR_ROLEID": "0",
+  "STR_USERID": "383",
+  "STR_USERNAME": "testuser2",
+  "STR_SECURITY_LEVEL": "5",
+  "STR_ROLENAME": "Project Manager",
+  "STR_ROLEID": "5",
   //-------------------------------------------------------------------------
 
   "STR_BLOBDBNAME": "TSSTaskHistory",
@@ -56,6 +60,7 @@ module.exports = {
   "TASKVERIFICATION_SLFDELETE_TABLE": {},
   "TASKVERIFICATION_RESOURCEUTILIZATION_TABLE": {},
   "TASKVERIFICATION_ASSIGNEDTASK_TABLE": {},
+
   "WORKFLOW": {
     "STR_WF_NEW": "New",
     "STR_WF_INPROGRESS": "In_Progress",

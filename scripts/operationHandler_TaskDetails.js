@@ -28,12 +28,15 @@ async function operationSwitch_TaskDetails(params, values) {
             {
                 loadMask(1, 'Loading data');
                 console.log(res["STR_USERID"] + "--" + values)
-                let data = await taskm.getSingleTaskData(values);
-                let activityData = await taskm.getTaskActivityData(values);
+                //let data = await taskm.getSingleTaskData(values);
+                //console.log(data)
+                let data = await taskm.getTaskActivityData(values);
+                console.log(data)
                 let projectData = await admin.getProjectListForUser(res["STR_USERID"]);
-                tdvl.parseTaskInfoSection(data[0]);
-                tdvl.parseTaskActivityData(activityData["Activity"])
-                tdvl.loadProjectDropdown(projectData);
+                console.log(projectData)
+                tdvl.parseTaskInfoSection(data[0].payload[0]);
+                tdvl.parseTaskActivityData(data[1].payload.activity)
+                tdvl.loadProjectDropdown(projectData[0]);
                 loadMask(0);
                 break;
             }
@@ -55,7 +58,7 @@ async function operationSwitch_TaskDetails(params, values) {
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
                 let priorityData = await admin.getPriorityListForProject(projectId);
-                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId , res["STR_USERID"], res["STR_ROLEID"]);
+                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId, res["STR_USERID"], res["STR_SECURITY_LEVEL"]);
                 tdvl.checkForProjectUpdate(projectId);
                 tdvl.loadModuleDropdown(moduleData);
                 tdvl.loadTypeDropdown(typeData);

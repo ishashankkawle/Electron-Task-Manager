@@ -19,6 +19,7 @@ module.exports = class TaskVerification_ViewLoader {
       for (let index = 0; index < arrFields.length; index++) {
         data.push(element[arrFields[index]])
       }
+      data.push('Self_Commit')
       arrSelfCommitData.push(data)
     }
 
@@ -29,6 +30,7 @@ module.exports = class TaskVerification_ViewLoader {
         { title: 'TaskId', visible: false },
         { title: 'Title' },
         { title: 'Module' },
+        {title: 'State' , visible: false , data: 'Self_Commit' , defaultContent: 'Self_Commit'},
         { title: 'Action' },
       ],
       pageLength: 5,
@@ -85,6 +87,7 @@ module.exports = class TaskVerification_ViewLoader {
       for (let index = 0; index < arrFields.length; index++) {
         data.push(element[arrFields[index]])
       }
+      data.push('Self_Delete')
       arrSelfDeleteData.push(data)
     }
 
@@ -96,6 +99,7 @@ module.exports = class TaskVerification_ViewLoader {
         { title: 'TaskId', visible: false },
         { title: 'Title' },
         { title: 'Module' },
+        {title: 'State' , visible: false , data: 'Self_Delete' , defaultContent: 'Self_Delete'},
         { title: 'Action' },
       ],
       pageLength: 5,

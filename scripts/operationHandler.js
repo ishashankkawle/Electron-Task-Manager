@@ -6,6 +6,7 @@ let Ove_ViewLdr = require('././scripts/Overview_ViewLoader');
 let AllTask_ViewLdr = require('././scripts/AllTask_ViewLoader');
 let Admin_ViewLdr = require('././scripts/Admin_ViewLoader');
 let TaskVerification_ViewLdr = require('././scripts/TaskVerification_ViewLoader');
+let Workflow = require('././core/workflowOperations');
 const { ResumeToken } = require('mongodb');
 
 
@@ -17,6 +18,7 @@ const ovl = new Ove_ViewLdr();
 const atvl = new AllTask_ViewLdr();
 const tskv = new TaskVerification_ViewLdr();
 const advl = new Admin_ViewLdr();
+const workflow = new Workflow();
 
 loadMask(0);
 
@@ -37,7 +39,7 @@ async function operationSwitch(params, values) {
         case "base_getAllOverviewData":
             {
                 loadMask(1, "fetching data");
-                let data = await taskm.getTasksForUser();
+                let data = await taskm.getTasksByFilter("TaskOwner", res["STR_USERID"]);
                 let summaryData = await taskm.getTaskSummaryData(false);
                 loadMask(1, "populating ui view");
                 let element_list = document.getElementById("ovr-tsk-list");
@@ -53,7 +55,7 @@ async function operationSwitch(params, values) {
         case "base_getAllTaskData":
             {
                 loadMask(1, "fetching data");
-                let all_data = await taskm.getTasksForUser();
+                let all_data = await taskm.getTasksByFilter("TaskOwner", res["STR_USERID"]);
                 let allTaskNewTile = document.getElementById("all-tsk-summ-new")
                 let allTaskCompleteTile = document.getElementById("all-tsk-summ-cmpl")
                 let allTaskTotalTile = document.getElementById("all-tsk-summ-tot")
@@ -228,7 +230,7 @@ async function operationSwitch(params, values) {
         case "admin_getUserAssignmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getUserDetailsByFilter(res["STR_USERID"], "", "small" , "same");
+                let data = await admin.getUserDetailsByFilter(res["STR_USERID"], "", "small", "same");
                 let allProjectData = await admin.getAllProjects();
                 advl.loadUserAssignmentDropdown(data, allProjectData);
                 loadMask(0);
@@ -259,7 +261,7 @@ async function operationSwitch(params, values) {
             {
                 loadMask(1, 'getting project list');
                 let data = await admin.getProjectListForUser(res["STR_USERID"]);
-                let roleData = await admin.getSmallerRoles(res["STR_ROLEID"]);
+                let roleData = await admin.getSmallerRoles(res["STR_SECURITY_LEVEL"]);
                 advl.loadUserProjectDropdown(data);
                 advl.loadUserRoleDropdown(roleData);
                 loadMask(0);
@@ -282,7 +284,7 @@ async function operationSwitch(params, values) {
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
                 let priorityData = await admin.getPriorityListForProject(projectId);
-                let userData = await admin.getUserDetailsByFilter( res["STR_USERID"], projectId , "smaller_and_equal" , "same");
+                let userData = await admin.getUserDetailsByFilter(res["STR_USERID"], projectId, "smaller_and_equal", "same");
                 console.log(userData);
                 advl.loadTaskModuleDropdown(moduleData);
                 advl.loadTaskTypeDropdown(typeData);
@@ -344,7 +346,7 @@ async function operationSwitch(params, values) {
         case "admin_roleAssigmentSource":
             {
                 loadMask(1, 'getting user assignment data');
-                let data = await admin.getUserDetailsByFilter(res["STR_USERID"], "", "small" , "same");
+                let data = await admin.getUserDetailsByFilter(res["STR_USERID"], "", "small", "same");
                 advl.loadRoleAssignmentUserDropdown(data)
                 loadMask(0);
                 break;
@@ -355,7 +357,7 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'getting role list for user');
                 let userId = document.getElementById('adm-Rleassign-User').value;
                 let data = await admin.getRoleIdForUser(userId);
-                let roleData = await admin.getValidRoles(data[0], res["STR_ROLEID"]);
+                let roleData = await admin.getValidRoles(data[0], res["STR_SECURITY_LEVEL"]);
                 advl.loadRoleAssignmentRoleDropdown(roleData)
                 loadMask(0);
                 break;
@@ -366,7 +368,7 @@ async function operationSwitch(params, values) {
                 loadMask(1, 'updating role asssignment for user');
                 let userId = document.getElementById('adm-Rleassign-User').value;
                 let roleId = document.getElementById('adm-Rleassign-Role').value;
-                let result = await admin.updateRoleAssignment(userId, roleId);
+                let result = await admin.updateUser(userId, "Role", roleId);
                 loadMask(0);
                 if (result.operationStatus == "failed") {
                     popupNotification(res.POPUP_NOTIFICATION_MAP.type.ERROR, "ERROR: Failed to update role");
@@ -377,20 +379,23 @@ async function operationSwitch(params, values) {
                 break;
             }
 
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!
+        // PENDING CHANGE
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!
         case "admin_getAcountDeleteData":
             {
                 loadMask(1, "checking assigments and task status")
                 let projectData = await admin.getProjectListForUser(res["STR_USERID"]);
                 let userData = [];
                 if (projectData != undefined && projectData.length !== 0) {
-                    userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID)
+                    userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_SECURITY_LEVEL)
                     advl.loadProjectUserDeleteDropdown(projectData, userData);
                 }
-                let taskAssignerData = await taskm.getTaskByAssigner(res["STR_USERID"])
-                let taskOwnerData = await taskm.getTaskByOwner(res["STR_USERID"])
+                let taskAssignerData = await taskm.getTasksByFilter("TaskAssigner", res["STR_USERID"])
+                let taskOwnerData = await taskm.getTasksByFilter("TaskOwner", res["STR_USERID"])
                 if ((taskAssignerData !== undefined) && (taskOwnerData != undefined) && (taskAssignerData.length !== 0) && (taskOwnerData !== 0)) {
                     if (userData == []) {
-                        userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID)
+                        userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_SECURITY_LEVEL)
                     }
                     advl.loadTaskUserDeleteDropdown(userData);
                 }
@@ -411,7 +416,7 @@ async function operationSwitch(params, values) {
         case "admin_accDeleteUserAssign":
             {
                 loadMask(1, "update task assignments mapping");
-                let userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_ROLEID);
+                let userData = await admin.getUsersWithEqualRole(res.STR_USERID, res.STR_SECURITY_LEVEL);
                 let userMap = admin.generateUserMap(userData);
                 let newAssignerId = document.getElementById('adm-accDel-TaskAssigner').value;
                 let newOwnerId = document.getElementById('adm-accDel-TaskOwner').value;
@@ -444,7 +449,8 @@ async function operationSwitch(params, values) {
         case "tsb_NextTaskWorkflowState":
             {
                 loadMask(1, "performing operation");
-                await taskm.updateNextTaskWorkflowState(res["TASKDATA_TABLE"]);
+                let arrData = res["TASKDATA_TABLE"].rows({ selected: true }).data().toArray();
+                await taskm.updateWorkflowToNextStateMulti(arrData);
                 loadMask(0);
                 break;
             }
@@ -452,7 +458,8 @@ async function operationSwitch(params, values) {
         case "tsb_TaskToSelfCommitState":
             {
                 loadMask(1, "performing self commit operation");
-                await taskm.updateTaskWorkflowStateToSelfCommit(res["TASKDATA_TABLE"]);
+                let arrData = res["TASKDATA_TABLE"].rows({ selected: true }).data().toArray();
+                await taskm.updateWorkflowToSpecificStateMulti(arrData, res["WORKFLOW"]["STR_WF_SELFCOMMIT"]);
                 loadMask(0);
                 break;
             }
@@ -460,7 +467,8 @@ async function operationSwitch(params, values) {
         case "tsb_TaskToSelfDeleteState":
             {
                 loadMask(1, "performing self delete operation");
-                await taskm.updateTaskWorkflowStateToSelfDelete(res["TASKDATA_TABLE"]);
+                let arrData = res["TASKDATA_TABLE"].rows({ selected: true }).data().toArray();
+                await taskm.updateWorkflowToSpecificStateMulti(arrData, res["WORKFLOW"]["STR_WF_SELFDELETE"]);
                 loadMask(0);
                 break;
             }
@@ -477,7 +485,7 @@ async function operationSwitch(params, values) {
         case "tskv_MarkTaskAsComplete":
             {
                 loadMask(1, "updating task status");
-                await taskm.TSKV_updateTaskToComplete(values);
+                await taskm.updateWorkflowToSpecificState(values, values[4], await workflow.getNextWorkflowStatus(values[4]));
                 loadMask(0);
                 break;
             }
@@ -485,7 +493,8 @@ async function operationSwitch(params, values) {
         case "tskv_MarkTaskAsDelete":
             {
                 loadMask(1, "updating task status");
-                await taskm.TSKV_updateTaskToDelete(values);
+                console.log(values)
+                await taskm.updateWorkflowToSpecificState(values, values[4], await workflow.getNextWorkflowStatus(values[4]));
                 loadMask(0);
                 break;
             }
@@ -493,7 +502,8 @@ async function operationSwitch(params, values) {
         case "tskv_MarkTaskAsRevert":
             {
                 loadMask(1, "updating task status");
-                await taskm.TSKV_revertTask(values);
+                console.log(await workflow.getPreviousWorkflowStatus(values[4]))
+                await taskm.updateWorkflowToSpecificState(values, values[4], await workflow.getPreviousWorkflowStatus(values[4]));
                 loadMask(0);
                 break;
             }
@@ -501,7 +511,8 @@ async function operationSwitch(params, values) {
         case "tskv_MarkMultiTaskAsComplete":
             {
                 loadMask(1, "updating multiple task status");
-                await taskm.TSKV_updateTaskToComplete_Multi(res["TASKVERIFICATION_SLFCOMMIT_TABLE"])
+                let arrData = res["TASKVERIFICATION_SLFCOMMIT_TABLE"].rows({ selected: true }).data().toArray();
+                await taskm.TSKV_updateTaskToComplete_Multi(arrData)
                 loadMask(0);
                 break;
             }
@@ -509,7 +520,8 @@ async function operationSwitch(params, values) {
         case "tskv_MarkMultiTaskAsDelete":
             {
                 loadMask(1, "updating multiple task status");
-                await taskm.TSKV_updateTaskToDelete_Multi(res["TASKVERIFICATION_SLFDELETE_TABLE"])
+                let arrData = res["TASKVERIFICATION_SLFDELETE_TABLE"].rows({ selected: true }).data().toArray();
+                await taskm.TSKV_updateTaskToDelete_Multi(arrData)
                 loadMask(0);
                 break;
             }
@@ -524,7 +536,8 @@ async function operationSwitch(params, values) {
                 if (values == "SelfDeleteTable") {
                     tablename = res["TASKVERIFICATION_SLFDELETE_TABLE"]
                 }
-                await taskm.TSKV_revertTask_Multi(tablename);
+                let arrData = tablename.rows({ selected: true }).data().toArray();
+                await taskm.TSKV_revertTask_Multi(arrData);
                 loadMask(0);
                 break;
             }

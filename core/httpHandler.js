@@ -31,4 +31,15 @@ module.exports = class HttpHandler
         }).then((result) => {data = result});
         return await data.json();
     }
+
+    async httpPut(url , reqBody , customHeaders = this.getDefaultHeaders())
+    {
+        let data = {}
+        await fetch(url , {
+            method: 'PUT',
+            headers: customHeaders,
+            body: JSON.stringify(reqBody)
+        }).then((result) => {data = result});
+        return await data.json();
+    }
 }
