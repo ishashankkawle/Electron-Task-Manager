@@ -215,13 +215,13 @@ module.exports = class TaskDetails_ViewLoader {
     {
         let listElementHTML = [
             '<div class="col-sm-12">',
-            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
+            '<small class="text-muted">' + data["username"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
             '</div>',
             '<hr class="gen-hr">',
             '<div class="col-sm-12">',
             '<small><span class="badge badge-primary">' + updateType + '</span> Update :</small><br />',
             '<div class="col-sm-12">',
-            '<small class="badge badge-light">' + data["fieldsUpdated"][updateType][oldKey] + '</small><i class="material-icons tskd-ico-position-fix">arrow_right_alt</i><small class="badge badge-light">' + data["fieldsUpdated"][updateType][newKey] + '</small>',
+            '<small class="badge badge-light">' + data[oldKey] + '</small><i class="material-icons tskd-ico-position-fix">arrow_right_alt</i><small class="badge badge-light">' + data[newKey] + '</small>',
             '</div>',
             '</div>',
         ].join("\n");
@@ -246,46 +246,18 @@ module.exports = class TaskDetails_ViewLoader {
                 elm = this.getCommentListNode(dataItem) 
                 list.appendChild(elm)
             }
-            if(dataItem["updateType"] == "workflow")
+            else if(dataItem["updateType"] == "workflow")
             {
                 elm = this.getWorkflowListNode(dataItem) 
                 list.appendChild(elm)
             }
-            if(dataItem["updateType"] == "field")
+            else
             {
-                let fieldsObj = dataItem["fieldsUpdated"];
-                console.log(fieldsObj)
-                for (var field in fieldsObj) 
-                {
-                    if (fieldsObj.hasOwnProperty(field)) 
-                    {
-                        if(field == "Project")
-                        {
-                            elm = this.getFieldListNode(dataItem , "Project" , "OldProjectName" , "NewProjectName")
-                        }
-                        if(field == "Module")
-                        {
-                            elm = this.getFieldListNode(dataItem , "Module" , "OldModule" , "NewModule")
-                        }
-                        if(field == "Type")
-                        {
-                            elm = this.getFieldListNode(dataItem , "Type" , "OldType" , "NewType")
-                        }
-                        if(field == "Priority")
-                        {
-                            elm = this.getFieldListNode(dataItem , "Priority" , "OldPriority" , "NewPriority")
-                        }
-                        if(field == "Owner")
-                        {
-                            elm = this.getFieldListNode(dataItem , "Owner" , "OldOwner" , "NewOwner")
-                        }
-                        if(field == "Assigner")
-                        {
-                            elm = this.getFieldListNode(dataItem , "Assigner" , "OldAssigner" , "NewAssigner")
-                        }
-                        list.appendChild(elm)
-                    }
-                }
+                console.log(dataItem)
+                dataItem.update["username"] = dataItem["username"]
+                let updateType = dataItem["updateType"];
+                elm = this.getFieldListNode(dataItem.update , updateType , "oldValue" , "newValue")
+                list.appendChild(elm)
             }
         }
     }

@@ -55,7 +55,6 @@ module.exports = class taskManager {
     }
 
     async updateWorkflowToNextStateMulti(arrData) {
-        //let arrData = tableObject.rows({ selected: true }).data().toArray();
         const http = new httpOperations();
         let arrTaskToUpdate = [];
         for (let index = 0; index < arrData.length; index++) {
@@ -64,18 +63,17 @@ module.exports = class taskManager {
             body["taskId"] = element[7];
             body["userId"] = res["STR_USERID"];
             body["userName"] = res["STR_USERNAME"];
+            body["updateType"] = "workflow";
             body["currentWorkflowState"] = element[8];
             body["newWorkflowState"] = await this.wf.getNextWorkflowStatus(element[8]);
             arrTaskToUpdate.push(body)
         }
-        console.log(arrTaskToUpdate);
-        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/workflow", arrTaskToUpdate, http.getDefaultHeaders());
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/activityworkflow", arrTaskToUpdate, http.getDefaultHeaders());
         return result;
     }
 
     async updateWorkflowToSpecificStateMulti(arrData, nextWorkflowState) {
         const http = new httpOperations();
-        console.log(arrData)
         let arrTaskToUpdate = [];
         for (let index = 0; index < arrData.length; index++) {
             const element = arrData[index];
@@ -83,12 +81,12 @@ module.exports = class taskManager {
             body["taskId"] = element[7];
             body["userId"] = res["STR_USERID"];
             body["userName"] = res["STR_USERNAME"];
+            body["updateType"] = "workflow";
             body["currentWorkflowState"] = element[8];
             body["newWorkflowState"] = nextWorkflowState;
             arrTaskToUpdate.push(body)
         }
-        console.log(arrTaskToUpdate);
-        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/workflow", arrTaskToUpdate, http.getDefaultHeaders());
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/activityworkflow", arrTaskToUpdate, http.getDefaultHeaders());
         return result;
     }
 
@@ -99,9 +97,10 @@ module.exports = class taskManager {
         body["taskId"] = taskData[1];
         body["userId"] = res["STR_USERID"];
         body["userName"] = res["STR_USERNAME"];
+        body["updateType"] = "workflow";
         body["currentWorkflowState"] = currentState;
         body["newWorkflowState"] = newState;
-        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/workflow", body, http.getDefaultHeaders());
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/activityworkflow", body, http.getDefaultHeaders());
         return result;
     }
 
@@ -134,20 +133,7 @@ module.exports = class taskManager {
     //     return result
     // }
 
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!
-    // PENDING CHANGE
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    getBlobDocWorkflowUpdateObj(oldWorkflow, newWorkflow) {
-        let obj = {};
-        obj["userNameBy"] = res["STR_USERNAME"]
-        obj["userId"] = res["STR_USERID"]
-        obj["dateUpdated"] = util.getCurrentDateString();
-        obj["updateType"] = "workflow"
-        obj["prevWorkflowState"] = oldWorkflow;
-        obj["nextWorkflowState"] = newWorkflow;
-        return obj;
-    }
+ 
 
     getBlobDocFieldUpdateObj(data) {
         let obj = {};
@@ -195,64 +181,69 @@ module.exports = class taskManager {
         return obj;
     }
 
-    async UpdateBlobTaskWithNewComment(taskId, data) {
-        let obj = this.getBlobDocUpdateObj(data);
-        const dbOps = new dbOperations();
-        let query = { "TaskId": taskId }
-        let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-        console.log(taskData);
-        let activitySet = taskData["Activity"]
-        activitySet.push(obj);
-        let updateObject = { "Activity": activitySet }
-        let result = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-        console.log(result);
+    async UpdateNewComment(taskId, data) {
+        const http = new httpOperations();
+        console.log(data)
+        let body = {}
+        body["taskId"] = taskId;
+        body["userId"] = res["STR_USERID"];
+        body["userName"] = res["STR_USERNAME"];
+        body["updateType"] = "comment";
+        body["data"] = data;
+        let result = await http.httpPut(res["STR_BASEPATH"] + "/task/activityworkflow", body, http.getDefaultHeaders());
+        return result;
     }
 
     async updateTaskFields(data) {
-        let arrColms = [];
-        let arrValues = [];
-
+        const http = new httpOperations();
+        console.log(data)
+        let arrObj = []
         if ((data["Project"] != undefined) && (Object.keys(data["Project"]).length !== 0)) {
-            arrColms.push("ProjectId");
-            arrValues.push(data["Project"]["NewProjectId"]);
+            let obj = {}
+            obj["field"] = "Project"
+            obj["fieldValue"] = data["Project"]["NewProjectId"]
+            arrObj.push(obj);
         }
-        if ((data["Module"] != undefined) && (Object.keys(data["Module"]).length !== 0)) {
-            arrColms.push("Module");
-            arrValues.push(data["Module"]["NewModule"]);
+        if ((data["Module"] != {}) && (Object.keys(data["Module"]).length !== 0)) {
+            let obj = {}
+            obj["field"] = "Module"
+            obj["fieldValue"] = data["Module"]["NewModule"]
+            arrObj.push(obj);
         }
         if ((data["Type"] != undefined) && (Object.keys(data["Type"]).length !== 0)) {
-            arrColms.push("Type");
-            arrValues.push(data["Type"]["NewType"]);
+            let obj = {}
+            obj["field"] = "Type"
+            obj["fieldValue"] = data["Type"]["NewType"]
+            arrObj.push(obj);
         }
         if ((data["Priority"] != undefined) && (Object.keys(data["Priority"]).length !== 0)) {
-            arrColms.push("Priority");
-            arrValues.push(data["Priority"]["NewPriority"]);
+            let obj = {}
+            obj["field"] = "Priority"
+            obj["fieldValue"] = data["Priority"]["NewPriority"]
+            arrObj.push(obj);
         }
         if ((data["Owner"] != undefined) && (Object.keys(data["Owner"]).length !== 0)) {
-            arrColms.push("Owner");
-            arrValues.push(data["Owner"]["NewOwnerId"]);
+            let obj = {}
+            obj["field"] = "Owner"
+            obj["fieldValue"] = data["Owner"]["NewOwnerId"]
+            arrObj.push(obj);
         }
         if ((data["Assigner"] != undefined) && (Object.keys(data["Assigner"]).length !== 0)) {
-            arrColms.push("Assigner");
-            arrValues.push(data["Assigner"]["NewAssignerId"]);
+            let obj = {}
+            obj["field"] = "Assigner"
+            obj["fieldValue"] = data["Assigner"]["NewAssignerId"]
+            arrObj.push(obj);
         }
-
-        arrColms = util.generateCustomWrapperArray("\"", arrColms)
-        arrValues = util.generateCustomWrapperArray("\'", arrValues)
-        const dbOps = new dbOperations();
-        let condition = " \"TaskId\" = " + data["TaskId"];
-        let result = await dbOps.updateData("Task_Master", arrColms, arrValues, condition)
-
-        let obj = this.getBlobDocFieldUpdateObj(data);
-        console.log(obj)
-        let query = { "TaskId": data["TaskId"] }
-        let taskData = await dbOps.getBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query);
-        let activitySet = taskData["Activity"]
-        activitySet.push(obj);
-        let updateObject = { "Activity": activitySet }
-        let resultBlob = dbOps.updateBlobData(res["STR_BLOBDBNAME"], res["STR_BLOBDBCOLLECTIONAME"], query, updateObject);
-        console.log(resultBlob);
-        return result;
+        
+        console.log(arrObj)
+        for (let index = 0; index < arrObj.length; index++) 
+        {
+            let element = arrObj[index];
+            element["taskId"] = data["TaskId"]
+            element["userId"] = res["STR_USERID"]
+            element["userName"] = res["STR_USERNAME"]
+            await http.httpPut(res["STR_BASEPATH"] + "/task/" + data["TaskId"], element, http.getDefaultHeaders());
+        }
     }
 
     async updateTaskFieldsForAccountDelete(data) {
@@ -304,8 +295,4 @@ module.exports = class taskManager {
         }
 
     }
-
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!
-    // PENDING CHANGE
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!
 }

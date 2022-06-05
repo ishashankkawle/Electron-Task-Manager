@@ -36,7 +36,7 @@ async function operationSwitch_TaskDetails(params, values) {
                 console.log(projectData)
                 tdvl.parseTaskInfoSection(data[0].payload[0]);
                 tdvl.parseTaskActivityData(data[1].payload.activity)
-                tdvl.loadProjectDropdown(projectData[0]);
+                tdvl.loadProjectDropdown(projectData);
                 loadMask(0);
                 break;
             }
@@ -46,7 +46,7 @@ async function operationSwitch_TaskDetails(params, values) {
                 loadMask(1, 'Updating new activity in task');
                 let taskId = document.getElementById("tskd-taskid").innerHTML;
                 let data = document.getElementById("tskd-comment-input").value.replace(/\n/g, "<br>");
-                let result = await taskm.UpdateBlobTaskWithNewComment(taskId, data)
+                let result = await taskm.UpdateNewComment(taskId, data)
                 loadMask(0);
                 break;
             }
@@ -58,7 +58,7 @@ async function operationSwitch_TaskDetails(params, values) {
                 let moduleData = await admin.getModuleListForProject(projectId);
                 let typeData = await admin.getTypeListForProject(projectId);
                 let priorityData = await admin.getPriorityListForProject(projectId);
-                let userData = await admin.getUsersFromProjectWithSmallOrEqualRole(projectId, res["STR_USERID"], res["STR_SECURITY_LEVEL"]);
+                let userData = await admin.getUserDetailsByFilter(res["STR_USERID"], projectId, "smaller_and_equal", "same");
                 tdvl.checkForProjectUpdate(projectId);
                 tdvl.loadModuleDropdown(moduleData);
                 tdvl.loadTypeDropdown(typeData);
