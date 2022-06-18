@@ -10,15 +10,19 @@ module.exports = {
   //-------------------------------------------------------------------------
   // "STR_USERID": "250",
   // "STR_USERNAME": "Mandar",
-  // "STR_ROLEID": "5",
+  // "STR_SECURITY_LEVEL": "5",
+  // "STR_ROLENAME": "Master",
+  // "STR_ROLEID": "314",
 
-  "STR_USERID": "240",
-  "STR_USERNAME": "Shashank",
-  "STR_ROLEID": "0",
+  // "STR_USERID": "240",
+  // "STR_USERNAME": "Shashank",
+  // "STR_SECURITY_LEVEL": "0",
 
-  // "STR_USERID": "311",
-  // "STR_USERNAME": "TEST User 1",
-  // "STR_ROLEID": "0",
+  "STR_USERID": "383",
+  "STR_USERNAME": "testuser2",
+  "STR_SECURITY_LEVEL": "5",
+  "STR_ROLENAME": "Project Manager",
+  "STR_ROLEID": "5",
   //-------------------------------------------------------------------------
 
   "STR_BLOBDBNAME": "TSSTaskHistory",
@@ -56,6 +60,7 @@ module.exports = {
   "TASKVERIFICATION_SLFDELETE_TABLE": {},
   "TASKVERIFICATION_RESOURCEUTILIZATION_TABLE": {},
   "TASKVERIFICATION_ASSIGNEDTASK_TABLE": {},
+
   "WORKFLOW": {
     "STR_WF_NEW": "New",
     "STR_WF_INPROGRESS": "In_Progress",
@@ -64,8 +69,10 @@ module.exports = {
     "STR_WF_COMPLETE": "Complete",
     "STR_WF_DELETE": "Delete",
   },
+
+  "STR_BASEPATH": "http://localhost:8082/api",
   "PostgresConnection": "postgres://uuktnljs:Bd-dHv74TDkC-XcBp5Sp-du4xiomzwo1@drona.db.elephantsql.com:5432/uuktnljs",
-  "MongoClusterConnection": "mongodb+srv://ets_admin:SmX9qhyXD0qlUhkF@tsstaskcluster.8gnng.mongodb.net/test"
+  "MongoClusterConnection": "mongodb+srv://ets_admin:adreno%40123@tsstaskcluster.8gnng.mongodb.net/ETMHistoryDatabase"
 
 };
 

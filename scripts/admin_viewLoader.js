@@ -4,16 +4,15 @@ const util = new Util();
 
 module.exports = class Admin_ViewLoader {
     loadProjectListData(data) {
-
+        data = util.getSubArray(["ProjectName"] , data);
         let tableData = util.convertArrayForDataTable(data);
         $('#admin-project-table').DataTable({
             data: tableData,
-            columns: [
-                { title: "Project List" }
-            ],
+            columns: [{ title: "Project List" }],
             searching: false,
             info: false,
-            paging: false
+            paging: false,
+            bPaginate: false
         });
 
     }
@@ -118,7 +117,7 @@ module.exports = class Admin_ViewLoader {
             return;
         }
         let updatedSourceData = util.createSelectMenuDataObject(sourceData, "Name", "UserId");
-        let updatedDestinaionData = util.createSelectMenuDataObject(destinationData, "ProjectName", "ProjectId");
+        let updatedDestinaionData = util.createSelectMenuDataObject(destinationData, "projectName", "projectId");
         let sourceElement = document.getElementById("adm-UsrAsi-Source");
         let sourceElement2 = document.getElementById("adm-UsrDeAsi-Source");
         let destinationElement = document.getElementById("adm-UsrAsi-Target");
