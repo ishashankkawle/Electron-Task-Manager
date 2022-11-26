@@ -3,6 +3,8 @@ let httpOperations = require('../core/httpHandler');
 let res = require('../shared/resources');
 let Workflow = require('../core/workflowOperations');
 const Util = require('../core/util');
+const fs = require('fs')
+const axios = require('axios');
 
 const util = new Util();
 
@@ -133,7 +135,7 @@ module.exports = class taskManager {
     //     return result
     // }
 
- 
+
 
     getBlobDocFieldUpdateObj(data) {
         let obj = {};
@@ -194,6 +196,32 @@ module.exports = class taskManager {
         return result;
     }
 
+    async AddNewAttachment(taskId, commentData) {
+        const http = new httpOperations();
+
+        let fileData = document.getElementById('tskd-file-input').files[0];
+        console.log(fileData)
+        let body = new FormData();
+        body.append(fileData.name,fileData)
+        //body.append("UPLOADCARE_PUB_KEY", "a5ef62030b406923258c")
+        body.append("UPLOADCARE_PUB_KEY", "0df57c1d7377e7482b0b")
+        let result = await http.httpPostMultiartData("https://upload.uploadcare.com/base/", body, http.getDefaultMultipartHeaders());
+        console.log(result)
+        
+        let metaData = {}
+        metaData["taskId"] = taskId;
+        metaData["userId"] = res["STR_USERID"];
+        metaData["userName"] = res["STR_USERNAME"];
+        metaData["updateType"] = "attachment";
+        metaData["commentData"] = commentData;
+        metaData["fileName"] = fileData.name;
+        metaData["url"] = "https://ucarecdn.com/" + result[fileData.name] + "/";
+        console.log(metaData)
+        result = await http.httpPut(res["STR_BASEPATH"] + "/task/activityworkflow", metaData, http.getDefaultHeaders());
+        return result;
+    }
+
+
     async updateTaskFields(data) {
         const http = new httpOperations();
         console.log(data)
@@ -234,10 +262,9 @@ module.exports = class taskManager {
             obj["fieldValue"] = data["Assigner"]["NewAssignerId"]
             arrObj.push(obj);
         }
-        
+
         console.log(arrObj)
-        for (let index = 0; index < arrObj.length; index++) 
-        {
+        for (let index = 0; index < arrObj.length; index++) {
             let element = arrObj[index];
             element["taskId"] = data["TaskId"]
             element["userId"] = res["STR_USERID"]

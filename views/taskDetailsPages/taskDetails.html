@@ -60,40 +60,46 @@
         <div class="card-body p-0">
             <div id="accordion">
                 <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                aria-expanded="true" aria-controls="collapseOne">
-                                Add New Comment
-                            </button>
-                        </h5>
-                    </div>
 
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div class="card-body">
-                            <div class="form-group">
-                                <textarea class="form-control" id="tskd-comment-input" rows="3"
-                                    placeholder="Add new comment" style="white-space: pre-wrap"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-success" onclick="operationTrigger_TaskDetails('tskd_AddCommentInTask')">Add</button>
-                            </div>
-
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                          <button class="nav-link active" id="nav-comment-tab" data-toggle="tab" data-target="#nav-comment" type="button" role="tab" aria-controls="nav-comment" aria-selected="true"><span class="material-icons mr-2" style="font-size: 18px; vertical-align: bottom; font-weight: bold">comment</span>Comment</button>
+                          <button class="nav-link" id="nav-attachment-tab" data-toggle="tab" data-target="#nav-attachment" type="button" role="tab" aria-controls="nav-attachment" aria-selected="false"><span class="material-icons mr-2" style="font-size: 18px; vertical-align: bottom; font-weight: bold">attach_file</span>Attach</button>
+                          <button class="nav-link" id="nav-edit-tab" data-toggle="tab" data-target="#nav-edit" type="button" role="tab" aria-controls="nav-edit" aria-selected="false"><span class="material-icons mr-2" style="font-size: 18px; vertical-align: bottom; font-weight: bold">edit</span>Edit</button>
                         </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header" id="headingTwo">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                                aria-expanded="false" aria-controls="collapseTwo">
-                                Modify Ticket fields
-                            </button>
-                        </h5>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                        <div class="card-body">
+                    </nav>
 
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-comment" role="tabpanel" aria-labelledby="nav-comment-tab">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="tskd-comment-input" rows="3"
+                                        placeholder="Add new comment" style="white-space: pre-wrap; margin-top: 1.7%;"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-success" onclick="operationTrigger_TaskDetails('tskd_AddCommentInTask')">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-attachment" role="tabpanel" aria-labelledby="nav-attachment-tab">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <textarea class="form-control" id="tskd-file_upload-comment-input" rows="1"
+                                    placeholder="Add new comment" style="white-space: pre-wrap; margin-top: 1.7%; margin-bottom: 1.7%; resize: none;"></textarea>
+                                </div>
+                                <div class="col-sm-6">
+                                        <input type="file" id="tskd-file-input" style="text-decoration: none;margin-top: 2%;">
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <button class="btn btn-success" onclick="operationTrigger_TaskDetails('tskd_AddAttachmentInTask')">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="nav-edit" role="tabpanel" aria-labelledby="nav-edit-tab">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-6">
@@ -136,15 +142,15 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <button class="btn btn-success" onclick="operationTrigger_TaskDetails('tskd_UpdateTaskFields')">Update Task</button>
+                            <div class="col">
+                                <div class="form-group">
+                                    <button class="btn btn-success" onclick="operationTrigger_TaskDetails('tskd_UpdateTaskFields')">Update Task</button>
+                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>

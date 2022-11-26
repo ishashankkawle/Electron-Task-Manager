@@ -213,9 +213,10 @@ module.exports = class TaskDetails_ViewLoader {
 
     getFieldListNode(data , updateType , oldKey , newKey)
     {
+        console.log(data)
         let listElementHTML = [
             '<div class="col-sm-12">',
-            '<small class="text-muted">' + data["username"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
+            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
             '</div>',
             '<hr class="gen-hr">',
             '<div class="col-sm-12">',
@@ -230,6 +231,28 @@ module.exports = class TaskDetails_ViewLoader {
         listnode.innerHTML = listElementHTML
         listnode.classList.add("tskd-task-card")
         listnode.classList.add("tskd-task-card-update")
+        return listnode;
+    }
+
+    getAttachmentListNode(data)
+    {
+        let listElementHTML = [
+            '<div class="col-sm-12">',
+            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
+            '</div>',
+            '<hr class="gen-hr">',
+            '<div class="col-sm-12">',
+            '<small>' + data["comment"] + '</small><br />',
+            '<div class="col-sm-12">',
+            '<small><a class="btn btn-outline-secondary" href="' + data["url"] + '" target="top"> <span class="material-icons mr-2" style="font-size: 18px; vertical-align: middle; font-weight: bold"> description </span>' + data["fileName"] + '</a>',
+            '</div>',
+            '</div>',
+        ].join("\n");
+  
+        let listnode = document.createElement('li')
+        listnode.innerHTML = listElementHTML
+        listnode.classList.add("tskd-task-card")
+        listnode.classList.add("tskd-task-card-alert")
         return listnode;
     }
 
@@ -251,12 +274,16 @@ module.exports = class TaskDetails_ViewLoader {
                 elm = this.getWorkflowListNode(dataItem) 
                 list.appendChild(elm)
             }
+            else if(dataItem["updateType"] == "attachment")
+            {
+                elm = this.getAttachmentListNode(dataItem) 
+                list.appendChild(elm)
+            }
             else
             {
-                console.log(dataItem)
-                dataItem.update["username"] = dataItem["username"]
-                let updateType = dataItem["updateType"];
-                elm = this.getFieldListNode(dataItem.update , updateType , "oldValue" , "newValue")
+                dataItem.update["userNameBy"] = dataItem["userNameBy"]
+                dataItem.update["dateUpdated"] = dataItem["dateUpdated"]
+                elm = this.getFieldListNode(dataItem.update , dataItem["updateType"] , "oldValue" , "newValue")
                 list.appendChild(elm)
             }
         }

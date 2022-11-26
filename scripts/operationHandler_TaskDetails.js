@@ -51,6 +51,16 @@ async function operationSwitch_TaskDetails(params, values) {
                 break;
             }
 
+        case "tskd_AddAttachmentInTask":
+            {
+                loadMask(1, 'Addeing new attachment');
+                let taskId = document.getElementById("tskd-taskid").innerHTML;
+                let commentData = document.getElementById("tskd-file_upload-comment-input").value.replace(/\n/g, "<br>");
+                let result = await taskm.AddNewAttachment(taskId, commentData)
+                loadMask(0);
+                break;
+            }
+
         case "tskd_getModuleTypePriorityListForTask":
             {
                 loadMask(1, 'getting Modules , Types & Priority for project');

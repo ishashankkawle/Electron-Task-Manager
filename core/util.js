@@ -158,4 +158,16 @@ module.exports = class Util {
         }
         return arrFinal
     }
+
+    async readFile(fileData)
+    {
+        let reader = new FileReader();
+        return new Promise((resolve , reject) => {
+            reader.onload = () => {
+                resolve(reader.result);
+            }
+
+            reader.readAsText(fileData)
+        })
+    }
 }

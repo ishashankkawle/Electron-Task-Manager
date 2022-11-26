@@ -36,6 +36,7 @@ async function createTaskWindow(args) {
     })
   )
   secondWindow.send('transfer-taskid', args)
+  secondWindow.webContents.openDevTools();
 
   //MENU
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate)
