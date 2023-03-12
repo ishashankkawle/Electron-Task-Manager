@@ -4,7 +4,7 @@ const util = new Util();
 
 module.exports = class Admin_ViewLoader {
     loadProjectListData(data) {
-        data = util.getSubArray(["ProjectName"] , data);
+        data = util.getSubArray(["ProjectName"], data);
         let tableData = util.convertArrayForDataTable(data);
         $('#admin-project-table').DataTable({
             data: tableData,

@@ -30,7 +30,7 @@ module.exports = class TaskVerification_ViewLoader {
         { title: 'TaskId', visible: false },
         { title: 'Title' },
         { title: 'Module' },
-        {title: 'State' , visible: false , data: 'Self_Commit' , defaultContent: 'Self_Commit'},
+        { title: 'State', visible: false, data: 'Self_Commit', defaultContent: 'Self_Commit' },
         { title: 'Action' },
       ],
       pageLength: 5,
@@ -99,7 +99,7 @@ module.exports = class TaskVerification_ViewLoader {
         { title: 'TaskId', visible: false },
         { title: 'Title' },
         { title: 'Module' },
-        {title: 'State' , visible: false , data: 'Self_Delete' , defaultContent: 'Self_Delete'},
+        { title: 'State', visible: false, data: 'Self_Delete', defaultContent: 'Self_Delete' },
         { title: 'Action' },
       ],
       pageLength: 5,
@@ -215,7 +215,7 @@ module.exports = class TaskVerification_ViewLoader {
 
   loaTaskdAssignmentData(data) {
     if (data == undefined) {
-      popupNotification("alert" , "ERROR : No data received");
+      popupNotification("alert", "ERROR : No data received");
       return 0;
     }
     let tabledata = util.convertArrayForDataTable(data)

@@ -3,7 +3,7 @@ let res = require('../shared/resources')
 module.exports = class AllTasks_ViewLoader {
   parseSummaryTaskData(data) {
     if (data == undefined) {
-      popupNotification("alert" , "ERROR : No data received")
+      popupNotification("alert", "ERROR : No data received")
       return;
     }
     let actCount = document.getElementById('taskboard_new')
