@@ -9,45 +9,49 @@ module.exports = class Overview_ViewLoader {
     //----------------------------------------------
     // TASK LIST
     //----------------------------------------------
-    if (datarows != undefined && datarows.length != 0) {
+    if (datarows != undefined && datarows.length != 0) 
+    {
       toggleDisplayElement('ovr-noData-msg')
-      for (let index = 0; index < 3; index++) {
+      for (let index = 0; index < 3; index++) 
+      {
         //console.log(datarows)
         const data_element = datarows[index]
-        if (data_element == undefined) {
+        if (data_element == undefined) 
+        {
           continue
         }
-        if (data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS'] || data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW']) {
+        if (data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_INPROGRESS'] || data_element['TaskStatus'] == res['WORKFLOW']['STR_WF_NEW']) 
+        {
           //console.log(data_element)
           data_element["DateTerminated"] = '10-20-2020'
 
           let listElementHTML = [
-            '<div class="row" id="ovr-tsk-panel">',
-            '<div class="col-1">',
-            '<span class="material-icons" style="font-size: 18px; vertical-align: bottom">build</span>',
-            '</div>',
-            '<div class="col-2 d-flex">',
-            '<div style="font-size: 14px" class="my-auto" id="ovr-tsk-card-date">' + data_element["DateTerminated"] + '</div>',
-            '</div>',
-            '<div class="col-6 d-flex">',
-            '<div style="font-size: 14px" class="my-auto" id="ovr-tsk-card-title">' + data_element["Title"] + '</div>',
-            '</div>',
-            '<div class="col-2 d-flex">',
-            '<div style="font-size: 10px" class="my-auto"><span id="ovr-tsk-card-module">' + data_element["Module"] + '</span>&nbsp|&nbsp<span id="ovr-tsk-card-priority">' + data_element["Priority"] + '</span>',
-            '</div>',
-            '</div>',
-            '<div class="ml-auto col-1">',
-            '<div class="dropdown align-self-center text-center">',
-            '<button class="btn dropdown-toggle btn-more" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>',
-            '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" style="background: var(--bg3); color: var(--text); font-size: 14px">',
-            '<a class="dropdown-item" onClick="operationTrigger(this.id , \'delete_tas\')">Open</a>',
-            '<a class="dropdown-item" onClick="operationTrigger(this.id , \'delete_tas\')">In_Progress</a>',
-            '<a class="dropdown-item" onClick="operationTrigger(this.id , \'complete_task\')">Self_Commit</a>',
-            '<a class="dropdown-item" onClick="operationTrigger(this.id , \'edit_task\')">Self_Delete</a>',
-            '</div>',
-            '</div>',
-            '</div>',
-            '</div>',
+          '<div class="row" id="ovr-tsk-panel">',
+          '<div class="col-1">',
+          '<span class="material-icons" style="font-size: 18px; vertical-align: bottom">build</span>',
+          '</div>',
+          '<div class="col-2 d-flex">',
+          '<div style="font-size: 14px" class="my-auto" id="ovr-tsk-card-date">' + data_element["DateTerminated"] + '</div>',
+          '</div>',
+          '<div class="col-6 d-flex">',
+          '<div style="font-size: 14px" class="my-auto" id="ovr-tsk-card-title">' + data_element["Title"] + '</div>',
+          '</div>',
+          '<div class="col-2 d-flex">',
+          '<div style="font-size: 10px" class="my-auto"><span id="ovr-tsk-card-module">' + data_element["Module"] + '</span>&nbsp|&nbsp<span id="ovr-tsk-card-priority">' + data_element["Priority"] + '</span>',
+          '</div>',
+          '</div>',
+          '<div class="ml-auto col-1">',
+          '<div class="dropdown align-self-center text-center">',
+          '<button class="btn dropdown-toggle btn-more" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>',
+          '<div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton" style="background: var(--bg3); color: var(--text); font-size: 14px">',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'delete_tas\')">Open</a>',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'delete_tas\')">In_Progress</a>',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'complete_task\')">Self_Commit</a>',
+          '<a class="dropdown-item" onClick="operationTrigger(this.id , \'edit_task\')">Self_Delete</a>',
+          '</div>',
+          '</div>',
+          '</div>',
+          '</div>',
           ].join("\n");
 
           let listnode = document.createElement('li')
@@ -61,8 +65,9 @@ module.exports = class Overview_ViewLoader {
   }
 
   async parseSummarySectionObject(data, root_element, perf_chart, mod_occup_chart) {
-    if (Object.keys(data).length === 0) {
-      popupNotification("alert", "ERROR : No data received");
+    if(Object.keys(data).length === 0)
+    {
+      popupNotification("alert" , "ERROR : No data received");
       return;
     }
     let activeTile = document.getElementById('overview_active')
@@ -73,7 +78,8 @@ module.exports = class Overview_ViewLoader {
     let totaTaskCount = 0
     let percActive = 0
     let perComplete = 0
-    if (data['activeCount'] == undefined || data['completedCount'] == undefined) {
+    if(data['activeCount'] == undefined || data['completedCount'] == undefined)
+    {
       data['activeCount'] = 0;
       data['completedCount'] = 0;
     }
@@ -89,7 +95,8 @@ module.exports = class Overview_ViewLoader {
     }
 
     let moduleData = {}
-    if (data['moduleData'] != undefined) {
+    if(data['moduleData'] != undefined)
+    {
       moduleData = data['moduleData']
     }
     let moduleNames = []

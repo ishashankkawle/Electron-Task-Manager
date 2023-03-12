@@ -40,17 +40,17 @@ module.exports = class HttpHandler {
         return await data.json();
     }
 
-    async httpPutMultiartData(url, data, customHeaders) {
-        data = await axios.put(url, data, { headers: customHeaders }).then(function (response) {
+    async httpPutMultiartData(url, data , customHeaders) {
+        data = await axios.put(url, data, { headers: customHeaders}).then(function (response) {
             return response.data;
         });
         return data;
     }
-
-    async httpPostMultiartData(url, data, customHeaders) {
-        data = await axios.post(url, data, { headers: customHeaders }).then(function (response) {
-            return response.data;
-        });
+    
+    async httpPostMultiartData(url, data , customHeaders) {
+        data = await axios.post(url, data, { headers: customHeaders}).then(function (response) {
+                return response.data;
+            });
         return data;
     }
 }

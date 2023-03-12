@@ -1,7 +1,8 @@
 const res = require('../shared/resources');
 const XLSX = require('xlsx')
 
-module.exports = class ExlJS {
+module.exports = class ExlJS 
+{
 
 
     //let xlWorkbook = XLSX.utils.book_new();

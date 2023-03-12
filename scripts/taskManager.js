@@ -202,12 +202,12 @@ module.exports = class taskManager {
         let fileData = document.getElementById('tskd-file-input').files[0];
         console.log(fileData)
         let body = new FormData();
-        body.append(fileData.name, fileData)
+        body.append(fileData.name,fileData)
         //body.append("UPLOADCARE_PUB_KEY", "a5ef62030b406923258c")
         body.append("UPLOADCARE_PUB_KEY", "0df57c1d7377e7482b0b")
         let result = await http.httpPostMultiartData("https://upload.uploadcare.com/base/", body, http.getDefaultMultipartHeaders());
         console.log(result)
-
+        
         let metaData = {}
         metaData["taskId"] = taskId;
         metaData["userId"] = res["STR_USERID"];

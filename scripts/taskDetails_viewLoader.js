@@ -164,15 +164,17 @@ module.exports = class TaskDetails_ViewLoader {
         console.log("FINAL OBJ = " + JSON.stringify(this.objFieldUpdateStatus))
     }
 
-    getUpdatedFieldsData() {
+    getUpdatedFieldsData()
+    {
         return this.objFieldUpdateStatus;
     }
 
 
-    getCommentListNode(data) {
+    getCommentListNode(data)
+    {
         let listElementHTML = [
             '<div class="col-sm-12">',
-            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"] + '</small>',
+            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
             '</div>',
             '<hr class="gen-hr">',
             '<div class="col-sm-12">',
@@ -187,20 +189,21 @@ module.exports = class TaskDetails_ViewLoader {
         return listnode;
     }
 
-    getWorkflowListNode(data) {
+    getWorkflowListNode(data)
+    {
         let listElementHTML = [
             '<div class="col-sm-12">',
-            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"] + '</small>',
+            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
             '</div>',
             '<hr class="gen-hr">',
             '<div class="col-sm-12">',
             '<small>Workflow State Change :</small><br />',
             '<div class="col-sm-12">',
-            '<small class="badge badge-success">' + data["prevWorkflowState"] + '</small><i class="material-icons tskd-ico-position-fix">arrow_right_alt</i><small class="badge badge-success">' + data["nextWorkflowState"] + '</small>',
+            '<small class="badge badge-success">'+ data["prevWorkflowState"] + '</small><i class="material-icons tskd-ico-position-fix">arrow_right_alt</i><small class="badge badge-success">' + data["nextWorkflowState"] + '</small>',
             '</div>',
             '</div>',
         ].join("\n");
-
+  
         let listnode = document.createElement('li')
         listnode.innerHTML = listElementHTML
         listnode.classList.add("tskd-task-card")
@@ -208,11 +211,12 @@ module.exports = class TaskDetails_ViewLoader {
         return listnode;
     }
 
-    getFieldListNode(data, updateType, oldKey, newKey) {
+    getFieldListNode(data , updateType , oldKey , newKey)
+    {
         console.log(data)
         let listElementHTML = [
             '<div class="col-sm-12">',
-            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"] + '</small>',
+            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
             '</div>',
             '<hr class="gen-hr">',
             '<div class="col-sm-12">',
@@ -222,7 +226,7 @@ module.exports = class TaskDetails_ViewLoader {
             '</div>',
             '</div>',
         ].join("\n");
-
+  
         let listnode = document.createElement('li')
         listnode.innerHTML = listElementHTML
         listnode.classList.add("tskd-task-card")
@@ -230,10 +234,11 @@ module.exports = class TaskDetails_ViewLoader {
         return listnode;
     }
 
-    getAttachmentListNode(data) {
+    getAttachmentListNode(data)
+    {
         let listElementHTML = [
             '<div class="col-sm-12">',
-            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"] + '</small>',
+            '<small class="text-muted">' + data["userNameBy"] + '</small class="text-muted"><small>&nbsp|&nbsp</small><small class="text-muted">' + data["dateUpdated"]+ '</small>',
             '</div>',
             '<hr class="gen-hr">',
             '<div class="col-sm-12">',
@@ -243,7 +248,7 @@ module.exports = class TaskDetails_ViewLoader {
             '</div>',
             '</div>',
         ].join("\n");
-
+  
         let listnode = document.createElement('li')
         listnode.innerHTML = listElementHTML
         listnode.classList.add("tskd-task-card")
@@ -251,28 +256,34 @@ module.exports = class TaskDetails_ViewLoader {
         return listnode;
     }
 
-    parseTaskActivityData(data) {
+    parseTaskActivityData(data)
+    {
         console.log(data);
         let list = document.getElementById('tskd-activity-list')
-        for (let index = 0; index < data.length; index++) {
+        for (let index = 0; index < data.length; index++) 
+        {
             const dataItem = data[index];
             let elm;
-            if (dataItem["updateType"] == "comment") {
-                elm = this.getCommentListNode(dataItem)
+            if(dataItem["updateType"] == "comment")
+            {
+                elm = this.getCommentListNode(dataItem) 
                 list.appendChild(elm)
             }
-            else if (dataItem["updateType"] == "workflow") {
-                elm = this.getWorkflowListNode(dataItem)
+            else if(dataItem["updateType"] == "workflow")
+            {
+                elm = this.getWorkflowListNode(dataItem) 
                 list.appendChild(elm)
             }
-            else if (dataItem["updateType"] == "attachment") {
-                elm = this.getAttachmentListNode(dataItem)
+            else if(dataItem["updateType"] == "attachment")
+            {
+                elm = this.getAttachmentListNode(dataItem) 
                 list.appendChild(elm)
             }
-            else {
+            else
+            {
                 dataItem.update["userNameBy"] = dataItem["userNameBy"]
                 dataItem.update["dateUpdated"] = dataItem["dateUpdated"]
-                elm = this.getFieldListNode(dataItem.update, dataItem["updateType"], "oldValue", "newValue")
+                elm = this.getFieldListNode(dataItem.update , dataItem["updateType"] , "oldValue" , "newValue")
                 list.appendChild(elm)
             }
         }

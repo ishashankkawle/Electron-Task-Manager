@@ -1,4 +1,3 @@
-
 const { ipcRenderer } = require('electron');
 let res = require('././shared/resources');
 let isDark = false
